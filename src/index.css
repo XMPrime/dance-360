@@ -235,6 +235,10 @@ strong {
   color: #fff;
   font-family: Arial;
   padding-left: 31px;
+  background: url(https://dezov.s3.amazonaws.com/media/dropdown-icon-pngffb-4b34-b3ae-cf22855ec4eb.png);
+  background-size: 35px;
+  background-repeat: no-repeat;
+  background-position: 93% 50%;
 }
 
 .btn-back,
