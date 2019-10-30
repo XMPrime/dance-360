@@ -215,12 +215,26 @@ strong {
   border-radius: 5px;
 }
 
-.dropdown-container {
-  background-color: #2b2b2b;
+.form-container {
+  background-color: rgba(43, 43, 43, 0.2);
   grid-column: 1 / -1;
   grid-row: 2 / 3;
   height: 120px;
   margin-bottom: 1em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-select {
+  background-color: #27282a;
+  margin: 30px;
+  border-radius: 440px;
+  height: 60px;
+  color: #fff;
+  font-family: Arial;
+  padding-left: 31px;
 }
 
 .btn-back,
@@ -235,6 +249,7 @@ strong {
   max-height: 40px;
   max-width: 128px;
   grid-row: 3 / 4;
+  margin-bottom: 20px;
 }
 
 .btn-back {
