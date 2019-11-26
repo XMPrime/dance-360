@@ -217,19 +217,16 @@ strong {
 
 .form-container {
   background-color: rgba(43, 43, 43, 0.2);
+  width: 100%;
   grid-column: 1 / -1;
   grid-row: 2 / 3;
-  height: 120px;
   margin-bottom: 1em;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  padding: 30px;
+  grid-gap: 1em;
 }
 
 .custom-select {
-  background-color: #27282a;
-  margin: 30px;
   border-radius: 440px;
   height: 60px;
   color: #fff;
@@ -239,6 +236,9 @@ strong {
   background-size: 35px;
   background-repeat: no-repeat;
   background-position: 93% 50%;
+  border: none;
+  background-color: #363636;
+  width: 100%;
 }
 
 .btn-back,
@@ -264,4 +264,19 @@ strong {
   grid-column: 3 / 4;
   background-color: #3123ae;
   margin-right: 1em;
+}
+
+/* JUDGE-4 */
+.menu-title {
+  text-align: left;
+  color: #c0c0c0;
+  font-family: "Montserrat";
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.75em 0.75em;
+  margin-bottom: 0;
+}
+.menu-judge {
+  /* display: flex;
+  flex-direction: column; */
 }
