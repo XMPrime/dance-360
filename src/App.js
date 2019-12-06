@@ -1,37 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./App.css";
-import "./index.css";
+import "./css/index.css";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { JudgeContext } from "./JudgeContext";
+import LoginPage from "./components/LoginPage";
+import EventPage from "./components/EventPage";
 
 function App() {
+  const { isLoggedIn } = useContext(JudgeContext);
+
   return (
-    <div className='App'>
-      <div className='container-fluid'>
-        <div className='col-sm'>
-          <div className='dropdown'>
-            <button
-              className='btn btn-secondary dropdown-toggle dropdown-level-one'
-              type='button'
-              id='dropdownMenuButton'
-              data-toggle='dropdown'
-              aria-haspopup='true'
-              aria-expanded='false'
-            >
-              Dropdown button
-            </button>
-            <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-              <a className='dropdown-item dropdown-level-two' href='#'>
-                Action
-              </a>
-              <a className='dropdown-item' href='#'>
-                Another action
-              </a>
-              <a className='dropdown-item' href='#'>
-                Something else here
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="App">
+      <Switch>
+        <Route exact path="/">
+          <LoginPage />
+        </Route>
+        <Route exact path="/events">
+          {isLoggedIn ? <EventPage /> : <Redirect to="/" />}
+        </Route>
+      </Switch>
     </div>
   );
 }

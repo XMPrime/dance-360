@@ -67,21 +67,21 @@ strong {
 }
 
 .container-fluid {
-  display: grid;
-  justify-items: center stretch;
-  /* border: 2px solid pink; */
-  margin: 0 50px;
+  justify-items: center;
+  margin: 0 auto;
 }
 
 .group-logo {
   max-width: 100%;
-  max-height: 100%;
   object-fit: contain;
   margin-bottom: 3em;
 }
 
-.input-icon {
+.input-container {
   margin-bottom: 0.75em;
+  // display: flex;
+  width: 100%;
+  position: relative;
 }
 
 .input,
@@ -98,7 +98,7 @@ strong {
 .input {
   background-color: #27282a;
   color: #fff;
-  padding-left: 2.5rem;
+  padding-left: 3rem;
   font-family: "Arial";
   font-size: 1em;
   align-items: center;
@@ -119,13 +119,18 @@ strong {
   letter-spacing: 0.36px;
 }
 
+.fa-envelope {
+  font-size: 1rem;
+}
+.fa-lock {
+  font-size: 1.4rem;
+}
+
 .icon {
-  position: absolute;
-  width: 0px;
-  margin-left: 20px;
-  margin-top: 20px;
   color: #fff;
-  font-size: 1.5rem;
+  position: absolute;
+  left: 5%;
+  top: 35%;
 }
 
 /* JUDGE-2 */
@@ -278,5 +283,5 @@ strong {
 }
 .menu-judge {
   /* display: flex;
-  flex-direction: column; */
+    flex-direction: column; */
 }
