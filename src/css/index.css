@@ -1,6 +1,6 @@
 * {
   -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
@@ -56,6 +56,32 @@ strong {
   border: none;
   cursor: pointer;
 }
+/* Judge Dropwdown */
+.judge-dropdown {
+  width: 250px;
+  font-size: 14px;
+}
+
+.judge-id-name {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  width: 113px;
+}
+
+.profile-pic {
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
+.fa-caret-down {
+  font-size: 30px;
+  vertical-align: middle;
+  margin-left: 15px;
+}
 
 /* JUDGE-1 */
 .judge-1 {
@@ -64,16 +90,16 @@ strong {
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   width: 100vw;
   height: 100vh;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   background-color: #1c1e22;
 }
 
@@ -85,7 +111,7 @@ strong {
 .group-logo {
   max-width: 100%;
   -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
   margin-bottom: 3em;
 }
 
@@ -113,8 +139,8 @@ strong {
   font-family: "Arial";
   font-size: 1em;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
 ::-webkit-input-placeholder {
@@ -174,33 +200,54 @@ strong {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: auto auto auto;
-      grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto auto;
   -ms-grid-rows: auto auto auto;
-      grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto;
   min-width: 100vw;
   min-height: 100vh;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   background-color: #1c1e22;
 }
 
-.header-text {
+header {
   min-width: 100vw;
   text-align: center;
-  color: #c0c0c0;
   background-color: #131517;
+  color: #c0c0c0;
   font-family: "Montserrat";
   font-weight: 700;
   font-size: 1.25em;
   padding: 0.75em 0;
   grid-column: 1 / -1;
   -ms-flex-item-align: start;
-      -ms-grid-row-align: start;
-      align-self: start;
+  -ms-grid-row-align: start;
+  align-self: start;
+  display: flex;
+  justify-content: center;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.inner-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-text {
+  align-self: center;
+  text-align: center;
+  position: absolute;
+}
+
+.fa-bars {
+  font-size: 26px;
+  align-self: center;
 }
 
 .grid {
@@ -208,7 +255,7 @@ strong {
   display: grid;
   grid-gap: 2em;
   -ms-grid-row-align: center;
-      align-self: center;
+  align-self: center;
   -ms-grid-column: 2;
   -ms-grid-column-span: 1;
   grid-column: 2 / 3;
@@ -224,11 +271,11 @@ strong {
   height: 220px;
   width: 220px;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   border-radius: 10px;
   background-color: #131517;
 }
@@ -236,9 +283,9 @@ strong {
 .grid-item:hover,
 .grid-item:focus {
   -webkit-box-shadow: 0 0 20px black;
-          box-shadow: 0 0 20px black;
+  box-shadow: 0 0 20px black;
   -webkit-transform: scale(1.1, 1.1);
-          transform: scale(1.1, 1.1);
+  transform: scale(1.1, 1.1);
   -webkit-transition: 200ms;
   transition: 200ms;
 }
@@ -267,17 +314,17 @@ strong {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: auto auto auto;
-      grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto auto;
   -ms-grid-rows: auto auto auto;
-      grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto;
   min-width: 100vw;
   min-height: 100vh;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   background-color: #1c1e22;
 }
 
@@ -288,12 +335,12 @@ strong {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: auto auto auto;
-      grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto auto;
   -ms-grid-rows: auto auto auto auto;
-      grid-template-rows: auto auto auto auto;
+  grid-template-rows: auto auto auto auto;
   background-color: #131517;
   -webkit-column-gap: 1em;
-          column-gap: 1em;
+  column-gap: 1em;
   border-radius: 5px;
 }
 
