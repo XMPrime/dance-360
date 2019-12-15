@@ -5,12 +5,16 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import { JudgeContext } from "./JudgeContext";
 import LoginPage from "./components/LoginPage";
 import EventPage from "./components/EventPage";
+import ScoringBreakdown from "./components/ScoringBreakdown";
+import Rectangle from "./components/Rectangle";
 
 function App() {
   const { isLoggedIn } = useContext(JudgeContext);
 
   return (
     <div className="App">
+      <ScoringBreakdown />
+      <Rectangle />
       <Switch>
         <Route exact path="/">
           <LoginPage />

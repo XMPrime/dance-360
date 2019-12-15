@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import profilePic from "../imgs/IMG_5719.JPG";
+// import { JudgeContext } from "./JudgeContext";
 
 export default function JudgeDropdown() {
   return (
