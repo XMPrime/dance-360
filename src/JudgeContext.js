@@ -3,20 +3,36 @@ import React, { useState } from "react";
 const JudgeContext = React.createContext();
 
 function JudgeContextProvider(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [username, setUsername] = useState("jason");
+  const [password, setPassword] = useState("testtest");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   function handleChange(e) {
     const { value } = e.target;
     e.target.id === "username" ? setUsername(value) : setPassword(value);
-    console.log(username);
+    console.log(e.target.value);
   }
 
   function login(e) {
-    if (username === "jason" && password === "asdf") {
-      setIsLoggedIn(true);
-    }
+    const url = "https://api.d360test.com/api/auth/signin";
+    // const formData = new FormData(document.getElementById("login-form"));
+    // formData.append("name", username);
+    // formData.append("password", password);
+    // const bodyObj = { name: username, password: password };
+    const axios = require("axios");
+    axios
+      .post(url, {
+        name: username,
+        password: password
+      })
+      .then(response => {
+        if (response.status === 200) {
+          setIsLoggedIn(true);
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 
   return (

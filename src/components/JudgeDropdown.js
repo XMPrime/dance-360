@@ -6,7 +6,7 @@ export default function JudgeDropdown() {
   return (
     <div className="judge-dropdown">
       <div className="judge-id-name">#1 Anthony Morigerato</div>
-      <img className="profile-pic" src={profilePic} />
+      <img className="profile-pic" src={profilePic} alt="your profile pic" />
       <i class="fas fa-caret-down"></i>
     </div>
   );
