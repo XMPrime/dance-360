@@ -1,12 +1,13 @@
 import React from "react";
 import JudgeDropdown from "./JudgeDropdown";
 
-export default function Header() {
+export default function Header(props) {
   return (
     <header>
-      <div className="header-text">CHOOSE YOUR EVENT:</div>
+      <div className="header-text">{props.title}</div>
       <div className="inner-header">
-        <i className="fas fa-bars"></i>
+        {props.barIcon === true ? <i className="fas fa-bars"></i> : <div></div>}
+        {/* jank solutions for jank problems */}
         <JudgeDropdown />
       </div>
     </header>

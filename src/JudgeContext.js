@@ -7,8 +7,12 @@ function JudgeContextProvider(props) {
   const [password, setPassword] = useState("testtest");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [judgeDropdownIsOpen, setJudgeDropdownIsOpen] = useState(false);
+  const [sideMenuIsOpen, setSideMenuIsOpen] = useState(false);
 
-  function toggleJudgeDropdown() {
+  function toggleSideMenuIsOpen(e) {
+    setSideMenuIsOpen(!sideMenuIsOpen);
+  }
+  function toggleJudgeDropdown(e) {
     setJudgeDropdownIsOpen(!judgeDropdownIsOpen);
   }
 
@@ -48,7 +52,8 @@ function JudgeContextProvider(props) {
         handleChange,
         login,
         judgeDropdownIsOpen,
-        toggleJudgeDropdown
+        toggleJudgeDropdown,
+        toggleSideMenuIsOpen
       }}
     >
       {props.children}

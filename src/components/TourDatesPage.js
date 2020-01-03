@@ -21,7 +21,7 @@ export default function TourDatesPage() {
 
   return (
     <div className="generic-page">
-      <Header />
+      <Header barIcon={false} title="CHOOSE YOUR CITY:" />
       <div className="tour-dates-menu">
         <img src={logo} className="grid-group-logo" alt="logo" />
         <form className="form-container">

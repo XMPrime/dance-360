@@ -10,7 +10,7 @@ export default function JudgeDropdown() {
     <div className="judge-dropdown" onClick={toggleJudgeDropdown}>
       <div className="judge-id-name">#1 Anthony Morigerato</div>
       <img className="profile-pic" src={profilePic} alt="your profile pic" />
-      <i class="fas fa-caret-down"></i>
+      <i className="fas fa-caret-down"></i>
       {judgeDropdownIsOpen ? <JudgeDropdownMenu /> : null}
     </div>
   );

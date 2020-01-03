@@ -7,35 +7,35 @@ export default function LoginPage() {
   const { handleChange, login, username, password } = useContext(JudgeContext);
 
   return (
-    <div class="judge-1">
-      <div class="container-fluid">
+    <div className="judge-1">
+      <div className="container-fluid">
         <form id="login-form" onSubmit={login}>
-          <img src={logo} class="group-logo" alt="logo" />
-          <div class="input-container">
+          <img src={logo} className="group-logo" alt="logo" />
+          <div className="input-container">
             <input
               type="text"
               id="username"
               name="name"
-              class="input username"
+              className="input username"
               placeholder="email"
               onChange={handleChange}
             />
-            <i class="fa fa-envelope icon"></i>
+            <i className="fa fa-envelope icon"></i>
           </div>
 
-          <div class="input-container">
+          <div className="input-container">
             <input
               type="text"
               id="password"
               name="password"
-              class="input password"
+              className="input password"
               placeholder="password"
               onChange={handleChange}
             />
-            <i class="fa fa-lock fa-lg icon"></i>
+            <i className="fa fa-lock fa-lg icon"></i>
           </div>
           <Link to="/events">
-            <button class="btn btn-login" type="submit" onClick={login}>
+            <button className="btn btn-login" type="submit" onClick={login}>
               LOGIN
             </button>
           </Link>
