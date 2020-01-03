@@ -6,11 +6,15 @@ function JudgeContextProvider(props) {
   const [username, setUsername] = useState("jason");
   const [password, setPassword] = useState("testtest");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [judgeDropdownIsOpen, setJudgeDropdownIsOpen] = useState(false);
+
+  function toggleJudgeDropdown() {
+    setJudgeDropdownIsOpen(!judgeDropdownIsOpen);
+  }
 
   function handleChange(e) {
     const { value } = e.target;
     e.target.id === "username" ? setUsername(value) : setPassword(value);
-    console.log(e.target.value);
   }
 
   function login(e) {
@@ -37,7 +41,15 @@ function JudgeContextProvider(props) {
 
   return (
     <JudgeContext.Provider
-      value={{ username, password, isLoggedIn, handleChange, login }}
+      value={{
+        username,
+        password,
+        isLoggedIn,
+        handleChange,
+        login,
+        judgeDropdownIsOpen,
+        toggleJudgeDropdown
+      }}
     >
       {props.children}
     </JudgeContext.Provider>

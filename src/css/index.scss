@@ -191,11 +191,15 @@ strong {
 .judge-dropdown {
   width: 250px;
   font-size: 14px;
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .judge-id-name {
   display: inline-block;
-  height: 100%;
   vertical-align: middle;
   width: 113px;
 }
@@ -211,7 +215,31 @@ strong {
 .fa-caret-down {
   font-size: 30px;
   vertical-align: middle;
-  margin-left: 15px;
+  margin-left: 20px;
+}
+.judge-dropdown-menu {
+  position: absolute;
+  top: 100%;
+}
+.judge-dropdown:hover,
+.judge-dropdown:focus {
+  cursor: pointer;
+}
+.judge-dropdown-menu-rectangle {
+  width: 250px;
+  height: 40px;
+  font-family: Arial;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.29;
+  color: lightgrey;
+  background-color: #131517;
+
+  padding-right: 30px;
+  border-top: 1px solid #1c1e22;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 /* JUDGE-1 */
@@ -353,19 +381,22 @@ header {
   font-family: "Montserrat";
   font-weight: 700;
   font-size: 1.25em;
-  padding: 0.75em 0;
+  // padding: 0.75em 0;
   -ms-flex-item-align: start;
   -ms-grid-row-align: start;
   align-self: start;
   display: flex;
   justify-content: center;
   padding-left: 30px;
-  padding-right: 30px;
+  padding-right: 0px;
+  // height: 100%;
+  position: relative;
 }
 
 .inner-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
 }
 

@@ -209,11 +209,21 @@ strong {
 .judge-dropdown {
   width: 250px;
   font-size: 14px;
+  position: relative;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .judge-id-name {
   display: inline-block;
-  height: 100%;
   vertical-align: middle;
   width: 113px;
 }
@@ -230,7 +240,39 @@ strong {
 .fa-caret-down {
   font-size: 30px;
   vertical-align: middle;
-  margin-left: 15px;
+  margin-left: 20px;
+}
+
+.judge-dropdown-menu {
+  position: absolute;
+  top: 100%;
+}
+
+.judge-dropdown:hover,
+.judge-dropdown:focus {
+  cursor: pointer;
+}
+
+.judge-dropdown-menu-rectangle {
+  width: 250px;
+  height: 40px;
+  font-family: Arial;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.29;
+  color: lightgrey;
+  background-color: #131517;
+  padding-right: 30px;
+  border-top: 1px solid #1c1e22;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 
 /* JUDGE-1 */
@@ -372,7 +414,6 @@ header {
   font-family: "Montserrat";
   font-weight: 700;
   font-size: 1.25em;
-  padding: 0.75em 0;
   -ms-flex-item-align: start;
   -ms-grid-row-align: start;
   align-self: start;
@@ -383,7 +424,8 @@ header {
       -ms-flex-pack: center;
           justify-content: center;
   padding-left: 30px;
-  padding-right: 30px;
+  padding-right: 0px;
+  position: relative;
 }
 
 .inner-header {
@@ -393,6 +435,9 @@ header {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   width: 100%;
 }
 
