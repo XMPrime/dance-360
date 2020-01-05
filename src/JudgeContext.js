@@ -22,6 +22,38 @@ function JudgeContextProvider(props) {
   //   setSelectedSeasonId(e.target.season_id);
   // }
 
+  function findClosestDate(tourDatesData) {
+    const now = new Date();
+
+    let closest = Infinity;
+    let closestDate;
+
+    tourDatesData.forEach(tourDate => {
+      // const startDate = new Date(tourDate.start_date);
+      const endDate = new Date(tourDate.end_date);
+
+      if (Math.abs(now - endDate) < Math.abs(now - closest)) {
+        closest = Date.parse(endDate);
+        closestDate = tourDate.end_date;
+      }
+    });
+    return closestDate;
+
+    // const tourEndDates = [...tourDatesData].map(tourDate => {
+    //   return tourDate.end_date;
+    // });
+    // const parsedDates = tourEndDates.map(tourDate => {
+    //   return Date.parse(tourDate);
+    // });
+    // const closestDate = new Date(
+    //   parsedDates.reduce((a, b) => {
+    //     return Math.abs(now - a) < Math.abs(now - b) ? a : b;
+    //   })
+    // );
+
+    // return closestDate;
+  }
+
   function transformTourDateData(tourDateData) {
     const monthNames = {
       1: "Jan",
@@ -59,7 +91,7 @@ function JudgeContextProvider(props) {
     const startYear = startDate[0] + startDate[1] + startDate[2] + startDate[3];
     const endYear = endDate[0] + endDate[1] + endDate[2] + endDate[3];
 
-    // console.log(tourDateData);
+    // console.log(tourDatesData);
     // const present = Date.now();
     // console.log(present, Date.parse(tourDateData.start_date));
 
@@ -84,10 +116,6 @@ function JudgeContextProvider(props) {
 
   function login(e) {
     const url = "https://api.d360test.com/api/auth/signin";
-    // const formData = new FormData(document.getElementById("login-form"));
-    // formData.append("name", username);
-    // formData.append("password", password);
-    // const bodyObj = { name: username, password: password };
     const axios = require("axios");
     axios
       .post(url, {
@@ -103,12 +131,6 @@ function JudgeContextProvider(props) {
         console.log(error);
       });
   }
-
-  // useEffect(() => {
-  //   axios.get("https://api.d360test.com/api/coda/events").then(response => {
-  //     setEventsData(response.data);
-  //   });
-  // });
 
   return (
     <JudgeContext.Provider
@@ -127,7 +149,8 @@ function JudgeContextProvider(props) {
         setSelectedEvent,
         tourDatesData,
         setTourDatesData,
-        transformTourDateData
+        transformTourDateData,
+        findClosestDate
       }}
     >
       {props.children}

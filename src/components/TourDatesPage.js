@@ -9,43 +9,14 @@ export default function TourDatesPage() {
     selectedEvent,
     tourDatesData,
     setTourDatesData,
-    transformTourDateData
+    transformTourDateData,
+    findClosestDate
   } = useContext(JudgeContext);
-  // const cityArr = [
-  //   { id: 1, name: "St. Louis - December 7-9, 2019" },
-  //   { id: 2, name: "St. Louis - December 7-9, 2019" },
-  //   { id: 3, name: "St. Louis - December 7-9, 2019" }
-  // ];
-  // const cityList = cityArr.map(city => {
-  //   return city.id === 1 ? (
-  //     <option className="city-options" selected>
-  //       {city.name}
-  //     </option>
-  //   ) : (
-  //     <option className="city-options">{city.name}</option>
-  //   );
-  // });
-
-  function findClosestDate(tourDatesData) {
-    const now = new Date();
-
-    let closest = Infinity;
-
-    tourDatesData.forEach(tourDate => {
-      const date = new Date(tourDate.start_date);
-
-      if (date >= now && (date < new Date(closest) || date < closest)) {
-        closest = tourDate.start_date;
-      }
-    });
-
-    return closest;
-  }
 
   const closestDate = findClosestDate(tourDatesData);
 
   const tourDatesList = tourDatesData.map(tourDateData => {
-    if (tourDateData.start_date === closestDate) {
+    if (tourDateData.end_date === closestDate) {
       return (
         <option key={tourDateData.id} className="tour-dates" selected>
           {transformTourDateData(tourDateData)}
