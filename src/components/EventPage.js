@@ -1,55 +1,23 @@
-import React, { useState, useEffect } from "react";
-import logo from "../imgs/group-6.svg";
+import React, { useState, useContext, useEffect } from "react";
 import Header from "./Header";
 import { Link, Route, Switch, Redirect } from "react-router-dom";
-// import {  } from "react-router-dom";
+import { JudgeContext } from "../JudgeContext";
 
 export default function EventPage() {
-  // const numberOfEventsTest = 5;
-  // const eventsList = [
-  //   {
-  //     id: 0,
-  //     name: "CODA",
-  //     src: logo
-  //   },
-  //   {
-  //     id: 0,
-  //     name: "CODA",
-  //     src: logo
-  //   },
-  //   {
-  //     id: 0,
-  //     name: "CODA",
-  //     src: logo
-  //   },
-  //   {
-  //     id: 0,
-  //     name: "CODA",
-  //     src: logo
-  //   },
-  //   {
-  //     id: 0,
-  //     name: "CODA",
-  //     src: logo
-  //   },
-  //   {
-  //     id: 0,
-  //     name: "CODA",
-  //     src: logo
-  //   },
-  //   {
-  //     id: 0,
-  //     name: "CODA",
-  //     src: logo
-  //   }
-  // ];
-  const [eventsData, setEventsData] = useState([]);
   const axios = require("axios");
+  const { eventsData, setEventsData, setSelectedEvent } = useContext(
+    JudgeContext
+  );
 
   const events = eventsData.map(event => {
     return (
-      <Link to="/tour-dates">
-        <div className="grid-item">
+      <Link to="/tour-dates" key={event.id}>
+        <div
+          className="grid-item"
+          event_id={event.id}
+          season_id={event.current_season_id}
+          onClick={() => setSelectedEvent(event)}
+        >
           <img
             src={`https://assets.dance360.com/coda/${event.id}.svg`}
             className="grid-group-logo"

@@ -475,6 +475,7 @@ header {
   background-color: #131517;
   border-radius: 5px;
   justify-self: center;
+  margin-bottom: 50px; //bump the menu up so the dropdown drops down
 }
 
 .form-container {
@@ -508,6 +509,10 @@ header {
 }
 select {
   appearance: none;
+  font-weight: bold;
+}
+.tour-dates {
+  font-weight: bold;
 }
 
 .btn-block {
@@ -536,6 +541,7 @@ select {
   grid-row: 3 / 4;
   margin-top: 20px;
   margin-bottom: 20px;
+  font-weight: bold;
 }
 
 .btn-grey {

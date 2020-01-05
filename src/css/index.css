@@ -533,6 +533,7 @@ header {
   border-radius: 5px;
   -ms-grid-column-align: center;
       justify-self: center;
+  margin-bottom: 50px;
 }
 
 .form-container {
@@ -569,6 +570,11 @@ select {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
+  font-weight: bold;
+}
+
+.tour-dates {
+  font-weight: bold;
 }
 
 .btn-block {
@@ -601,6 +607,7 @@ select {
   grid-row: 3 / 4;
   margin-top: 20px;
   margin-bottom: 20px;
+  font-weight: bold;
 }
 
 .btn-grey {
