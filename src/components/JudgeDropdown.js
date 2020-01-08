@@ -4,7 +4,9 @@ import { JudgeContext } from "../JudgeContext";
 import JudgeDropdownMenu from "./JudgeDropdownMenu";
 
 export default function JudgeDropdown() {
-  const { judgeDropdownIsOpen, toggleJudgeDropdown } = useContext(JudgeContext);
+  const { judgeDropdownIsOpen, toggleJudgeDropdown, judgeData } = useContext(
+    JudgeContext
+  );
 
   return (
     <div className="judge-dropdown" onClick={toggleJudgeDropdown}>

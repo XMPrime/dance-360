@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import history from "./history";
 const JudgeContext = React.createContext();
 
 function JudgeContextProvider(props) {
@@ -12,46 +12,50 @@ function JudgeContextProvider(props) {
   const [eventsData, setEventsData] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState();
   const [tourDatesData, setTourDatesData] = useState([]);
+  const [judgesData, setJudgesData] = useState([]);
+  const [competitionGroupsData, setCompetitionGroupsData] = useState([]);
+  // const [judgeInfo, setJudgeInfo] = useState({
+  //   name: "",
+  //   position: "",
+  //   isTeacher: "",
+  //   competitionGroup: ""
+  // });
 
-  // const [selectedEventId, setSelectedEventId] = useState();
-  // const [selectedSeasonId, setSelectedSeasonId] = useState();
+  // function useJudgeInfo() {
+  //   const judge = document.getElementById("judge").value;
+  //   const position = document.getElementById("position").value;
+  //   const isTeacher = document.getElementById("teacher").value;
+  //   const competition = document.getElementById("competition").value;
 
-  // function selectEvent(e) {
-  //   console.log(selectedEventId);
-  //   setSelectedEventId(e.target.event_id);
-  //   setSelectedSeasonId(e.target.season_id);
+  //   setJudgeInfo({
+  //     name: judge,
+  //     position: position,
+  //     isTeacher: isTeacher,
+  //     competitionGroup: competition
+  //   });
+  //   console.log(judgeInfo);
+
+  //   history.push("/scoring");
   // }
+
+  function pageRouter(route) {
+    route === "goBack" ? history.goBack() : history.push(route);
+  }
 
   function findClosestDate(tourDatesData) {
     const now = new Date();
-
     let closest = Infinity;
     let closestDate;
 
     tourDatesData.forEach(tourDate => {
-      // const startDate = new Date(tourDate.start_date);
       const endDate = new Date(tourDate.end_date);
 
-      if (Math.abs(now - endDate) < Math.abs(now - closest)) {
+      if (Math.abs(now - endDate) < Math.abs(now - closest) && now < endDate) {
         closest = Date.parse(endDate);
         closestDate = tourDate.end_date;
       }
     });
     return closestDate;
-
-    // const tourEndDates = [...tourDatesData].map(tourDate => {
-    //   return tourDate.end_date;
-    // });
-    // const parsedDates = tourEndDates.map(tourDate => {
-    //   return Date.parse(tourDate);
-    // });
-    // const closestDate = new Date(
-    //   parsedDates.reduce((a, b) => {
-    //     return Math.abs(now - a) < Math.abs(now - b) ? a : b;
-    //   })
-    // );
-
-    // return closestDate;
   }
 
   function transformTourDateData(tourDateData) {
@@ -91,10 +95,6 @@ function JudgeContextProvider(props) {
     const startYear = startDate[0] + startDate[1] + startDate[2] + startDate[3];
     const endYear = endDate[0] + endDate[1] + endDate[2] + endDate[3];
 
-    // console.log(tourDatesData);
-    // const present = Date.now();
-    // console.log(present, Date.parse(tourDateData.start_date));
-
     if (startMonth !== endMonth) {
       return `${cityName} - ${monthNames[startMonth]} ${startDay}, ${startYear} - ${monthNames[endMonth]} ${endDay}, ${endYear}`;
     } else {
@@ -114,6 +114,10 @@ function JudgeContextProvider(props) {
     e.target.id === "username" ? setUsername(value) : setPassword(value);
   }
 
+  function logout(e) {
+    setIsLoggedIn(false);
+  }
+
   function login(e) {
     const url = "https://api.d360test.com/api/auth/signin";
     const axios = require("axios");
@@ -130,6 +134,8 @@ function JudgeContextProvider(props) {
       .catch(function(error) {
         console.log(error);
       });
+
+    history.push("/events");
   }
 
   return (
@@ -140,6 +146,8 @@ function JudgeContextProvider(props) {
         isLoggedIn,
         handleChange,
         login,
+        logout,
+        pageRouter,
         judgeDropdownIsOpen,
         toggleJudgeDropdown,
         toggleSideMenuIsOpen,
@@ -150,7 +158,11 @@ function JudgeContextProvider(props) {
         tourDatesData,
         setTourDatesData,
         transformTourDateData,
-        findClosestDate
+        findClosestDate,
+        judgesData,
+        setJudgesData,
+        competitionGroupsData,
+        setCompetitionGroupsData
       }}
     >
       {props.children}

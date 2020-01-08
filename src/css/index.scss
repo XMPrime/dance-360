@@ -16,7 +16,10 @@ h2,
 strong {
   font-weight: 700;
 }
-
+p {
+  color: #fff;
+  font-weight: bold;
+}
 .rectangle {
   width: 205px;
   height: 30px;
@@ -269,10 +272,10 @@ strong {
 }
 
 .group-logo {
-  max-width: 100%;
-  -o-object-fit: contain;
-  object-fit: contain;
-  margin-bottom: 3em;
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 30px;
 }
 
 .input-container {
@@ -290,6 +293,9 @@ strong {
   border-radius: 440px;
   width: 100%;
   border: none;
+}
+.btn:hover {
+  cursor: pointer;
 }
 
 .input {
@@ -462,16 +468,16 @@ header {
 .grid-group-logo {
   /* border: 2px solid pink; */
   width: 100%;
-  padding: 2em;
-  grid-column: 1 / -1;
+  padding: 2rem;
 }
 
 /* JUDGE-3 */
 
 .tour-dates-menu {
   width: 540px;
-  grid-column: 1/2;
-  display: grid;
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
   background-color: #131517;
   border-radius: 5px;
   justify-self: center;
@@ -481,16 +487,13 @@ header {
 .form-container {
   background-color: rgba(43, 43, 43, 0.2);
   width: 100%;
-  grid-column: 1 / -1;
-  -ms-grid-row: 2;
-  -ms-grid-row-span: 1;
-  grid-row: 2 / 3;
-  margin-bottom: 1em;
-  display: -ms-grid;
-  display: grid;
-  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 30px;
+  padding-right: 30px;
   grid-gap: 1em;
   position: relative;
+  align-items: center;
 }
 
 .custom-select {
@@ -506,7 +509,25 @@ header {
   border: none;
   background-color: #363636;
   width: 100%;
+  margin: 30px 30px 30px 30px;
+  position: relative;
 }
+
+.label-container {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: -10px;
+}
+.label-container:first-child {
+  margin-top: 30px;
+}
+
+.custom-label {
+  color: #fff;
+  font-size: 14px;
+}
+
 select {
   appearance: none;
   font-weight: bold;
@@ -518,7 +539,7 @@ select {
 .btn-block {
   display: flex;
   position: absolute;
-  margin-top: 120px;
+  top: 100%;
   background-color: #131517;
   width: 100%;
   padding-right: 20px;

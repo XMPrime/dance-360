@@ -1,30 +1,34 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Header from "./Header";
-import { Link, Route, Switch, Redirect } from "react-router-dom";
 import { JudgeContext } from "../JudgeContext";
 
 export default function EventPage() {
   const axios = require("axios");
-  const { eventsData, setEventsData, setSelectedEvent } = useContext(
-    JudgeContext
-  );
+  const {
+    eventsData,
+    setEventsData,
+    setSelectedEvent,
+    pageRouter
+  } = useContext(JudgeContext);
 
   const events = eventsData.map(event => {
     return (
-      <Link to="/tour-dates" key={event.id}>
-        <div
-          className="grid-item"
-          event_id={event.id}
-          season_id={event.current_season_id}
-          onClick={() => setSelectedEvent(event)}
-        >
-          <img
-            src={`https://assets.dance360.com/coda/${event.id}.svg`}
-            className="grid-group-logo"
-            alt={event.name}
-          />
-        </div>
-      </Link>
+      <div
+        key={event.id}
+        className="grid-item"
+        event_id={event.id}
+        season_id={event.current_season_id}
+        onClick={() => {
+          setSelectedEvent(event);
+          pageRouter("/tour-dates");
+        }}
+      >
+        <img
+          src={`https://assets.dance360.com/coda/${event.id}.svg`}
+          className="grid-group-logo"
+          alt={event.name}
+        />
+      </div>
     );
   });
 

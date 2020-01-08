@@ -10,7 +10,8 @@ export default function TourDatesPage() {
     tourDatesData,
     setTourDatesData,
     transformTourDateData,
-    findClosestDate
+    findClosestDate,
+    pageRouter
   } = useContext(JudgeContext);
 
   const closestDate = findClosestDate(tourDatesData);
@@ -50,18 +51,21 @@ export default function TourDatesPage() {
       <div className="tour-dates-menu">
         <img
           src={`https://assets.dance360.com/coda/${selectedEvent.id}.svg`}
-          className="grid-group-logo"
+          className="group-logo"
           alt="logo"
         />
         <form className="form-container">
           <select className="custom-select">{tourDatesList}</select>
           <div className="btn-block">
-            <button className="btn btn-grey">
-              BACK<Link to="/events"></Link>
-            </button>
-
-            <button className="btn btn-purple" type="submit">
-              NEXT<Link to="/judge-info"></Link>
+            <Link to="/events">
+              <button className="btn btn-grey">BACK</button>
+            </Link>
+            <button
+              className="btn btn-purple"
+              type="submit"
+              onClick={() => pageRouter("/judge-info")}
+            >
+              NEXT
             </button>
           </div>
         </form>
