@@ -129,13 +129,12 @@ function JudgeContextProvider(props) {
       .then(response => {
         if (response.status === 200) {
           setIsLoggedIn(true);
+          history.push("/events");
         }
       })
       .catch(function(error) {
         console.log(error);
       });
-
-    history.push("/events");
   }
 
   return (
