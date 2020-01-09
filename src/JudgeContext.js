@@ -135,6 +135,8 @@ function JudgeContextProvider(props) {
       .catch(function(error) {
         console.log(error);
       });
+    //leaving this extra history.push fixes it for some reason...
+    history.push("/events");
   }
 
   return (

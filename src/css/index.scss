@@ -11,6 +11,11 @@ body {
   line-height: 1.6;
 }
 
+.btn:focus,
+input:focus {
+  outline: none;
+}
+
 h1,
 h2,
 strong {
