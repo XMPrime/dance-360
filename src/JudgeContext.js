@@ -4,8 +4,8 @@ const JudgeContext = React.createContext();
 
 function JudgeContextProvider(props) {
   // const axios = require("axios");
-  const [username, setUsername] = useState("jason");
-  const [password, setPassword] = useState("testtest");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [judgeDropdownIsOpen, setJudgeDropdownIsOpen] = useState(false);
   const [sideMenuIsOpen, setSideMenuIsOpen] = useState(false);
@@ -135,8 +135,6 @@ function JudgeContextProvider(props) {
       .catch(function(error) {
         console.log(error);
       });
-    //leaving this extra history.push fixes it for some reason...
-    history.push("/events");
   }
 
   return (
