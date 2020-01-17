@@ -629,3 +629,55 @@ select {
   color: #b4b5b5;
   display: flex;
 }
+
+.modal-background {
+  background-color: #000000;
+  opacity: 70%;
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2; // envelope and lock icons on z-index 1
+}
+
+.modal {
+  z-index: 3;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 40%;
+  margin: 0 auto;
+  border: 1px solid #131517;
+  border-radius: 0.25rem;
+  width: 500px;
+}
+
+.modal-header {
+  background-color: #131517;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.29;
+  color: silver;
+  padding: 17px 20px;
+  display: flex;
+}
+
+.modal-body {
+  background-color: #181a1d;
+  color: white;
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.modal-footer {
+  display: flex;
+  background-color: #131517;
+  padding-right: 20px;
+  justify-content: flex-end;
+}

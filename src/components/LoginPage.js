@@ -2,12 +2,13 @@ import React, { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setUsername, setPassword, loginAsync } from "../redux/loginReducer";
 import logo from "../imgs/group-6.svg";
-import { JudgeContext } from "../JudgeContext";
+// import { JudgeContext } from "../JudgeContext";
 import useForm from "react-hook-form";
 import LoginModal from "../components/LoginModal";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
+  const modal = useSelector(state => state.login.modal);
   // const { handleChange, login, username, password } = useContext(JudgeContext);
   const { register, handleSubmit, errors } = useForm();
   const errorMessage = (
@@ -16,7 +17,7 @@ export default function LoginPage() {
 
   return (
     <div className="judge-1">
-      {/* <LoginModal /> */}
+      {modal ? <LoginModal /> : null}
       <div className="container-fluid">
         <img src={logo} className="login-logo" alt="logo" />
         <form onSubmit={handleSubmit(() => dispatch(loginAsync()))}>

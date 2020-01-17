@@ -27,6 +27,12 @@ export function logout() {
   };
 }
 
+export function toggleModal() {
+  return {
+    type: "TOGGLE_MODAL"
+  };
+}
+
 // LOGIN LOGIC
 export function loginAsync() {
   return (dispatch, getState) => {
@@ -42,12 +48,12 @@ export function loginAsync() {
         if (response.status === 200) {
           dispatch(login());
           history.push("/events");
-        } else {
-          //display modal?
         }
       })
       .catch(function(error) {
         console.log(error);
+        //display modal
+        dispatch(toggleModal());
       });
   };
 }
@@ -60,7 +66,8 @@ export function handleChange(e) {
 const initialState = {
   isLoggedIn: false,
   username: "",
-  password: ""
+  password: "",
+  modal: false
 };
 
 export default function loginReducer(loginState = initialState, action) {
@@ -73,6 +80,8 @@ export default function loginReducer(loginState = initialState, action) {
       return { ...loginState, isLoggedIn: true };
     case "LOGOUT":
       return { ...loginState, isLoggedIn: false };
+    case "TOGGLE_MODAL":
+      return { ...loginState, modal: !loginState.modal };
     default:
       return loginState;
   }
