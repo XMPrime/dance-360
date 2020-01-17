@@ -1,18 +1,27 @@
 import React, { useEffect, useContext } from "react";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
-import { JudgeContext } from "../JudgeContext";
+import history from "../history";
+// import { JudgeContext } from "../JudgeContext";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setTourDatesData,
+  transformTourDateData,
+  findClosestDate
+} from "../redux/tourDatesReducer";
 
 export default function TourDatesPage() {
+  const selectedEvent = useSelector(state => state.events.selectedEvent);
+  const tourDatesData = useSelector(state => state.tourDates.tourDatesData);
+  const dispatch = useDispatch();
   const axios = require("axios");
-  const {
-    selectedEvent,
-    tourDatesData,
-    setTourDatesData,
-    transformTourDateData,
-    findClosestDate,
-    pageRouter
-  } = useContext(JudgeContext);
+  // const {
+  //   selectedEvent,
+  //   tourDatesData,
+  //   setTourDatesData,
+  //   transformTourDateData,
+  //   findClosestDate,
+  //   pageRouter
+  // } = useContext(JudgeContext);
 
   const closestDate = findClosestDate(tourDatesData);
 
@@ -41,7 +50,7 @@ export default function TourDatesPage() {
         }
       })
       .then(response => {
-        setTourDatesData(response.data);
+        dispatch(setTourDatesData(response.data));
       });
   });
 
@@ -57,13 +66,14 @@ export default function TourDatesPage() {
         <form className="form-container">
           <select className="custom-select">{tourDatesList}</select>
           <div className="btn-block">
-            <Link to="/events">
-              <button className="btn btn-grey">BACK</button>
-            </Link>
+            <button className="btn btn-grey" onClick={() => history.goBack()}>
+              BACK
+            </button>
+
             <button
               className="btn btn-purple"
               type="submit"
-              onClick={() => pageRouter("/judge-info")}
+              onClick={() => history.push("/judge-info")}
             >
               NEXT
             </button>

@@ -210,7 +210,8 @@ p {
 .judge-id-name {
   display: inline-block;
   vertical-align: middle;
-  width: 113px;
+  margin-right: 10px;
+  // width: 100px;
 }
 
 .profile-pic {
@@ -219,12 +220,13 @@ p {
   border-radius: 50%;
   object-fit: cover;
   vertical-align: middle;
+  background-color: #c0c0c0;
 }
 
 .fa-caret-down {
   font-size: 30px;
   vertical-align: middle;
-  margin-left: 20px;
+  margin-left: 10px;
   color: #fff;
 }
 .judge-dropdown-menu {
@@ -275,13 +277,15 @@ p {
 .container-fluid {
   justify-items: center;
   margin: 0 auto;
+  width: 440px;
 }
 
 .login-logo,
 .group-logo {
   width: 100%;
   margin-top: 30px;
-  padding: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 .group-logo {
   margin-bottom: 30px;
@@ -313,7 +317,7 @@ p {
 .input {
   background-color: #27282a;
   color: #fff;
-  padding-left: 3rem;
+  padding-left: 3.5rem;
   font-family: "Arial";
   font-size: 1em;
   -webkit-box-align: center;
@@ -364,13 +368,13 @@ p {
 }
 
 .fa-lock {
-  font-size: 1.4rem;
+  font-size: 1.1rem;
 }
 
 .icon {
   color: #fff;
   position: absolute;
-  left: 5%;
+  left: 8%;
   align-self: center;
   z-index: 1;
 }
@@ -408,9 +412,6 @@ header {
   align-self: start;
   display: flex;
   justify-content: center;
-  padding-left: 30px;
-  padding-right: 0px;
-  // height: 100%;
   position: relative;
 }
 
@@ -430,6 +431,7 @@ header {
 .fa-bars {
   font-size: 26px;
   align-self: center;
+  margin-left: 20px;
 }
 
 .events-container-4orless,
@@ -625,4 +627,5 @@ select {
 
 .error-message {
   color: #b4b5b5;
+  display: flex;
 }

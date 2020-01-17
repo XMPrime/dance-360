@@ -1,15 +1,20 @@
 import React, { useContext, useEffect } from "react";
 import Header from "./Header";
+import history from "../history";
 import { JudgeContext } from "../JudgeContext";
+import { useSelector, useDispatch } from "react-redux";
+import { setEventsData, setSelectedEvent } from "../redux/eventsReducer";
 
 export default function EventPage() {
+  const eventsData = useSelector(state => state.events.eventsData);
+  const dispatch = useDispatch();
   const axios = require("axios");
-  const {
-    eventsData,
-    setEventsData,
-    setSelectedEvent,
-    pageRouter
-  } = useContext(JudgeContext);
+  // const {
+  //   eventsData,
+  //   setEventsData,
+  //   setSelectedEvent,
+  //   pageRouter
+  // } = useContext(JudgeContext);
 
   const events = eventsData.map(event => {
     return (
@@ -19,8 +24,8 @@ export default function EventPage() {
         event_id={event.id}
         season_id={event.current_season_id}
         onClick={() => {
-          setSelectedEvent(event);
-          pageRouter("/tour-dates");
+          dispatch(setSelectedEvent(event));
+          history.push("/tour-dates");
         }}
       >
         <img
@@ -34,7 +39,7 @@ export default function EventPage() {
 
   useEffect(() => {
     axios.get("https://api.d360test.com/api/coda/events").then(response => {
-      setEventsData(response.data);
+      dispatch(setEventsData(response.data));
     });
   });
 

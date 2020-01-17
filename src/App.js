@@ -10,10 +10,12 @@ import JudgeInfo from "./components/JudgeInfo";
 import Scoring from "./components/Scoring";
 import ScoringBreakdown from "./components/ScoringBreakdown";
 import Rectangle from "./components/Rectangle";
+import { useSelector, useDispatch } from "react-redux";
+import store from "./redux";
 
 function App() {
-  const { isLoggedIn } = useContext(JudgeContext);
-
+  // const { isLoggedIn } = useContext(JudgeContext);
+  const isLoggedIn = useSelector(state => state.login.isLoggedIn);
   return (
     <div className="App">
       {/* <ScoringBreakdown />

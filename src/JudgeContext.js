@@ -14,12 +14,16 @@ function JudgeContextProvider(props) {
   const [tourDatesData, setTourDatesData] = useState([]);
   const [judgesData, setJudgesData] = useState([]);
   const [competitionGroupsData, setCompetitionGroupsData] = useState([]);
-  // const [judgeInfo, setJudgeInfo] = useState({
-  //   name: "",
-  //   position: "",
-  //   isTeacher: "",
-  //   competitionGroup: ""
-  // });
+  const [judgeInfo, setJudgeInfo] = useState({
+    fullName: "Anonymous Judge",
+    position: "",
+    isTeacher: false,
+    competitionGroup: ""
+  });
+  const [judgeFullName, setJudgeFullName] = useState("Anonymous");
+  const [judgePosition, setJudgePosition] = useState("");
+  const [judgeIsTeacher, setJudgeIsTeacher] = useState(false);
+  const [judgeGroupName, setJudgeGroupName] = useState("");
 
   // function useJudgeInfo() {
   //   const judge = document.getElementById("judge").value;
@@ -37,6 +41,39 @@ function JudgeContextProvider(props) {
 
   //   history.push("/scoring");
   // }
+
+  // function judgeDataFormSubmit() {
+  //   setJudgeInfoData({
+  //     fullName: "john",
+  //     position: 4,
+  //     isTeacher: true,
+  //     competitionGroup: "Finals"
+  //   });
+  // }
+
+  function formSubmit() {}
+
+  function handleFormChange(e) {
+    console.log(e.target);
+    const name = e.target.id;
+    const value = e.target.value;
+    switch (name) {
+      case "judge":
+        setJudgeFullName(value);
+        break;
+      case "position":
+        setJudgePosition(`#${value}`);
+        break;
+      case "teacher":
+        setJudgeIsTeacher(value);
+        break;
+      case "competition":
+        setJudgeGroupName(value);
+        break;
+      default:
+        console.log("error");
+    }
+  }
 
   function pageRouter(route) {
     route === "goBack" ? history.goBack() : history.push(route);
@@ -161,7 +198,12 @@ function JudgeContextProvider(props) {
         judgesData,
         setJudgesData,
         competitionGroupsData,
-        setCompetitionGroupsData
+        setCompetitionGroupsData,
+        handleFormChange,
+        judgeFullName,
+        judgePosition,
+        setJudgeFullName,
+        setJudgePosition
       }}
     >
       {props.children}

@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import store from "./redux";
 import { JudgeContextProvider } from "./JudgeContext";
 import { Router } from "react-router-dom";
 import history from "./history";
@@ -9,7 +11,9 @@ import history from "./history";
 ReactDOM.render(
   <JudgeContextProvider>
     <Router history={history}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </Router>
   </JudgeContextProvider>,
   document.getElementById("root")
