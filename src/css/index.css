@@ -288,6 +288,10 @@ p {
           justify-content: flex-end;
 }
 
+.judge-dropdown-menu-rectangle:hover {
+  color: white;
+}
+
 /* JUDGE-1 */
 .judge-1 {
   display: -webkit-box;
@@ -359,7 +363,7 @@ p {
 .input {
   background-color: #27282a;
   color: #fff;
-  padding-left: 3.5rem;
+  padding-left: 4rem;
   font-family: "Arial";
   font-size: 1em;
   -webkit-box-align: center;
@@ -416,7 +420,7 @@ p {
 .icon {
   color: #fff;
   position: absolute;
-  left: 8%;
+  left: 6%;
   -ms-flex-item-align: center;
       -ms-grid-row-align: center;
       align-self: center;
