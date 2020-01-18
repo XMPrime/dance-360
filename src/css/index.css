@@ -635,6 +635,11 @@ select {
   font-weight: bold;
 }
 
+select:hover,
+select:focus {
+  outline: none;
+}
+
 .tour-dates {
   font-weight: bold;
 }
@@ -699,10 +704,6 @@ select {
   margin-bottom: 0;
 }
 
-.menu-judge {
-  /* display: flex;
-    flex-direction: column; */
-}
 .btn-submit {
   background-color: #3123ae;
   color: #fff;

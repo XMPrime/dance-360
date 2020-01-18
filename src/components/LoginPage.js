@@ -1,15 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setUsername, setPassword, loginAsync } from "../redux/loginReducer";
 import logo from "../imgs/group-6.svg";
-// import { JudgeContext } from "../JudgeContext";
 import useForm from "react-hook-form";
 import LoginModal from "../components/LoginModal";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
   const modal = useSelector(state => state.login.modal);
-  // const { handleChange, login, username, password } = useContext(JudgeContext);
   const { register, handleSubmit, errors } = useForm();
   const errorMessage = (
     <span className="error-message">This field is required!</span>
