@@ -8,15 +8,23 @@ import {
   setJudgeFullName,
   setJudgePosition,
   setJudgeIsTeacher,
-  setJudgeGroupName
+  setJudgeGroupName,
+  setJudgeGroupId,
+  toggleJudgeInfoModal,
+  getModalJudgeName
 } from "../redux/judgeInfoReducer";
+import JudgeInfoModal from "./JudgeInfoModal";
 import history from "../history";
 
 export default function JudgeInfo() {
-  const judgesData = useSelector(state => state.judgeInfo.judgesData);
-  const competitionGroupsData = useSelector(
-    state => state.judgeInfo.competitionGroupsData
-  );
+  const tourDateId = useSelector(state => state.tourDates.tourDateId);
+  const {
+    competitionGroupsData,
+    judgesData,
+    judgePosition,
+    judgeGroupId,
+    modal
+  } = useSelector(state => state.judgeInfo);
   const dispatch = useDispatch();
   const axios = require("axios");
   // const {
@@ -58,6 +66,7 @@ export default function JudgeInfo() {
     return (
       <option
         key={group.id}
+        id={group.id}
         className="tour-dates"
         name="groupName"
         value={group.name}
@@ -70,49 +79,77 @@ export default function JudgeInfo() {
   function handleFormChange(e) {
     const name = e.target.id;
     const value = e.target.value;
+    var select = document.getElementById("competition");
+    const groupId = select.options[select.selectedIndex].id;
     switch (name) {
       case "judge":
         dispatch(setJudgeFullName(value));
         break;
       case "position":
-        dispatch(setJudgePosition(`#${value}`));
+        dispatch(setJudgePosition(value));
         break;
       case "teacher":
         dispatch(setJudgeIsTeacher(value));
         break;
       case "competition":
         dispatch(setJudgeGroupName(value));
+        dispatch(setJudgeGroupId(groupId));
         break;
       default:
         console.log("error");
     }
   }
 
+  function handleSubmit() {
+    console.log(tourDateId, judgeGroupId, judgePosition);
+    const url = "https://api.d360test.com/api/coda/check-judge";
+    axios
+      .get(url, {
+        tour_date_id: tourDateId,
+        competition_group_id: 2, //judgeGroupId
+        position: judgePosition
+      })
+      .then(response => {
+        console.log(response);
+
+        // if (response === null) {
+        //   history.push("/scoring");
+        // } else {
+        //   dispatch(getModalJudgeName(response));
+        //   dispatch(toggleJudgeInfoModal());
+        // }
+      });
+  }
+
   useEffect(() => {
     axios.get("https://api.d360test.com/api/coda/judges").then(response => {
       dispatch(setJudgesData(response.data));
+      dispatch(
+        setJudgeFullName(`${response.data[0].fname} ${response.data[0].lname}`)
+      );
     });
 
     axios
       .get("https://api.d360test.com/api/coda/competition-groups")
       .then(response => {
         dispatch(setCompetitionGroupsData(response.data));
+        dispatch(setJudgePosition(1));
+        dispatch(setJudgeGroupId(response.data[0].id));
       });
 
     // why dis no work? document.getElementById("judge").value
-    dispatch(setJudgeFullName("Dana"));
-    dispatch(setJudgePosition("#1"));
   }, []); // empty array makes it run only once
 
   return (
     <div className="generic-page">
       <Header barIcon={false} title="JUDGE INFORMATION:" />
+      {modal ? <JudgeInfoModal /> : null}
       <div className="tour-dates-menu">
         <p>JUDGE INFORMATION</p>
         <form
           className="form-container"
           id="judgeInfoForm"
-          onSubmit={() => history.push("/scoring")}
+          onSubmit={handleSubmit}
         >
           <div className="label-container">
             <label className="custom-label" htmlFor="judge">
@@ -170,11 +207,18 @@ export default function JudgeInfo() {
             {competitionGroupsList}
           </select>
           <div className="btn-block">
-            <button className="btn btn-grey" onClick={() => history.goBack()}>
+            <button
+              className="btn btn-grey"
+              onClick={() => history.push("/tour-dates")}
+            >
               BACK
             </button>
 
-            <button className="btn btn-purple" type="submit">
+            <button
+              className="btn btn-purple"
+              type="submit"
+              onClick={() => handleSubmit}
+            >
               NEXT
             </button>
           </div>

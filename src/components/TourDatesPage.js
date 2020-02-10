@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header";
 import history from "../history";
 // import { JudgeContext } from "../JudgeContext";
@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setTourDatesData,
   transformTourDateData,
+  setSelectedTour,
   findClosestDate
 } from "../redux/tourDatesReducer";
 
@@ -28,18 +29,33 @@ export default function TourDatesPage() {
   const tourDatesList = tourDatesData.map(tourDateData => {
     if (tourDateData.end_date === closestDate) {
       return (
-        <option key={tourDateData.id} className="tour-dates" selected>
+        <option
+          key={tourDateData.id}
+          id={tourDateData.id}
+          className="tour-dates"
+          selected
+        >
           {transformTourDateData(tourDateData)}
         </option>
       );
     } else {
       return (
-        <option key={tourDateData.id} className="tour-dates">
+        <option
+          key={tourDateData.id}
+          id={tourDateData.id}
+          className="tour-dates"
+        >
           {transformTourDateData(tourDateData)}
         </option>
       );
     }
   });
+
+  function handleChange() {
+    var select = document.getElementById("tour-select");
+    const tourId = select.options[select.selectedIndex].id;
+    dispatch(setSelectedTour(tourId));
+  }
 
   useEffect(() => {
     axios
@@ -51,8 +67,10 @@ export default function TourDatesPage() {
       })
       .then(response => {
         dispatch(setTourDatesData(response.data));
+        //defaults the tourId to the first option in the list, would prefer a more elegant solution....
+        dispatch(setSelectedTour(response.data[0].id));
       });
-  });
+  }, []);
 
   return (
     <div className="generic-page">
@@ -64,9 +82,18 @@ export default function TourDatesPage() {
           alt="logo"
         />
         <form className="form-container">
-          <select className="custom-select">{tourDatesList}</select>
+          <select
+            id="tour-select"
+            className="custom-select"
+            onChange={handleChange}
+          >
+            {tourDatesList}
+          </select>
           <div className="btn-block">
-            <button className="btn btn-grey" onClick={() => history.goBack()}>
+            <button
+              className="btn btn-grey"
+              onClick={() => history.push("/events")}
+            >
               BACK
             </button>
 

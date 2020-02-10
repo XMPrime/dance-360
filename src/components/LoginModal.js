@@ -1,5 +1,5 @@
 import React from "react";
-import { toggleModal } from "../redux/loginReducer";
+import { toggleLoginModal } from "../redux/loginReducer";
 import { useDispatch } from "react-redux";
 
 export default function LoginModal() {
@@ -15,7 +15,7 @@ export default function LoginModal() {
         <div className="modal-footer">
           <button
             className="btn btn-purple"
-            onClick={() => dispatch(toggleModal())}
+            onClick={() => dispatch(toggleLoginModal())}
           >
             OK
           </button>
@@ -23,7 +23,7 @@ export default function LoginModal() {
       </div>
       <div
         className="modal-background"
-        onClick={() => dispatch(toggleModal())}
+        onClick={() => dispatch(toggleLoginModal())}
       ></div>
     </div>
   );

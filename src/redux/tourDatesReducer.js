@@ -14,6 +14,12 @@ export function setSelectedEvent(event) {
     event
   };
 }
+export function setSelectedTour(tour) {
+  return {
+    type: "SET_SELECTED_TOUR",
+    tour
+  };
+}
 
 // TOUR DATES PAGE LOGIC
 export function findClosestDate(tourDatesData) {
@@ -79,7 +85,8 @@ export function pageRouter(route) {
 //REDUCER
 
 const initialState = {
-  tourDatesData: []
+  tourDatesData: [],
+  tourDateId: null
 };
 
 export default function tourDatesReducer(
@@ -89,6 +96,8 @@ export default function tourDatesReducer(
   switch (action.type) {
     case "SET_TOUR_DATES_DATA":
       return { ...tourDatesState, tourDatesData: action.data };
+    case "SET_SELECTED_TOUR":
+      return { ...tourDatesState, tourDateId: Number(action.tour) };
     default:
       return tourDatesState;
   }

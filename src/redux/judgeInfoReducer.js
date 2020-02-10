@@ -1,6 +1,3 @@
-import history from "../history";
-import { useSelector, useDispatch } from "react-redux";
-
 //ACTION CREATORS:
 export function setJudgesData(data) {
   return {
@@ -40,14 +37,38 @@ export function setJudgeGroupName(value) {
     value
   };
 }
+export function setJudgeGroupId(id) {
+  return {
+    type: "SET_JUDGE_GROUP_ID",
+    id
+  };
+}
+
+export function toggleJudgeInfoModal(judgeName) {
+  console.log(judgeName);
+  return {
+    type: "TOGGLE_JUDGE_INFO_MODAL",
+    judgeName
+  };
+}
+
+export function getModalJudgeName(judgeName) {
+  return {
+    type: "GET_MODAL_JUDGE_NAME",
+    judgeName
+  };
+}
 
 const initialState = {
   judgesData: [],
   competitionGroupsData: [],
   judgeFullName: "Anonymous",
-  judgePosition: "",
-  judgeIsTeacher: "",
-  judgeGroupName: ""
+  judgePosition: null,
+  judgeIsTeacher: null,
+  judgeGroupName: null,
+  judgeGroupId: null,
+  modal: false,
+  modalState: { fname: "", lname: "" }
 };
 
 export default function judgeInfoReducer(
@@ -62,11 +83,26 @@ export default function judgeInfoReducer(
     case "SET_JUDGE_FULL_NAME":
       return { ...judgeInfoState, judgeFullName: action.value };
     case "SET_JUDGE_POSITION":
-      return { ...judgeInfoState, judgePosition: action.value };
+      return { ...judgeInfoState, judgePosition: Number(action.value) };
     case "SET_JUDGE_IS_TEACHER":
       return { ...judgeInfoState, judgeIsTeacher: action.value };
     case "SET_JUDGE_GROUP_NAME":
       return { ...judgeInfoState, judgeGroupName: action.value };
+    case "SET_JUDGE_GROUP_ID":
+      return { ...judgeInfoState, judgeGroupId: Number(action.id) };
+    case "TOGGLE_JUDGE_INFO_MODAL":
+      return {
+        ...judgeInfoState,
+        modal: !judgeInfoState.modal
+      };
+    case "GET_MODAL_JUDGE_NAME":
+      return {
+        ...judgeInfoState,
+        modalState: {
+          fname: action.judgeName.fname,
+          lname: action.judgeName.lname
+        }
+      };
     default:
       return judgeInfoState;
   }

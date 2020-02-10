@@ -27,9 +27,9 @@ export function logout() {
   };
 }
 
-export function toggleModal() {
+export function toggleLoginModal() {
   return {
-    type: "TOGGLE_MODAL"
+    type: "TOGGLE_LOGIN_MODAL"
   };
 }
 
@@ -38,7 +38,7 @@ export function loginAsync() {
   return (dispatch, getState) => {
     const url = "https://api.d360test.com/api/auth/signin";
     const axios = require("axios");
-    const { username, password, isLoggedIn } = getState().login;
+    const { username, password } = getState().login; //specific to react-hook-form?
     axios
       .post(url, {
         name: username,
@@ -53,7 +53,7 @@ export function loginAsync() {
       .catch(function(error) {
         console.log(error);
         //display modal
-        dispatch(toggleModal());
+        dispatch(toggleLoginModal());
       });
   };
 }
@@ -80,7 +80,7 @@ export default function loginReducer(loginState = initialState, action) {
       return { ...loginState, isLoggedIn: true };
     case "LOGOUT":
       return { ...loginState, isLoggedIn: false };
-    case "TOGGLE_MODAL":
+    case "TOGGLE_LOGIN_MODAL":
       return { ...loginState, modal: !loginState.modal };
     default:
       return loginState;

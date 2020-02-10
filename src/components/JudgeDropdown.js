@@ -23,7 +23,11 @@ export default function JudgeDropdown() {
       className="judge-dropdown"
       onClick={() => dispatch(toggleJudgeDropdown())}
     >
-      <div className="judge-id-name">{`${judgePosition} ${judgeFullName}`}</div>
+      <div className="judge-id-name">
+        {judgePosition
+          ? `#${judgePosition} ${judgeFullName}`
+          : `${judgeFullName}`}
+      </div>
       <img className="profile-pic" src={profilePic} alt="your profile pic" />
       <i className="fas fa-caret-down"></i>
       {judgeDropdownIsOpen ? <JudgeDropdownMenu /> : null}
