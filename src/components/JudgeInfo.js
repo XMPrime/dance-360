@@ -27,17 +27,7 @@ export default function JudgeInfo() {
   } = useSelector(state => state.judgeInfo);
   const dispatch = useDispatch();
   const axios = require("axios");
-  // const {
-  //   judgesData,
-  //   setJudgesData,
-  //   competitionGroupsData,
-  //   setCompetitionGroupsData,
-  //   handleFormChange(e),
-  //   judgeFullName,
-  //   judgePosition,
-  //   setJudgeFullName,
-  //   setJudgePosition
-  // } = useContext(JudgeContext);
+
   const judgesList = judgesData.map(judge => {
     return (
       <option
@@ -133,8 +123,8 @@ export default function JudgeInfo() {
       .get("https://api.d360test.com/api/coda/competition-groups")
       .then(response => {
         dispatch(setCompetitionGroupsData(response.data));
-        dispatch(setJudgePosition(1));
-        dispatch(setJudgeGroupId(response.data[0].id));
+        dispatch(setJudgePosition(1)); //rethink, not clear
+        dispatch(setJudgeGroupId(2)); //response.data[0].id
       });
 
     // why dis no work? document.getElementById("judge").value
