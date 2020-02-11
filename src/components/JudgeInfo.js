@@ -10,6 +10,7 @@ import {
   setJudgeIsTeacher,
   setJudgeGroupName,
   setJudgeGroupId,
+  setJudgeHeadshot,
   toggleJudgeInfoModal,
   getModalJudgeName
 } from "../redux/judgeInfoReducer";
@@ -32,8 +33,10 @@ export default function JudgeInfo() {
     return (
       <option
         key={judge.id}
+        id={judge.id}
         className="tour-dates"
         name="fullName"
+        headshot={69}
         value={`${judge.fname} ${judge.lname}`}
       >
         {`${judge.fname} ${judge.lname}`}
@@ -69,11 +72,12 @@ export default function JudgeInfo() {
   function handleFormChange(e) {
     const name = e.target.id;
     const value = e.target.value;
-    var select = document.getElementById("competition");
-    const groupId = select.options[select.selectedIndex].id;
+
     switch (name) {
       case "judge":
+        const index = document.getElementById("judge").selectedIndex;
         dispatch(setJudgeFullName(value));
+        dispatch(setJudgeHeadshot(judgesData[index].headshot));
         break;
       case "position":
         dispatch(setJudgePosition(value));
@@ -82,6 +86,9 @@ export default function JudgeInfo() {
         dispatch(setJudgeIsTeacher(value));
         break;
       case "competition":
+        const competitionElem = document.getElementById("competition");
+        const groupId =
+          competitionElem.options[competitionElem.selectedIndex].id;
         dispatch(setJudgeGroupName(value));
         dispatch(setJudgeGroupId(groupId));
         break;
@@ -90,30 +97,37 @@ export default function JudgeInfo() {
     }
   }
 
-  function handleSubmit() {
+  function handleSubmit(e) {
+    e.preventDefault();
     console.log(tourDateId, judgeGroupId, judgePosition);
     const url = "https://api.d360test.com/api/coda/check-judge";
     axios
       .get(url, {
-        tour_date_id: tourDateId,
-        competition_group_id: 2, //judgeGroupId
-        position: judgePosition
+        params: {
+          tour_date_id: tourDateId,
+          competition_group_id: 2, //judgeGroupId
+          position: judgePosition
+        }
       })
       .then(response => {
-        console.log(response);
+        let fname = response.data.fname;
+        let lname = response.data.lname;
 
-        // if (response === null) {
-        //   history.push("/scoring");
-        // } else {
-        //   dispatch(getModalJudgeName(response));
-        //   dispatch(toggleJudgeInfoModal());
-        // }
+        if (response.data === "") {
+          history.push("/scoring");
+        } else {
+          dispatch(getModalJudgeName(fname, lname));
+          dispatch(toggleJudgeInfoModal());
+        }
       });
   }
 
   useEffect(() => {
     axios.get("https://api.d360test.com/api/coda/judges").then(response => {
+      console.log(response.data);
       dispatch(setJudgesData(response.data));
+
+      //Defaults value of Judge's name on load. See comment below for reason.
       dispatch(
         setJudgeFullName(`${response.data[0].fname} ${response.data[0].lname}`)
       );
@@ -123,13 +137,15 @@ export default function JudgeInfo() {
       .get("https://api.d360test.com/api/coda/competition-groups")
       .then(response => {
         dispatch(setCompetitionGroupsData(response.data));
-        dispatch(setJudgePosition(1)); //rethink, not clear
-        dispatch(setJudgeGroupId(2)); //response.data[0].id
+
+        //Sets the default values on load of JudgeInfo page because the header needs
+        //to start as "Anonymous" without position # nor judge picture displayed
+        dispatch(setJudgePosition(1)); //defaulted to 1 as it is at the top of the positions list
+        dispatch(setJudgeGroupId(response.data[0].id));
       });
 
     // why dis no work? document.getElementById("judge").value
   }, []); // empty array makes it run only once
-
   return (
     <div className="generic-page">
       <Header barIcon={false} title="JUDGE INFORMATION:" />

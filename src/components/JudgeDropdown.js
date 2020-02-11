@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import profilePic from "../imgs/default_profile_pic.png";
+import anonymousJudge from "../imgs/default_profile_pic.png";
 // import { JudgeContext } from "../JudgeContext";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/loginReducer";
@@ -14,7 +14,7 @@ export default function JudgeDropdown() {
   //   judgePosition
   // } = useContext(JudgeContext);
   const dispatch = useDispatch();
-  const { judgePosition, judgeFullName } = useSelector(
+  const { judgePosition, judgeFullName, judgeHeadshot } = useSelector(
     state => state.judgeInfo
   );
   const judgeDropdownIsOpen = useSelector(state => state.judgeDropdown.isOpen);
@@ -28,7 +28,15 @@ export default function JudgeDropdown() {
           ? `#${judgePosition} ${judgeFullName}`
           : `${judgeFullName}`}
       </div>
-      <img className="profile-pic" src={profilePic} alt="your profile pic" />
+      <img
+        className="profile-pic"
+        src={
+          judgeHeadshot
+            ? `https://assets.dance360.com/staff/50x50/${judgeHeadshot}`
+            : anonymousJudge
+        }
+        alt="your profile pic"
+      />
       <i className="fas fa-caret-down"></i>
       {judgeDropdownIsOpen ? <JudgeDropdownMenu /> : null}
     </div>

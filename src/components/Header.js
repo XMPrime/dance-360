@@ -7,7 +7,6 @@ export default function Header(props) {
       <div className="header-text">{props.title}</div>
       <div className="inner-header">
         {props.barIcon === true ? <i className="fas fa-bars"></i> : <div></div>}
-        {/* jank solutions for jank problems */}
         <JudgeDropdown />
       </div>
     </header>

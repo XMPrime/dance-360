@@ -43,19 +43,25 @@ export function setJudgeGroupId(id) {
     id
   };
 }
+export function setJudgeHeadshot(img) {
+  return {
+    type: "SET_JUDGE_HEADSHOT",
+    img
+  };
+}
 
 export function toggleJudgeInfoModal(judgeName) {
-  console.log(judgeName);
   return {
     type: "TOGGLE_JUDGE_INFO_MODAL",
     judgeName
   };
 }
 
-export function getModalJudgeName(judgeName) {
+export function getModalJudgeName(fname, lname) {
   return {
     type: "GET_MODAL_JUDGE_NAME",
-    judgeName
+    fname,
+    lname
   };
 }
 
@@ -67,6 +73,7 @@ const initialState = {
   judgeIsTeacher: null,
   judgeGroupName: null,
   judgeGroupId: null,
+  judgeHeadshot: null,
   modal: false,
   modalState: { fname: "", lname: "" }
 };
@@ -90,6 +97,8 @@ export default function judgeInfoReducer(
       return { ...judgeInfoState, judgeGroupName: action.value };
     case "SET_JUDGE_GROUP_ID":
       return { ...judgeInfoState, judgeGroupId: Number(action.id) };
+    case "SET_JUDGE_HEADSHOT":
+      return { ...judgeInfoState, judgeHeadshot: action.img };
     case "TOGGLE_JUDGE_INFO_MODAL":
       return {
         ...judgeInfoState,
@@ -99,8 +108,8 @@ export default function judgeInfoReducer(
       return {
         ...judgeInfoState,
         modalState: {
-          fname: action.judgeName.fname,
-          lname: action.judgeName.lname
+          fname: action.fname,
+          lname: action.lname
         }
       };
     default:
