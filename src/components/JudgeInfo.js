@@ -123,8 +123,11 @@ export default function JudgeInfo() {
   }
 
   useEffect(() => {
+    // const competitionElem = document.getElementById("competition");
+    // const groupId =
+    //       competitionElem.options[competitionElem.selectedIndex].id;
+
     axios.get("https://api.d360test.com/api/coda/judges").then(response => {
-      console.log(response.data);
       dispatch(setJudgesData(response.data));
 
       //Defaults value of Judge's name on load. See comment below for reason.

@@ -201,10 +201,10 @@ p {
   font-size: 14px;
   height: 100%;
   display: flex;
+  position: relative;
   justify-content: flex-end;
   align-items: center;
   padding: 0.75em 0;
-  margin-right: 20px;
 }
 
 .judge-id-name {
@@ -227,11 +227,13 @@ p {
   font-size: 30px;
   vertical-align: middle;
   margin-left: 10px;
+  margin-right: 10px;
   color: #fff;
 }
 .judge-dropdown-menu {
   position: absolute;
   top: 100%;
+  right: 0;
 }
 .judge-dropdown:hover,
 .judge-dropdown:focus {
@@ -404,7 +406,7 @@ p {
 header {
   min-width: 100vw;
   text-align: center;
-  background-color: #131517;
+  background-color: #212529;
   color: #c0c0c0;
   font-family: "Montserrat";
   font-weight: 700;
@@ -423,6 +425,7 @@ header {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 0 20px;
 }
 
 .header-text {
@@ -431,10 +434,15 @@ header {
   position: absolute;
 }
 
-.fa-bars {
+.fa-bars,
+.fa-times {
   font-size: 26px;
   align-self: center;
-  margin-left: 20px;
+}
+
+.header-left-icon:focus,
+.header-left-icon:hover {
+  cursor: pointer;
 }
 
 .events-container-4orless,
@@ -682,4 +690,22 @@ select:focus {
   background-color: #131517;
   padding-right: 20px;
   justify-content: flex-end;
+}
+
+/* JUDGE-5 */
+.scoring-side-menu {
+  background-color: #131517;
+  width: 410px;
+  height: 500px;
+  padding: 0 30px 0 30px;
+  position: absolute;
+  left: 0;
+  top: 52px;
+  z-index: 5;
+}
+.scoring-side-menu__routines-list {
+  width: 350px;
+}
+.scoring-side-menu__header {
+  width: 410px;
 }
