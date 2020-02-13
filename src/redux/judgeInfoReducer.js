@@ -69,8 +69,8 @@ const initialState = {
   judgesData: [],
   competitionGroupsData: [],
   judgeFullName: "Anonymous",
-  judgePosition: null,
-  judgeIsTeacher: null,
+  judgePosition: 1,
+  judgeIsTeacher: true,
   judgeGroupName: null,
   judgeGroupId: null,
   judgeHeadshot: null,
@@ -84,9 +84,20 @@ export default function judgeInfoReducer(
 ) {
   switch (action.type) {
     case "SET_JUDGES_DATA":
-      return { ...judgeInfoState, judgesData: action.data };
+      const judgesData = action.data;
+      return {
+        ...judgeInfoState,
+        judgesData,
+        judgeFullName: `${judgesData[0].fname} ${judgesData[0].lname}`
+      };
     case "SET_COMPETITION_GROUPS_DATA":
-      return { ...judgeInfoState, competitionGroupsData: action.data };
+      const competitionGroupsData = action.data;
+      return {
+        ...judgeInfoState,
+        competitionGroupsData,
+        judgeGroupId: competitionGroupsData[0].id,
+        judgeGroupName: competitionGroupsData[0].name
+      };
     case "SET_JUDGE_FULL_NAME":
       return { ...judgeInfoState, judgeFullName: action.value };
     case "SET_JUDGE_POSITION":

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 export default function ScoringSideMenu() {
   const dispatch = useDispatch();
   const selectedEvent = useSelector(state => state.events.selectedEvent);
+  const tourDate = useSelector(state => state.tourDates.tourDate);
   const routinesList = [];
   return (
     <div className="scoring-side-menu">
@@ -14,7 +15,7 @@ export default function ScoringSideMenu() {
             className=""
             alt={selectedEvent.name}
           />
-          <span>City - Feb 14-16, 2020</span>
+          <span>{tourDate}</span>
         </div>
         {routinesList}
       </div>

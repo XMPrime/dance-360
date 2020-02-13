@@ -21,7 +21,7 @@ export default function Scoring() {
       .get(routinesUrl, {
         params: {
           tour_date_id: tourDateId,
-          competition_group_id: judgeInfo.GroupId,
+          competition_group_id: judgeInfo.judgeGroupId,
           position: judgeInfo.judgePosition
         }
       })

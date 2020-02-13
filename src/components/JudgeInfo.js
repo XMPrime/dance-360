@@ -1,6 +1,5 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header";
-// import { JudgeContext } from "../JudgeContext";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setJudgesData,
@@ -23,6 +22,7 @@ export default function JudgeInfo() {
     competitionGroupsData,
     judgesData,
     judgePosition,
+    judgeIsTeacher,
     judgeGroupId,
     modal
   } = useSelector(state => state.judgeInfo);
@@ -36,7 +36,6 @@ export default function JudgeInfo() {
         id={judge.id}
         className="tour-dates"
         name="fullName"
-        headshot={69}
         value={`${judge.fname} ${judge.lname}`}
       >
         {`${judge.fname} ${judge.lname}`}
@@ -99,13 +98,13 @@ export default function JudgeInfo() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(tourDateId, judgeGroupId, judgePosition);
+    console.log(tourDateId, judgeIsTeacher, judgeGroupId, judgePosition);
     const url = "https://api.d360test.com/api/coda/check-judge";
     axios
       .get(url, {
         params: {
           tour_date_id: tourDateId,
-          competition_group_id: 2, //judgeGroupId
+          competition_group_id: judgeGroupId,
           position: judgePosition
         }
       })
@@ -123,32 +122,16 @@ export default function JudgeInfo() {
   }
 
   useEffect(() => {
-    // const competitionElem = document.getElementById("competition");
-    // const groupId =
-    //       competitionElem.options[competitionElem.selectedIndex].id;
-
     axios.get("https://api.d360test.com/api/coda/judges").then(response => {
       dispatch(setJudgesData(response.data));
-
-      //Defaults value of Judge's name on load. See comment below for reason.
-      dispatch(
-        setJudgeFullName(`${response.data[0].fname} ${response.data[0].lname}`)
-      );
     });
 
     axios
       .get("https://api.d360test.com/api/coda/competition-groups")
       .then(response => {
         dispatch(setCompetitionGroupsData(response.data));
-
-        //Sets the default values on load of JudgeInfo page because the header needs
-        //to start as "Anonymous" without position # nor judge picture displayed
-        dispatch(setJudgePosition(1)); //defaulted to 1 as it is at the top of the positions list
-        dispatch(setJudgeGroupId(response.data[0].id));
       });
-
-    // why dis no work? document.getElementById("judge").value
-  }, []); // empty array makes it run only once
+  }, []);
   return (
     <div className="generic-page">
       <Header barIcon={false} title="JUDGE INFORMATION:" />

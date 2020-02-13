@@ -12,49 +12,28 @@ import {
 
 export default function TourDatesPage() {
   const selectedEvent = useSelector(state => state.events.selectedEvent);
-  const tourDatesData = useSelector(state => state.tourDates.tourDatesData);
+  const { tourDatesData, tourDate } = useSelector(state => state.tourDates);
   const dispatch = useDispatch();
   const axios = require("axios");
-  // const {
-  //   selectedEvent,
-  //   tourDatesData,
-  //   setTourDatesData,
-  //   transformTourDateData,
-  //   findClosestDate,
-  //   pageRouter
-  // } = useContext(JudgeContext);
-
-  const closestDate = findClosestDate(tourDatesData);
 
   const tourDatesList = tourDatesData.map(tourDateData => {
-    if (tourDateData.end_date === closestDate) {
-      return (
-        <option
-          key={tourDateData.id}
-          id={tourDateData.id}
-          className="tour-dates"
-          selected
-        >
-          {transformTourDateData(tourDateData)}
-        </option>
-      );
-    } else {
-      return (
-        <option
-          key={tourDateData.id}
-          id={tourDateData.id}
-          className="tour-dates"
-        >
-          {transformTourDateData(tourDateData)}
-        </option>
-      );
-    }
+    return (
+      <option
+        key={tourDateData.id}
+        id={tourDateData.id}
+        className="tour-dates"
+        value={transformTourDateData(tourDateData)}
+      >
+        {transformTourDateData(tourDateData)}
+      </option>
+    );
   });
 
-  function handleChange() {
+  function handleChange(e) {
     var select = document.getElementById("tour-select");
     const tourId = select.options[select.selectedIndex].id;
-    dispatch(setSelectedTour(tourId));
+    const tourDate = e.target.value;
+    dispatch(setSelectedTour(tourId, tourDate));
   }
 
   useEffect(() => {
@@ -67,8 +46,6 @@ export default function TourDatesPage() {
       })
       .then(response => {
         dispatch(setTourDatesData(response.data));
-        //defaults the tourId to the first option in the list, would prefer a more elegant solution....
-        dispatch(setSelectedTour(response.data[0].id));
       });
   }, []);
 
@@ -86,6 +63,7 @@ export default function TourDatesPage() {
             id="tour-select"
             className="custom-select"
             onChange={handleChange}
+            value={tourDate}
           >
             {tourDatesList}
           </select>

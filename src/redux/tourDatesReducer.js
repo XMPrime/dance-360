@@ -14,10 +14,11 @@ export function setSelectedEvent(event) {
     event
   };
 }
-export function setSelectedTour(tour) {
+export function setSelectedTour(tourId, tourDate) {
   return {
     type: "SET_SELECTED_TOUR",
-    tour
+    tourId,
+    tourDate
   };
 }
 
@@ -86,7 +87,8 @@ export function pageRouter(route) {
 
 const initialState = {
   tourDatesData: [],
-  tourDateId: null
+  tourDateId: null,
+  tourDate: ""
 };
 
 export default function tourDatesReducer(
@@ -95,9 +97,23 @@ export default function tourDatesReducer(
 ) {
   switch (action.type) {
     case "SET_TOUR_DATES_DATA":
-      return { ...tourDatesState, tourDatesData: action.data };
+      const closestDate = findClosestDate(action.data);
+      const defaultTour = action.data.find(tourDateData => {
+        return tourDateData.end_date === closestDate;
+      });
+
+      return {
+        ...tourDatesState,
+        tourDatesData: action.data,
+        tourDateId: defaultTour.id,
+        tourDate: transformTourDateData(defaultTour)
+      };
     case "SET_SELECTED_TOUR":
-      return { ...tourDatesState, tourDateId: Number(action.tour) };
+      return {
+        ...tourDatesState,
+        tourDateId: Number(action.tourId),
+        tourDate: action.tourDate
+      };
     default:
       return tourDatesState;
   }
