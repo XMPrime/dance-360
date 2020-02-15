@@ -98,7 +98,6 @@ export default function JudgeInfo() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(tourDateId, judgeIsTeacher, judgeGroupId, judgePosition);
     const url = "https://api.d360test.com/api/coda/check-judge";
     axios
       .get(url, {

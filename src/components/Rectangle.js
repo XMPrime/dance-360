@@ -1,19 +1,11 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-export default function Rectangle() {
+export default function Rectangle(props) {
+  // const { buttonsData } = useSelector(state => state.scoring);
   return (
-    <div>
-      <div className="rectangle first-level">Technique</div>
-      <div className="rectangle second-level">General</div>
-      <div className="rectangle third-level">Overall Control</div>
-      <div className="rectangle third-level">
-        <div className="great-job"></div>
-        <span className="rectangle fourth-level">Foot Work</span>
-      </div>
-      <div className="rectangle third-level">
-        <span className="needs-work"></span>
-        <span className="rectangle fourth-level">Balance</span>
-      </div>
+    <div className={`rectangle`}>
+      <div className={`level_${props.level}`}>{props.text}</div>
     </div>
   );
 }
