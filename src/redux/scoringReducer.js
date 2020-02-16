@@ -35,7 +35,7 @@ function objectMap(obj, fn) {
 
 const initialState = {
   routinesData: [],
-  buttonsData: [],
+  buttonsData: null,
   scoringBreakdownData: [],
   displaySideMenu: false
 };
