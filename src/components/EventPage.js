@@ -46,15 +46,7 @@ export default function EventPage() {
   return (
     <div className="generic-page">
       <Header title="CHOOSE YOUR EVENT:" />
-      <div
-        className={
-          eventsData.length <= 4
-            ? "events-container-4orless"
-            : "events-container-5ormore"
-        }
-      >
-        {events}
-      </div>
+      <div className="events-container">{events}</div>
     </div>
   );
 }

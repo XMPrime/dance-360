@@ -6,8 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setTourDatesData,
   transformTourDateData,
-  setSelectedTour,
-  findClosestDate
+  setSelectedTour
 } from "../redux/tourDatesReducer";
 
 export default function TourDatesPage() {

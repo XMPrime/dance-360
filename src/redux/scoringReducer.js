@@ -26,18 +26,29 @@ export function setScoringBreakdownData(data) {
   };
 }
 
-// Scoring PAGE LOGIC
-function objectMap(obj, fn) {
-  Object.fromEntries(
-    Object.entries(obj).map(([key, value], i) => [key, fn(value, key, i)])
-  );
+export function trackScrollPos(scrollPos) {
+  return {
+    type: "TRACK_SCROLL_POS",
+    scrollPos
+  };
+}
+
+export function setDivisionId(id) {
+  console.log(id);
+  return {
+    type: "SET_DIVISION_ID",
+    id
+  };
 }
 
 const initialState = {
   routinesData: [],
   buttonsData: null,
   scoringBreakdownData: [],
-  displaySideMenu: false
+  scrollPos: 0,
+  topButtons: true,
+  displaySideMenu: false,
+  divisionId: null
 };
 
 export default function scoringReducer(scoringState = initialState, action) {
@@ -61,6 +72,11 @@ export default function scoringReducer(scoringState = initialState, action) {
       return {
         ...scoringState,
         scoringBreakdownData: action.data
+      };
+    case "SET_DIVISION_ID":
+      return {
+        ...scoringState,
+        divisionId: action.id
       };
     default:
       return scoringState;

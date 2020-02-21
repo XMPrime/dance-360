@@ -1,21 +1,19 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./App.css";
 import "./css/index.css";
 import { Route, Switch, Redirect } from "react-router-dom";
-import { JudgeContext } from "./JudgeContext";
 import LoginPage from "./components/LoginPage";
 import EventPage from "./components/EventPage";
 import TourDatesPage from "./components/TourDatesPage";
 import JudgeInfo from "./components/JudgeInfo";
 import Scoring from "./components/Scoring";
-import ScoringBreakdown from "./components/ScoringBreakdown";
-import Rectangle from "./components/Rectangle";
-import { useSelector, useDispatch } from "react-redux";
-import store from "./redux";
+
+import { useSelector } from "react-redux";
 
 function App() {
   // const { isLoggedIn } = useContext(JudgeContext);
   const isLoggedIn = useSelector(state => state.login.isLoggedIn);
+
   return (
     <div className="App">
       {/* <ScoringBreakdown />
