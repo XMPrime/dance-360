@@ -7,9 +7,14 @@ export default function ScoringSideMenu() {
   const selectedEvent = useSelector(state => state.events.selectedEvent);
   const tourDate = useSelector(state => state.tourDates.tourDate);
   const { routinesData, divisionId } = useSelector(state => state.scoring);
-  console.log(divisionId);
-  console.log(routinesData[0].performance_division_level_id);
-  const routinesList = routinesData.map(routine => {
+
+  const routineNumbers = numbersTransformer(
+    routinesData.map(routine => {
+      return routine.number;
+    })
+  );
+
+  const routinesList = routinesData.map((routine, i) => {
     return (
       <div
         className="scoring-side-menu__routine"
@@ -19,14 +24,41 @@ export default function ScoringSideMenu() {
         //   dispatch(setDivisionId(routine.performance_division_level_id))
         // }
       >
-        <div className="routine-text__list-number">{`#${routine.number}`}</div>
+        <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
         <div className="routine-text__routine-name">{routine.routine}</div>
       </div>
     );
   });
 
   function nextChar(c) {
-    return String.fromCharCode(c.charCodeAt(-1) + 1);
+    return String.fromCharCode(c.charCodeAt(0) + 1);
+  }
+
+  function numbersTransformer(numbers) {
+    let newArr = [...numbers];
+    for (let i = 0, char = "a"; i < numbers.length; i++) {
+      let checker = numbers.filter(number => number === numbers[i]);
+      if (checker.length > 1) {
+        if (numbers[i] === numbers[i + 1]) {
+          newArr[i] = numbers[i] + char;
+          char = nextChar(char);
+        } else if (numbers[i] < numbers[i + 1]) {
+          newArr[i] = numbers[i] + char;
+          char = "a";
+        } else {
+          if (numbers[i] === numbers[i - 1]) {
+            char = nextChar(char);
+            newArr[i] = numbers[i] + char;
+          } else {
+            char = "a";
+            newArr[i] = numbers[i] + char;
+          }
+        }
+      } else {
+        char = "a";
+      }
+    }
+    return newArr;
   }
 
   return (

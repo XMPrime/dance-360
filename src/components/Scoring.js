@@ -10,6 +10,7 @@ import {
   setButtonsData,
   setRoutinesData,
   setScoringBreakdownData,
+  setTargetRoutine,
   setDivisionId
   // trackScrollPos
 } from "../redux/scoringReducer";
@@ -30,6 +31,12 @@ export default function Scoring() {
     routinesData,
     scoringBreakdownData,
     divisionId,
+    routineNumber,
+    routineName,
+    studioCode,
+    ageDivision,
+    performanceDivision,
+    routineCategory,
     // scrollPos,
     // topButtons,
     displaySideMenu
@@ -68,17 +75,17 @@ export default function Scoring() {
         }
       }
     });
-    let buttonsList_1 = fullButtonsList.slice(0, buttonsDivider);
-    let buttonsList_2 = fullButtonsList.slice(buttonsDivider);
+    let top = fullButtonsList.slice(0, buttonsDivider);
+    let bottom = fullButtonsList.slice(buttonsDivider);
 
-    while (buttonsList_1.length < minRectangles) {
-      buttonsList_1.push(<div className="blank-rectangle"></div>);
+    while (top.length < minRectangles) {
+      top.push(<div className="blank-rectangle"></div>);
     }
-    while (buttonsList_2.length < minRectangles) {
-      buttonsList_2.push(<div className="blank-rectangle"></div>);
+    while (bottom.length < minRectangles) {
+      bottom.push(<div className="blank-rectangle"></div>);
     }
 
-    return { buttonsList_1, buttonsList_2 };
+    return { top, bottom };
   }
 
   // function handleScroll(e) {
@@ -119,9 +126,24 @@ export default function Scoring() {
         }
       })
       .then(response => {
-        console.log(response);
-        dispatch(setRoutinesData(response.data));
-        dispatch(setDivisionId(response.data[0].performance_division_level_id));
+        console.log(response.data);
+        if (response.data.length !== 0) {
+          const initialRoutine = response.data[0];
+          console.log("pass");
+          dispatch(setRoutinesData(response.data));
+          // dispatch(setDivisionId(initialRoutine.performance_division_level_id));
+          dispatch(
+            setTargetRoutine(
+              initialRoutine.performance_division_level_id,
+              initialRoutine.number,
+              initialRoutine.routine,
+              initialRoutine.studio_code,
+              initialRoutine.age_division,
+              initialRoutine.performance_division,
+              initialRoutine.routine_category
+            )
+          );
+        }
       });
 
     axios.get(buttonsUrl).then(response => {
@@ -145,46 +167,53 @@ export default function Scoring() {
     // window.addEventListener("wheel", handleScroll);
     document.addEventListener("keydown", handleKeydown);
   }, []);
+
+  const buttonsList =
+    buttonsData === null || divisionId === null
+      ? null
+      : createButtonsList(buttonsData, divisionId);
+  const topStyle = {
+    height: `${Math.max(
+      Math.floor(
+        buttonsData === null || divisionId === null
+          ? 0
+          : (buttonsList.top.length * rectangleHeight) / minColumns
+      ),
+      minRows * rectangleHeight
+    )}px`
+  };
+  const bottomStyle = {
+    height: `${Math.max(
+      Math.floor(
+        buttonsData === null || divisionId === null
+          ? 0
+          : (buttonsList.bottom.length * rectangleHeight) / minColumns
+      ),
+      minRows * rectangleHeight
+    )}px`
+  };
+
+  const scoringTitle = (
+    <div>
+      <div className="scoring-title">{`#${routineNumber} - ${routineName} (${studioCode})`}</div>
+      <div className="scoring-subtitle">{`${ageDivision} • ${performanceDivision} • ${routineCategory}`}</div>
+    </div>
+  );
+
   return (
     <div className="generic-page">
-      <Header title="SCORING:" barIcon={true}></Header>
+      <Header title={scoringTitle} barIcon={true}></Header>
       {displaySideMenu ? <ScoringSideMenu /> : null}
       {buttonsData === null || divisionId === null ? null : (
         <div className="scoring-body">
           <div id="top-buttons">
-            <div
-              className="rectangles-container"
-              style={{
-                height: `${Math.max(
-                  Math.floor(
-                    (createButtonsList(buttonsData, divisionId).buttonsList_1
-                      .length *
-                      rectangleHeight) /
-                      minColumns
-                  ),
-                  minRows * rectangleHeight
-                )}px`
-              }}
-            >
-              {createButtonsList(buttonsData, divisionId).buttonsList_1}
+            <div className="rectangles-container" style={topStyle}>
+              {buttonsList.top}
             </div>
           </div>
           <div id="bottom-buttons">
-            <div
-              className="rectangles-container"
-              style={{
-                height: `${Math.max(
-                  Math.floor(
-                    (createButtonsList(buttonsData, divisionId).buttonsList_2
-                      .length *
-                      rectangleHeight) /
-                      minColumns
-                  ),
-                  minRows * rectangleHeight
-                )}px`
-              }}
-            >
-              {createButtonsList(buttonsData, divisionId).buttonsList_2}
+            <div className="rectangles-container" style={bottomStyle}>
+              {buttonsList.bottom}
             </div>
           </div>
         </div>

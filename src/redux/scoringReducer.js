@@ -41,6 +41,27 @@ export function setDivisionId(id) {
   };
 }
 
+export function setTargetRoutine(
+  divisionId,
+  routineNumber,
+  routineName,
+  studioCode,
+  ageDivision,
+  performanceDivision,
+  routineCategory
+) {
+  return {
+    type: "SET_TARGET_ROUTINE",
+    divisionId,
+    routineNumber,
+    routineName,
+    studioCode,
+    ageDivision,
+    performanceDivision,
+    routineCategory
+  };
+}
+
 const initialState = {
   routinesData: [],
   buttonsData: null,
@@ -48,7 +69,13 @@ const initialState = {
   scrollPos: 0,
   topButtons: true,
   displaySideMenu: false,
-  divisionId: null
+  divisionId: null,
+  routineNumber: "",
+  routineName: "",
+  studioCode: "",
+  ageDivision: "",
+  performanceDivision: "",
+  routineCategory: ""
 };
 
 export default function scoringReducer(scoringState = initialState, action) {
@@ -77,6 +104,17 @@ export default function scoringReducer(scoringState = initialState, action) {
       return {
         ...scoringState,
         divisionId: action.id
+      };
+    case "SET_TARGET_ROUTINE":
+      return {
+        ...scoringState,
+        divisionId: action.divisionId,
+        routineNumber: action.routineNumber,
+        routineName: action.routineName,
+        studioCode: action.studioCode,
+        ageDivision: action.ageDivision,
+        performanceDivision: action.performanceDivision,
+        routineCategory: action.routineCategory
       };
     default:
       return scoringState;

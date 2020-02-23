@@ -72,8 +72,10 @@ export function transformTourDateData(tourDateData) {
   const startYear = startDate[0] + startDate[1] + startDate[2] + startDate[3];
   const endYear = endDate[0] + endDate[1] + endDate[2] + endDate[3];
 
-  if (startMonth !== endMonth) {
+  if (startYear !== endYear) {
     return `${cityName} - ${monthNames[startMonth]} ${startDay}, ${startYear} - ${monthNames[endMonth]} ${endDay}, ${endYear}`;
+  } else if (startMonth !== endMonth) {
+    return `${cityName} - ${monthNames[startMonth]} ${startDay} - ${monthNames[endMonth]} ${endDay}, ${endYear}`;
   } else {
     return `${cityName} - ${monthNames[startMonth]} ${startDay}-${endDay}, ${startYear}`;
   }

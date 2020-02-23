@@ -22,7 +22,6 @@ export default function Header(props) {
             <div></div>
           )}
         </div>
-
         <JudgeDropdown />
       </div>
     </header>

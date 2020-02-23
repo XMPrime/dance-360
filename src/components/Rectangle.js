@@ -23,7 +23,7 @@ export default function Rectangle(props) {
 
   // }
   return (
-    <div className={`rectangle level_${props.level}`}>
+    <div className={`rectangle level_${props.isHeader ? props.level : 4}`}>
       {props.isHeader ? null : <div className="scoring-button-indent"></div>}
       {props.text}
     </div>

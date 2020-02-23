@@ -29,6 +29,8 @@ export default function ScoringBreakdown() {
           <label className="checkbox-label-style" for="family-friendly">
             Routine is not family-friendly
           </label>
+        </div>
+        <div>
           <input
             className="checkbox-style"
             type="checkbox"
