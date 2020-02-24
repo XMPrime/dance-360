@@ -14,9 +14,10 @@ import {
   getModalJudgeName
 } from "../redux/judgeInfoReducer";
 import JudgeInfoModal from "./JudgeInfoModal";
-import history from "../history";
+import { useHistory } from "react-router-dom";
 
 export default function JudgeInfo() {
+  const history = useHistory();
   const tourDateId = useSelector(state => state.tourDates.tourDateId);
   const {
     competitionGroupsData,
@@ -198,10 +199,7 @@ export default function JudgeInfo() {
             {competitionGroupsList}
           </select>
           <div className="btn-block">
-            <button
-              className="btn btn-grey"
-              onClick={() => history.push("/tour-dates")}
-            >
+            <button className="btn btn-grey" onClick={() => history.goBack()}>
               BACK
             </button>
 

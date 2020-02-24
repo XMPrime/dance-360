@@ -1,11 +1,10 @@
 import React from "react";
-// import { JudgeContext } from "../JudgeContext";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/loginReducer";
-import history from "../history";
+import { useHistory } from "react-router-dom";
 
 export default function JudgeDropdownMenu() {
-  // const { logout } = useContext(JudgeContext);
+  const history = useHistory();
   const dispatch = useDispatch();
   return (
     <div className="judge-dropdown-menu">

@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import Header from "./Header";
-import history from "../history";
+import { useHistory } from "react-router-dom";
 import { JudgeContext } from "../JudgeContext";
 import { useSelector, useDispatch } from "react-redux";
 import { setEventsData, setSelectedEvent } from "../redux/eventsReducer";
 
 export default function EventPage() {
+  const history = useHistory();
   const eventsData = useSelector(state => state.events.eventsData);
   const dispatch = useDispatch();
   const axios = require("axios");

@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import Header from "../components/Header";
-import history from "../history";
-// import { JudgeContext } from "../JudgeContext";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setTourDatesData,
-  transformTourDateData,
-  setSelectedTour
+  setSelectedTour,
+  transformTourDateData
 } from "../redux/tourDatesReducer";
 
 export default function TourDatesPage() {
@@ -14,6 +13,7 @@ export default function TourDatesPage() {
   const { tourDatesData, tourDate } = useSelector(state => state.tourDates);
   const dispatch = useDispatch();
   const axios = require("axios");
+  const history = useHistory();
 
   const tourDatesList = tourDatesData.map(tourDateData => {
     return (
@@ -67,10 +67,7 @@ export default function TourDatesPage() {
             {tourDatesList}
           </select>
           <div className="btn-block">
-            <button
-              className="btn btn-grey"
-              onClick={() => history.push("/events")}
-            >
+            <button className="btn btn-grey" onClick={() => history.goBack()}>
               BACK
             </button>
 

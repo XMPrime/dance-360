@@ -1,18 +1,10 @@
 import React, { useContext, useState } from "react";
 import anonymousJudge from "../imgs/default_profile_pic.png";
-// import { JudgeContext } from "../JudgeContext";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../redux/loginReducer";
 import { toggleJudgeDropdown } from "../redux/judgeDropdownReducer";
 import JudgeDropdownMenu from "./JudgeDropdownMenu";
 
 export default function JudgeDropdown() {
-  // const {
-  //   judgeDropdownIsOpen,
-  //   toggleJudgeDropdown,
-  //   judgeFullName,
-  //   judgePosition
-  // } = useContext(JudgeContext);
   const dispatch = useDispatch();
   const { judgePosition, judgeFullName, judgeHeadshot } = useSelector(
     state => state.judgeInfo

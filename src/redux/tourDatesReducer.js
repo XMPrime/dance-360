@@ -1,5 +1,3 @@
-import history from "../history";
-
 //ACTION CREATORS:
 export function setTourDatesData(data) {
   return {
@@ -79,10 +77,6 @@ export function transformTourDateData(tourDateData) {
   } else {
     return `${cityName} - ${monthNames[startMonth]} ${startDay}-${endDay}, ${startYear}`;
   }
-}
-
-export function pageRouter(route) {
-  route === "goBack" ? history.goBack() : history.push(route);
 }
 
 //REDUCER

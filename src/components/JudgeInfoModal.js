@@ -1,9 +1,10 @@
 import React from "react";
 import { toggleJudgeInfoModal } from "../redux/judgeInfoReducer";
 import { useDispatch, useSelector } from "react-redux";
-import history from "../history";
+import { useHistory } from "react-router-dom";
 
 export default function JudgeInfoModal() {
+  const history = useHistory();
   const { fname, lname } = useSelector(state => state.judgeInfo.modalState);
   const dispatch = useDispatch();
 

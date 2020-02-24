@@ -1,17 +1,48 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setUsername, setPassword, loginAsync } from "../redux/loginReducer";
+import { useHistory } from "react-router-dom";
+import {
+  setUsername,
+  setPassword,
+  login,
+  toggleLoginModal
+} from "../redux/loginReducer";
 import logo from "../imgs/group-6.svg";
 import useForm from "react-hook-form";
 import LoginModal from "../components/LoginModal";
 
 export default function LoginPage() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const modal = useSelector(state => state.login.modal);
   const { register, handleSubmit, errors } = useForm();
   const errorMessage = (
     <span className="error-message">This field is required!</span>
   );
+
+  function loginAsync() {
+    return (dispatch, getState) => {
+      const url = "https://api.d360test.com/api/auth/signin";
+      const axios = require("axios");
+      const { username, password } = getState().login; //specific to react-hook-form?
+      axios
+        .post(url, {
+          name: username,
+          password: password
+        })
+        .then(response => {
+          if (response.status === 200) {
+            dispatch(login());
+            history.push("/events");
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          //display modal
+          dispatch(toggleLoginModal());
+        });
+    };
+  }
 
   return (
     <div className="judge-1">

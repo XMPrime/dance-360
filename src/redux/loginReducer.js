@@ -1,5 +1,3 @@
-import history from "../history";
-
 //ACTION CREATORS:
 export function setUsername(username) {
   return {
@@ -30,31 +28,6 @@ export function logout() {
 export function toggleLoginModal() {
   return {
     type: "TOGGLE_LOGIN_MODAL"
-  };
-}
-
-// LOGIN LOGIC
-export function loginAsync() {
-  return (dispatch, getState) => {
-    const url = "https://api.d360test.com/api/auth/signin";
-    const axios = require("axios");
-    const { username, password } = getState().login; //specific to react-hook-form?
-    axios
-      .post(url, {
-        name: username,
-        password: password
-      })
-      .then(response => {
-        if (response.status === 200) {
-          dispatch(login());
-          history.push("/events");
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-        //display modal
-        dispatch(toggleLoginModal());
-      });
   };
 }
 
