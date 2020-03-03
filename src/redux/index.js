@@ -6,6 +6,7 @@ import tourDatesReducer from "./tourDatesReducer";
 import judgeInfoReducer from "./judgeInfoReducer";
 import judgeDropdownReducer from "./judgeDropdownReducer";
 import scoringReducer from "./scoringReducer";
+import scoringBreakdownReducer from "./scoringBreakdownReducer";
 
 const rootReducer = combineReducers({
   login: loginReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   tourDates: tourDatesReducer,
   judgeInfo: judgeInfoReducer,
   judgeDropdown: judgeDropdownReducer,
-  scoring: scoringReducer
+  scoring: scoringReducer,
+  scoringBreakdown: scoringBreakdownReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

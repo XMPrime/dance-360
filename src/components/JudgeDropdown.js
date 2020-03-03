@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import anonymousJudge from "../imgs/default_profile_pic.png";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleJudgeDropdown } from "../redux/judgeDropdownReducer";

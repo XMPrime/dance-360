@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setJudgesData,
   setCompetitionGroupsData,
+  setJudgeId,
   setJudgeFullName,
   setJudgePosition,
   setJudgeIsTeacher,
@@ -76,8 +77,10 @@ export default function JudgeInfo() {
     switch (name) {
       case "judge":
         const index = document.getElementById("judge").selectedIndex;
+        console.log(judgesData[index]);
         dispatch(setJudgeFullName(value));
         dispatch(setJudgeHeadshot(judgesData[index].headshot));
+        dispatch(setJudgeId(judgesData[index].id)); //or staff_type_id?
         break;
       case "position":
         dispatch(setJudgePosition(value));

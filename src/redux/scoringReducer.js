@@ -34,7 +34,6 @@ export function trackScrollPos(scrollPos) {
 }
 
 export function setDivisionId(id) {
-  console.log(id);
   return {
     type: "SET_DIVISION_ID",
     id
@@ -43,6 +42,7 @@ export function setDivisionId(id) {
 
 export function setTargetRoutine(
   divisionId,
+  routineId,
   routineNumber,
   routineName,
   studioCode,
@@ -53,12 +53,20 @@ export function setTargetRoutine(
   return {
     type: "SET_TARGET_ROUTINE",
     divisionId,
+    routineId,
     routineNumber,
     routineName,
     studioCode,
     ageDivision,
     performanceDivision,
     routineCategory
+  };
+}
+
+export function setButtonGrades(grades) {
+  return {
+    type: "SET_BUTTON_GRADES",
+    grades
   };
 }
 
@@ -70,12 +78,14 @@ const initialState = {
   topButtons: true,
   displaySideMenu: false,
   divisionId: null,
+  routineId: "",
   routineNumber: "",
   routineName: "",
   studioCode: "",
   ageDivision: "",
   performanceDivision: "",
-  routineCategory: ""
+  routineCategory: "",
+  buttonGrades: []
 };
 
 export default function scoringReducer(scoringState = initialState, action) {
@@ -100,11 +110,11 @@ export default function scoringReducer(scoringState = initialState, action) {
         ...scoringState,
         scoringBreakdownData: action.data
       };
-    case "SET_DIVISION_ID":
-      return {
-        ...scoringState,
-        divisionId: action.id
-      };
+    // case "SET_DIVISION_ID":
+    //   return {
+    //     ...scoringState,
+    //     divisionId: action.id
+    //   };
     case "SET_TARGET_ROUTINE":
       return {
         ...scoringState,
@@ -115,6 +125,11 @@ export default function scoringReducer(scoringState = initialState, action) {
         ageDivision: action.ageDivision,
         performanceDivision: action.performanceDivision,
         routineCategory: action.routineCategory
+      };
+    case "SET_BUTTON_GRADES":
+      return {
+        ...scoringState,
+        buttonGrades: action.grades
       };
     default:
       return scoringState;

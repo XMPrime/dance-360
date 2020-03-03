@@ -1,0 +1,100 @@
+.rectangles-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  // columns: 30px 6;
+  // column-count: 6;
+  // column-gap: 30px;
+  margin-top: 10px;
+  padding-right: 30px;
+  width: 100%;
+}
+
+.rectangle {
+  min-height: 30px;
+  width: calc(100% / 8);
+  // min-width: 205px;
+  margin-left: 30px;
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1.33px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.blank-rectangle {
+  min-height: 30px;
+  min-width: 205px;
+  margin-left: 30px;
+}
+
+.level_1 {
+  background-color: $coda-bright-blue;
+  color: white;
+  text-transform: uppercase;
+  text-indent: 10px;
+  cursor: default;
+}
+.level_2 {
+  background-color: $dark-gray;
+  color: #007af4;
+  text-transform: uppercase;
+  text-indent: 20px;
+  cursor: default;
+}
+.level_3 {
+  background-color: $gray;
+  color: white;
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.11px;
+  text-transform: uppercase;
+  text-indent: 30px;
+  cursor: default;
+}
+.level_4 {
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: normal;
+  letter-spacing: normal;
+  color: #e1e2e3;
+  text-transform: capitalize;
+  background-color: $light-gray;
+  text-indent: 20px;
+  cursor: pointer;
+}
+
+.level_4:focus,
+.level_4:hover {
+  opacity: 0.5;
+}
+
+.scoring-button-indent {
+  background-color: $gray;
+  height: 100%;
+  min-width: 20px;
+  margin-right: 10px;
+}
+
+.great-job {
+  // background-color: green;
+  // opacity: 0.5;
+  // z-index: 1;
+  background-image: linear-gradient(180deg, #097952, #397d60),
+    linear-gradient(180deg, #3c4148, #3c4148);
+}
+.needs-work {
+  // background-color: red;
+  // opacity: 0.5;
+  // z-index: 1;
+  background-image: linear-gradient(180deg, #7b3b48, #8d1527);
+}
+
+.neutral {
+}

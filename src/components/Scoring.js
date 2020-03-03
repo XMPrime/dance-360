@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import { Route, Switch, Redirect } from "react-router-dom";
 import Header from "./Header";
 import ScoringSideMenu from "./ScoringSideMenu";
 import Rectangle from "./Rectangle";
@@ -11,7 +10,8 @@ import {
   setRoutinesData,
   setScoringBreakdownData,
   setTargetRoutine,
-  setDivisionId
+  setButtonGrades
+  // setDivisionId
   // trackScrollPos
 } from "../redux/scoringReducer";
 
@@ -65,12 +65,24 @@ export default function Scoring() {
         if (button.level_4_name === null) {
           //level 3 buttons
           return (
-            <Rectangle level={3} isHeader={false} text={button.level_3_name} />
+            <Rectangle
+              level={3}
+              isHeader={false}
+              text={button.level_3_name}
+              level_4_id={button.id}
+              level_1_id={button.level_1_id}
+            />
           );
         } else {
           //level 4 buttons
           return (
-            <Rectangle level={4} isHeader={false} text={button.level_4_name} />
+            <Rectangle
+              level={4}
+              isHeader={false}
+              text={button.level_4_name}
+              level_4_id={button.id}
+              level_1_id={button.level_1_id}
+            />
           );
         }
       }
@@ -85,7 +97,26 @@ export default function Scoring() {
       bottom.push(<div className="blank-rectangle"></div>);
     }
 
-    return { top, bottom };
+    const buttonGrades = fullButtonsList.map(button => {
+      return {
+        level_4_id: button.props.level_4_id,
+        level_1_id: button.props.level_1_id,
+        good: button.props.good
+      };
+    });
+
+    return { top, bottom, buttonGrades };
+  }
+
+  function createButtonsPostData(buttonsList) {
+    const postData = buttonsList.map(button => {
+      return {
+        level_4_id: button.props.level_4_id,
+        level_1_id: button.props.level_1_id,
+        good: button.props.good
+      };
+    });
+    console.log(postData);
   }
 
   // function handleScroll(e) {
@@ -103,12 +134,74 @@ export default function Scoring() {
   // }
 
   function handleKeydown(e) {
-    if (e.code === "ArrowUp") {
-      window.scrollTo(0, 0);
+    if (document.querySelector("textarea") !== document.activeElement) {
+      if (e.code === "ArrowUp") {
+        window.scrollTo(0, 0);
+      }
+      if (e.code === "ArrowDown") {
+        window.scrollTo(0, document.body.scrollHeight);
+      }
     }
-    if (e.code === "ArrowDown") {
-      window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function submitScore(e) {
+    // MAKE A FAKE SUBMIT THAT CONSOLES CURRENT STATE OF BUTTON GRADES
+    if (e.code === "Enter") {
+      let rectangles = document.querySelectorAll("div.rectangle.level_4");
+      let buttonsArray = [];
+      rectangles.forEach(rectangle => {
+        buttonsArray.push({
+          level_4_id: Number(rectangle.attributes.level_4_id.value),
+          level_1_id: Number(rectangle.attributes.level_1_id.value),
+          good: rectangle.attributes.good.value === "true" ? true : false
+        });
+      });
     }
+
+    // return (dispatch, getState) => {
+    //   const url = "https://api.d360test.com/api/coda/score";
+    //   const axios = require("axios");
+    //   const event_id = getState().events.selectedEvent.id;
+    //   const tour_date_id = getState().tourDates.tourDateId;
+    //   const {judgeGroupId, judgeId, judgePosition, judgeIsTeacher} = getState().judgeInfo.judgeGroupId;
+    //   const {routineId, } = getState().scoring;
+
+    // axios
+    //   .post(url, {
+    //     isTabulator: BOOLEAN,
+    //     competition_group_id: judgeGroupId,
+    //     date_routine_id: INT,
+    //     event_id,
+    //     tour_date_id,
+    //     data: {
+    //       online_scoring_id: INT,
+    //       staff_id: judgeId,
+    //       note: STRING,
+    //       score: INT,
+    //       not_friendly: BOOLEAN,
+    //       i_choreographed: BOOLEAN,
+    //       position: INT,
+    //       teacher_critique: BOOLEAN,
+    //       is_coda: true,
+    //       buttons: [
+    //         {
+    //           level_4_id: INT,
+    //           level_1_id: INT,
+    //           good: BOOLEAN
+    //         }
+    //       ],
+    //       strongest_level_1_id: INT,
+    //       weakest_level_1_id: INT
+    //     }
+    //   })
+    //   .then(response => {
+    //     if (response.status === 200) {
+    //     }
+    //   })
+    //   .catch(function(error) {
+    //     console.log(error);
+    //   });
+    // };
   }
 
   useEffect(() => {
@@ -129,12 +222,12 @@ export default function Scoring() {
         console.log(response.data);
         if (response.data.length !== 0) {
           const initialRoutine = response.data[0];
-          console.log("pass");
           dispatch(setRoutinesData(response.data));
           // dispatch(setDivisionId(initialRoutine.performance_division_level_id));
           dispatch(
             setTargetRoutine(
               initialRoutine.performance_division_level_id,
+              initialRoutine.date_routine_id,
               initialRoutine.number,
               initialRoutine.routine,
               initialRoutine.studio_code,
@@ -166,6 +259,7 @@ export default function Scoring() {
     // window.addEventListener("scroll", () => handleScroll(scrollPos));
     // window.addEventListener("wheel", handleScroll);
     document.addEventListener("keydown", handleKeydown);
+    document.addEventListener("keydown", submitScore);
   }, []);
 
   const buttonsList =

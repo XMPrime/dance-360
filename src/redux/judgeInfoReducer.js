@@ -13,6 +13,13 @@ export function setCompetitionGroupsData(data) {
   };
 }
 
+export function setJudgeId(id) {
+  return {
+    type: "SET_JUDGE_ID",
+    id
+  };
+}
+
 export function setJudgeFullName(value) {
   return {
     type: "SET_JUDGE_FULL_NAME",
@@ -68,6 +75,7 @@ export function getModalJudgeName(fname, lname) {
 const initialState = {
   judgesData: [],
   competitionGroupsData: [],
+  judgeId: "",
   judgeFullName: "Anonymous",
   judgePosition: 1,
   judgeIsTeacher: true,
@@ -98,6 +106,8 @@ export default function judgeInfoReducer(
         judgeGroupId: competitionGroupsData[0].id,
         judgeGroupName: competitionGroupsData[0].name
       };
+    case "SET_JUDGE_ID":
+      return { ...judgeInfoState, judgeId: action.id };
     case "SET_JUDGE_FULL_NAME":
       return { ...judgeInfoState, judgeFullName: action.value };
     case "SET_JUDGE_POSITION":

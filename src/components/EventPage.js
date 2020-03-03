@@ -1,12 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import Header from "./Header";
 import { useHistory } from "react-router-dom";
-import { JudgeContext } from "../JudgeContext";
 import { useSelector, useDispatch } from "react-redux";
 import { setEventsData, setSelectedEvent } from "../redux/eventsReducer";
 
 export default function EventPage() {
-  const history = useHistory();
+  let history = useHistory();
   const eventsData = useSelector(state => state.events.eventsData);
   const dispatch = useDispatch();
   const axios = require("axios");
@@ -42,7 +41,7 @@ export default function EventPage() {
     axios.get("https://api.d360test.com/api/coda/events").then(response => {
       dispatch(setEventsData(response.data));
     });
-  });
+  }, []);
 
   return (
     <div className="generic-page">
