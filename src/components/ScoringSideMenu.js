@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setTargetRoutine } from "../redux/scoringReducer";
 
@@ -6,7 +6,7 @@ export default function ScoringSideMenu() {
   const dispatch = useDispatch();
   const selectedEvent = useSelector(state => state.events.selectedEvent);
   const tourDate = useSelector(state => state.tourDates.tourDate);
-  const { routinesData, divisionId } = useSelector(state => state.scoring);
+  const { routinesData, targetRoutine } = useSelector(state => state.scoring);
 
   const routineNumbers = numbersTransformer(
     routinesData.map(routine => {
@@ -14,20 +14,44 @@ export default function ScoringSideMenu() {
     })
   );
 
+  // function createRoutinesList(targetRoutine) {
+  //   return routinesData.map((routine, i) => {
+  //     return (
+  //       <div
+  //         className={`scoring-side-menu__routine ${routine === targetRoutine ? "scoring-side-menu__routine--selected" : ""}`}
+  //         key={routine.date_routine_id}
+  //         divisionId={routine.performance_division_level_id}
+  //         onClick={e => handleClick(routine, e)}
+  //       >
+  //         <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
+  //         <div className="routine-text__routine-name">{routine.routine}</div>
+  //       </div>
+  //     );
+  //   });
+  // }
+
   const routinesList = routinesData.map((routine, i) => {
-    // console.log(routine);
     return (
       <div
-        className="scoring-side-menu__routine"
+        className={`scoring-side-menu__routine ${
+          routine === targetRoutine
+            ? "scoring-side-menu__routine--selected"
+            : ""
+        }`}
         key={routine.date_routine_id}
         divisionId={routine.performance_division_level_id}
-        onClick={() => dispatch(setTargetRoutine(routine))}
+        onClick={e => handleClick(routine, e)}
       >
         <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
         <div className="routine-text__routine-name">{routine.routine}</div>
       </div>
     );
   });
+
+  function handleClick(routine, e) {
+    dispatch(setTargetRoutine(routine));
+    e.target.classList.add("scoring-side-menu__routine--selected");
+  }
 
   function nextChar(c) {
     return String.fromCharCode(c.charCodeAt(0) + 1);
@@ -60,6 +84,10 @@ export default function ScoringSideMenu() {
     return newArr;
   }
 
+  // useEffect(() => {
+  //   document.addEventListener("click")
+  // },[])
+
   return (
     <div className="scoring-side-menu">
       <div className="scoring-side-menu__routines-list">
@@ -76,3 +104,5 @@ export default function ScoringSideMenu() {
     </div>
   );
 }
+
+//createRoutinesList(targetRoutine)

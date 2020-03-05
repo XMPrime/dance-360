@@ -631,6 +631,11 @@ select:focus {
   color: #ffffff;
 }
 
+.scoring-side-menu__routine--selected {
+  background-color: $coda-purple;
+  color: #ffffff;
+}
+
 .routine-text__list-number {
   width: 10%;
 }

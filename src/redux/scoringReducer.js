@@ -41,7 +41,6 @@ export function setDivisionId(id) {
 }
 
 export function setTargetRoutine(targetRoutine) {
-  console.log(targetRoutine);
   return {
     type: "SET_TARGET_ROUTINE",
     targetRoutine
