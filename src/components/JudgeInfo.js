@@ -24,7 +24,6 @@ export default function JudgeInfo() {
     competitionGroupsData,
     judgesData,
     judgePosition,
-    judgeIsTeacher,
     judgeGroupId,
     modal
   } = useSelector(state => state.judgeInfo);

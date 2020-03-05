@@ -73,6 +73,7 @@ export default class Rectangle extends Component {
         level_1_id={level_1_id}
         // good={this.state.good}
         good={`${this.state.good}`}
+        grade={this.state.grade}
         className={`rectangle level_${isHeader ? level : 4} ${
           this.state.grade
         }`}

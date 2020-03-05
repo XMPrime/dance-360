@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import setDivisionId from "../redux/scoringReducer";
 
 export default function ScoringSideMenu() {
   const dispatch = useDispatch();

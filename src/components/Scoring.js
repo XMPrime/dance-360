@@ -9,8 +9,8 @@ import {
   setButtonsData,
   setRoutinesData,
   setScoringBreakdownData,
-  setTargetRoutine,
-  setButtonGrades
+  setTargetRoutine
+  // setButtonGrades
   // setDivisionId
   // trackScrollPos
 } from "../redux/scoringReducer";
@@ -25,27 +25,65 @@ export default function Scoring() {
   const dispatch = useDispatch();
   const selectedEvent = useSelector(state => state.events.selectedEvent);
   const tourDateId = useSelector(state => state.tourDates.tourDateId);
-  const judgeInfo = useSelector(state => state.judgeInfo);
+  const { judgeGroupId, judgePosition } = useSelector(state => state.judgeInfo);
   const {
     buttonsData,
     routinesData,
     scoringBreakdownData,
-    divisionId,
-    routineNumber,
-    routineName,
-    studioCode,
-    ageDivision,
-    performanceDivision,
-    routineCategory,
+    targetRoutine,
     // scrollPos,
-    // topButtons,
     displaySideMenu
   } = useSelector(state => state.scoring);
+  const {
+    performance_division_level_id,
+    date_routine_id,
+    number,
+    routine,
+    studio_code,
+    age_division,
+    performance_division,
+    routine_category,
+    online_scoring_id
+  } = useSelector(state => state.scoring.targetRoutine);
   const axios = require("axios");
 
-  function createButtonsList(buttonsData, divisionId) {
+  const buttonsList =
+    buttonsData !== null && performance_division_level_id !== null
+      ? createButtonsList(buttonsData, performance_division_level_id)
+      : null;
+
+  const topStyle = {
+    height: `${Math.max(
+      Math.floor(
+        buttonsData !== null && targetRoutine !== null
+          ? (buttonsList.top.length * rectangleHeight) / minColumns
+          : 0
+      ),
+      minRows * rectangleHeight
+    )}px`
+  };
+
+  const bottomStyle = {
+    height: `${Math.max(
+      Math.floor(
+        buttonsData !== null && targetRoutine !== null
+          ? (buttonsList.bottom.length * rectangleHeight) / minColumns
+          : 0
+      ),
+      minRows * rectangleHeight
+    )}px`
+  };
+
+  const scoringTitle = (
+    <div>
+      <div className="scoring-title">{`#${number} - ${routine} (${studio_code})`}</div>
+      <div className="scoring-subtitle">{`${age_division} • ${performance_division} • ${routine_category}`}</div>
+    </div>
+  );
+
+  function createButtonsList(buttonsData, performance_division_level_id) {
     const targetButtonData = buttonsData.find(element => {
-      return element.level_id === divisionId;
+      return element.level_id === performance_division_level_id;
     });
 
     const buttonsDivider = targetButtonData.level_4.findIndex(
@@ -97,26 +135,7 @@ export default function Scoring() {
       bottom.push(<div className="blank-rectangle"></div>);
     }
 
-    const buttonGrades = fullButtonsList.map(button => {
-      return {
-        level_4_id: button.props.level_4_id,
-        level_1_id: button.props.level_1_id,
-        good: button.props.good
-      };
-    });
-
-    return { top, bottom, buttonGrades };
-  }
-
-  function createButtonsPostData(buttonsList) {
-    const postData = buttonsList.map(button => {
-      return {
-        level_4_id: button.props.level_4_id,
-        level_1_id: button.props.level_1_id,
-        good: button.props.good
-      };
-    });
-    console.log(postData);
+    return { top, bottom };
   }
 
   // function handleScroll(e) {
@@ -145,7 +164,7 @@ export default function Scoring() {
   }
 
   function submitScore(e) {
-    // MAKE A FAKE SUBMIT THAT CONSOLES CURRENT STATE OF BUTTON GRADES
+    // FAKE SUBMIT THAT CONSOLES CURRENT STATE OF BUTTON GRADES
     if (e.code === "Enter") {
       let rectangles = document.querySelectorAll("div.rectangle.level_4");
       let buttonsArray = [];
@@ -156,52 +175,8 @@ export default function Scoring() {
           good: rectangle.attributes.good.value === "true" ? true : false
         });
       });
+      console.log(buttonsArray);
     }
-
-    // return (dispatch, getState) => {
-    //   const url = "https://api.d360test.com/api/coda/score";
-    //   const axios = require("axios");
-    //   const event_id = getState().events.selectedEvent.id;
-    //   const tour_date_id = getState().tourDates.tourDateId;
-    //   const {judgeGroupId, judgeId, judgePosition, judgeIsTeacher} = getState().judgeInfo.judgeGroupId;
-    //   const {routineId, } = getState().scoring;
-
-    // axios
-    //   .post(url, {
-    //     isTabulator: BOOLEAN,
-    //     competition_group_id: judgeGroupId,
-    //     date_routine_id: INT,
-    //     event_id,
-    //     tour_date_id,
-    //     data: {
-    //       online_scoring_id: INT,
-    //       staff_id: judgeId,
-    //       note: STRING,
-    //       score: INT,
-    //       not_friendly: BOOLEAN,
-    //       i_choreographed: BOOLEAN,
-    //       position: INT,
-    //       teacher_critique: BOOLEAN,
-    //       is_coda: true,
-    //       buttons: [
-    //         {
-    //           level_4_id: INT,
-    //           level_1_id: INT,
-    //           good: BOOLEAN
-    //         }
-    //       ],
-    //       strongest_level_1_id: INT,
-    //       weakest_level_1_id: INT
-    //     }
-    //   })
-    //   .then(response => {
-    //     if (response.status === 200) {
-    //     }
-    //   })
-    //   .catch(function(error) {
-    //     console.log(error);
-    //   });
-    // };
   }
 
   useEffect(() => {
@@ -214,35 +189,24 @@ export default function Scoring() {
       .get(routinesUrl, {
         params: {
           tour_date_id: tourDateId,
-          competition_group_id: judgeInfo.judgeGroupId,
-          position: judgeInfo.judgePosition
+          competition_group_id: judgeGroupId,
+          position: judgePosition
         }
       })
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         if (response.data.length !== 0) {
           const initialRoutine = response.data[0];
           dispatch(setRoutinesData(response.data));
-          // dispatch(setDivisionId(initialRoutine.performance_division_level_id));
-          dispatch(
-            setTargetRoutine(
-              initialRoutine.performance_division_level_id,
-              initialRoutine.date_routine_id,
-              initialRoutine.number,
-              initialRoutine.routine,
-              initialRoutine.studio_code,
-              initialRoutine.age_division,
-              initialRoutine.performance_division,
-              initialRoutine.routine_category
-            )
-          );
+          dispatch(setTargetRoutine(initialRoutine));
         }
       });
 
     axios.get(buttonsUrl).then(response => {
-      console.log(response);
+      // console.log(response);
       dispatch(setButtonsData(response.data));
     });
+
     axios
       .get(scoringBreakdownUrl, {
         params: {
@@ -250,7 +214,6 @@ export default function Scoring() {
         }
       })
       .then(response => {
-        // console.log(response);
         dispatch(setScoringBreakdownData(response.data));
       });
   }, []);
@@ -262,43 +225,11 @@ export default function Scoring() {
     document.addEventListener("keydown", submitScore);
   }, []);
 
-  const buttonsList =
-    buttonsData === null || divisionId === null
-      ? null
-      : createButtonsList(buttonsData, divisionId);
-  const topStyle = {
-    height: `${Math.max(
-      Math.floor(
-        buttonsData === null || divisionId === null
-          ? 0
-          : (buttonsList.top.length * rectangleHeight) / minColumns
-      ),
-      minRows * rectangleHeight
-    )}px`
-  };
-  const bottomStyle = {
-    height: `${Math.max(
-      Math.floor(
-        buttonsData === null || divisionId === null
-          ? 0
-          : (buttonsList.bottom.length * rectangleHeight) / minColumns
-      ),
-      minRows * rectangleHeight
-    )}px`
-  };
-
-  const scoringTitle = (
-    <div>
-      <div className="scoring-title">{`#${routineNumber} - ${routineName} (${studioCode})`}</div>
-      <div className="scoring-subtitle">{`${ageDivision} • ${performanceDivision} • ${routineCategory}`}</div>
-    </div>
-  );
-
   return (
     <div className="generic-page">
       <Header title={scoringTitle} barIcon={true}></Header>
       {displaySideMenu ? <ScoringSideMenu /> : null}
-      {buttonsData === null || divisionId === null ? null : (
+      {buttonsData === null || routinesData === null ? null : (
         <div className="scoring-body">
           <div id="top-buttons">
             <div className="rectangles-container" style={topStyle}>

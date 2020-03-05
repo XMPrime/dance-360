@@ -40,26 +40,10 @@ export function setDivisionId(id) {
   };
 }
 
-export function setTargetRoutine(
-  divisionId,
-  routineId,
-  routineNumber,
-  routineName,
-  studioCode,
-  ageDivision,
-  performanceDivision,
-  routineCategory
-) {
+export function setTargetRoutine(targetRoutine) {
   return {
     type: "SET_TARGET_ROUTINE",
-    divisionId,
-    routineId,
-    routineNumber,
-    routineName,
-    studioCode,
-    ageDivision,
-    performanceDivision,
-    routineCategory
+    targetRoutine
   };
 }
 
@@ -71,20 +55,13 @@ export function setButtonGrades(grades) {
 }
 
 const initialState = {
-  routinesData: [],
+  routinesData: null,
+  targetRoutine: { performance_division_level_id: "" },
   buttonsData: null,
   scoringBreakdownData: [],
   scrollPos: 0,
   topButtons: true,
   displaySideMenu: false,
-  divisionId: null,
-  routineId: "",
-  routineNumber: "",
-  routineName: "",
-  studioCode: "",
-  ageDivision: "",
-  performanceDivision: "",
-  routineCategory: "",
   buttonGrades: []
 };
 
@@ -110,21 +87,10 @@ export default function scoringReducer(scoringState = initialState, action) {
         ...scoringState,
         scoringBreakdownData: action.data
       };
-    // case "SET_DIVISION_ID":
-    //   return {
-    //     ...scoringState,
-    //     divisionId: action.id
-    //   };
     case "SET_TARGET_ROUTINE":
       return {
         ...scoringState,
-        divisionId: action.divisionId,
-        routineNumber: action.routineNumber,
-        routineName: action.routineName,
-        studioCode: action.studioCode,
-        ageDivision: action.ageDivision,
-        performanceDivision: action.performanceDivision,
-        routineCategory: action.routineCategory
+        targetRoutine: action.targetRoutine
       };
     case "SET_BUTTON_GRADES":
       return {

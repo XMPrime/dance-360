@@ -11,11 +11,17 @@ export function minusScore() {
   };
 }
 
-export function editNotes(notes) {
+export function editNotes(note) {
   return {
-    type: "EDIT_NOTES",
-    notes
+    type: "EDIT_NOTE",
+    note
   };
+}
+
+export function toggleCheckbox(event) {
+  return event.target.name === "family-friendly"
+    ? { type: "TOGGLE_FAMILY_FRIENDLY" }
+    : { type: "TOGGLE_I_CHOREOGRAPHED" };
 }
 
 const initialState = {
@@ -40,10 +46,20 @@ export default function scoringBreakdownReducer(
         ...scoringBreakdownState,
         score: scoringBreakdownState.score - 1
       };
-    case "EDIT_NOTES":
+    case "EDIT_NOTE":
       return {
         ...scoringBreakdownState,
-        notes: action.notes
+        notes: action.note
+      };
+    case "TOGGLE_FAMILY_FRIENDLY":
+      return {
+        ...scoringBreakdownState,
+        familyFriendly: !scoringBreakdownState.familyFriendly
+      };
+    case "TOGGLE_I_CHOREOGRAPHED":
+      return {
+        ...scoringBreakdownState,
+        iChoreographed: !scoringBreakdownState.iChoreographed
       };
     default:
       return scoringBreakdownState;
