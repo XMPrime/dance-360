@@ -48,14 +48,14 @@ export default function Scoring() {
   const axios = require("axios");
 
   const buttonsList =
-    buttonsData !== null && performance_division_level_id !== null
+    buttonsData !== false && performance_division_level_id !== undefined
       ? createButtonsList(buttonsData, performance_division_level_id)
-      : null;
+      : "";
 
   const topStyle = {
     height: `${Math.max(
       Math.floor(
-        buttonsData !== null && targetRoutine !== null
+        buttonsData !== false && performance_division_level_id !== undefined
           ? (buttonsList.top.length * rectangleHeight) / minColumns
           : 0
       ),
@@ -66,7 +66,7 @@ export default function Scoring() {
   const bottomStyle = {
     height: `${Math.max(
       Math.floor(
-        buttonsData !== null && targetRoutine !== null
+        buttonsData !== false && performance_division_level_id !== undefined
           ? (buttonsList.bottom.length * rectangleHeight) / minColumns
           : 0
       ),

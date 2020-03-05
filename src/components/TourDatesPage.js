@@ -67,7 +67,10 @@ export default function TourDatesPage() {
             {tourDatesList}
           </select>
           <div className="btn-block">
-            <button className="btn btn-grey" onClick={() => history.goBack()}>
+            <button
+              className="btn btn-grey"
+              onClick={() => history.push("/events")}
+            >
               BACK
             </button>
 

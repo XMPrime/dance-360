@@ -201,7 +201,10 @@ export default function JudgeInfo() {
             {competitionGroupsList}
           </select>
           <div className="btn-block">
-            <button className="btn btn-grey" onClick={() => history.goBack()}>
+            <button
+              className="btn btn-grey"
+              onClick={() => history.push("/tour-dates")}
+            >
               BACK
             </button>
 

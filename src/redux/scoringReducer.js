@@ -55,9 +55,9 @@ export function setButtonGrades(grades) {
 }
 
 const initialState = {
-  routinesData: null,
-  targetRoutine: { performance_division_level_id: "" },
-  buttonsData: null,
+  routinesData: false,
+  targetRoutine: {},
+  buttonsData: false,
   scoringBreakdownData: [],
   scrollPos: 0,
   topButtons: true,
