@@ -180,27 +180,27 @@ export default function Scoring() {
   }
 
   useEffect(() => {
-    const routinesUrl = "https://api.d360test.com/api/coda/routines";
+    // const routinesUrl = "https://api.d360test.com/api/coda/routines";
     const buttonsUrl = "https://api.d360test.com/api/coda/buttons";
     const scoringBreakdownUrl =
       "https://api.d360test.com/api/coda/scoring-breakdown";
 
-    axios
-      .get(routinesUrl, {
-        params: {
-          tour_date_id: tourDateId,
-          competition_group_id: judgeGroupId,
-          position: judgePosition
-        }
-      })
-      .then(response => {
-        // console.log(response.data);
-        if (response.data.length !== 0) {
-          const initialRoutine = response.data[0];
-          dispatch(setRoutinesData(response.data));
-          dispatch(setTargetRoutine(initialRoutine));
-        }
-      });
+    // axios
+    //   .get(routinesUrl, {
+    //     params: {
+    //       tour_date_id: tourDateId,
+    //       competition_group_id: judgeGroupId,
+    //       position: judgePosition
+    //     }
+    //   })
+    //   .then(response => {
+    //     console.log(response);
+    //     if (response.data.length !== 0) {
+    //       const initialRoutine = response.data[0];
+    //       dispatch(setRoutinesData(response.data));
+    //       dispatch(setTargetRoutine(initialRoutine));
+    //     }
+    //   });
 
     axios.get(buttonsUrl).then(response => {
       // console.log(response);
@@ -214,9 +214,31 @@ export default function Scoring() {
         }
       })
       .then(response => {
+        // console.log(response);
         dispatch(setScoringBreakdownData(response.data));
       });
   }, []);
+
+  useEffect(() => {
+    const routinesUrl = "https://api.d360test.com/api/coda/routines";
+
+    axios
+      .get(routinesUrl, {
+        params: {
+          tour_date_id: tourDateId,
+          competition_group_id: judgeGroupId,
+          position: judgePosition
+        }
+      })
+      .then(response => {
+        // console.log(response);
+        if (response.data.length !== 0) {
+          const initialRoutine = response.data[0];
+          dispatch(setRoutinesData(response.data));
+          dispatch(setTargetRoutine(initialRoutine));
+        }
+      });
+  }, []); // targetRoutine
 
   useEffect(() => {
     // window.addEventListener("scroll", () => handleScroll(scrollPos));

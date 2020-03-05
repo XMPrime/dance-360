@@ -69,7 +69,7 @@ export default function ScoringBreakdown() {
     //   .post(url, {
     //     isTabulator: BOOLEAN,
     //     competition_group_id: judgeGroupId,
-    //     date_routine_id: INT,
+    //     date_routine_id,
     //     event_id,
     //     tour_date_id,
     //     data: {

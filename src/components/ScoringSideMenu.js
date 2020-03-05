@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { setTargetRoutine } from "../redux/scoringReducer";
 
 export default function ScoringSideMenu() {
   const dispatch = useDispatch();
@@ -14,14 +15,13 @@ export default function ScoringSideMenu() {
   );
 
   const routinesList = routinesData.map((routine, i) => {
+    // console.log(routine);
     return (
       <div
         className="scoring-side-menu__routine"
         key={routine.date_routine_id}
         divisionId={routine.performance_division_level_id}
-        // onClick={() =>
-        //   dispatch(setDivisionId(routine.performance_division_level_id))
-        // }
+        onClick={() => dispatch(setTargetRoutine(routine))}
       >
         <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
         <div className="routine-text__routine-name">{routine.routine}</div>
