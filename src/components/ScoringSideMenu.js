@@ -50,7 +50,6 @@ export default function ScoringSideMenu() {
 
   function handleClick(routine, e) {
     dispatch(setTargetRoutine(routine));
-    e.target.classList.add("scoring-side-menu__routine--selected");
   }
 
   function nextChar(c) {

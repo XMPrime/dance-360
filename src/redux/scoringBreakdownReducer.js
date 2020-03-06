@@ -24,11 +24,31 @@ export function toggleCheckbox(event) {
     : { type: "TOGGLE_I_CHOREOGRAPHED" };
 }
 
+export function setStrongestLevel1Id(level_1_id, ratio) {
+  return {
+    type: "SET_STRONGEST_LEVEL_1_ID",
+    level_1_id,
+    ratio
+  };
+}
+
+export function setWeakestLevel1Id(level_1_id, ratio) {
+  return {
+    type: "SET_WEAKEST_LEVEL_1_ID",
+    level_1_id,
+    ratio
+  };
+}
+
 const initialState = {
   score: 100,
   notes: "",
   familyFriendly: false,
-  iChoreographed: false
+  iChoreographed: false,
+  strongestRatio: -1,
+  strongestId: "",
+  weakestRatio: 2,
+  weakestId: ""
 };
 
 export default function scoringBreakdownReducer(
@@ -39,12 +59,18 @@ export default function scoringBreakdownReducer(
     case "ADD_SCORE":
       return {
         ...scoringBreakdownState,
-        score: scoringBreakdownState.score + 1
+        score: Math.min(
+          Math.max(parseInt(scoringBreakdownState.score + 1), 0),
+          100
+        )
       };
     case "MINUS_SCORE":
       return {
         ...scoringBreakdownState,
-        score: scoringBreakdownState.score - 1
+        score: Math.min(
+          Math.max(parseInt(scoringBreakdownState.score - 1), 0),
+          100
+        )
       };
     case "EDIT_NOTE":
       return {
@@ -61,6 +87,23 @@ export default function scoringBreakdownReducer(
         ...scoringBreakdownState,
         iChoreographed: !scoringBreakdownState.iChoreographed
       };
+    case "SET_STRONGEST_LEVEL_1_ID":
+      return action.ratio > scoringBreakdownState.strongestRatio
+        ? {
+            ...scoringBreakdownState,
+            strongestRatio: action.ratio,
+            strongestId: Number(action.level_1_id)
+          }
+        : { ...scoringBreakdownState };
+    case "SET_WEAKEST_LEVEL_1_ID":
+      console.log(scoringBreakdownState);
+      return action.ratio < scoringBreakdownState.weakestRatio
+        ? {
+            ...scoringBreakdownState,
+            weakestRatio: action.ratio,
+            weakestId: Number(action.level_1_id)
+          }
+        : { ...scoringBreakdownState };
     default:
       return scoringBreakdownState;
   }

@@ -31,6 +31,13 @@ export function toggleLoginModal() {
   };
 }
 
+export function isTabulator(boolean) {
+  return {
+    type: "IS_TABULATOR",
+    boolean
+  };
+}
+
 export function handleChange(e) {
   const { value } = e.target;
   e.target.id === "username" ? setUsername(value) : setPassword(value);
@@ -40,7 +47,8 @@ const initialState = {
   isLoggedIn: false,
   username: "",
   password: "",
-  modal: false
+  modal: false,
+  isTabulator: false
 };
 
 export default function loginReducer(loginState = initialState, action) {
@@ -53,6 +61,8 @@ export default function loginReducer(loginState = initialState, action) {
       return { ...loginState, isLoggedIn: true };
     case "LOGOUT":
       return { ...loginState, isLoggedIn: false };
+    case "IS_TABULATOR":
+      return { ...loginState, isTabulator: action.boolean };
     case "TOGGLE_LOGIN_MODAL":
       return { ...loginState, modal: !loginState.modal };
     default:

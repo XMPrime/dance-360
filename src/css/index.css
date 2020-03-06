@@ -92,12 +92,12 @@
   margin-right: 10px;
 }
 
-.great-job {
+.good {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#097952), to(#397d60)), -webkit-gradient(linear, left top, left bottom, from(#3c4148), to(#3c4148));
   background-image: linear-gradient(180deg, #097952, #397d60), linear-gradient(180deg, #3c4148, #3c4148);
 }
 
-.needs-work {
+.bad {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#7b3b48), to(#8d1527));
   background-image: linear-gradient(180deg, #7b3b48, #8d1527);
 }
@@ -959,10 +959,12 @@ select:focus {
 
 .routine-text__list-number {
   width: 10%;
+  background-color: transparent;
 }
 
 .routine-text__routine-name {
   margin-left: 15px;
+  background-color: transparent;
 }
 
 .scoring-subtitle {

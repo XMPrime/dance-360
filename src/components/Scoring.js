@@ -163,21 +163,30 @@ export default function Scoring() {
     }
   }
 
-  function submitScore(e) {
-    // FAKE SUBMIT THAT CONSOLES CURRENT STATE OF BUTTON GRADES
-    if (e.code === "Enter") {
-      let rectangles = document.querySelectorAll("div.rectangle.level_4");
-      let buttonsArray = [];
-      rectangles.forEach(rectangle => {
-        buttonsArray.push({
-          level_4_id: Number(rectangle.attributes.level_4_id.value),
-          level_1_id: Number(rectangle.attributes.level_1_id.value),
-          good: rectangle.attributes.good.value === "true" ? true : false
-        });
-      });
-      console.log(buttonsArray);
-    }
-  }
+  // function submitScore(e) {
+  //   // FAKE SUBMIT THAT CONSOLES CURRENT STATE OF BUTTON GRADES
+  //   if (e.code === "Enter") {
+  //     let rectangles = document.querySelectorAll("div.rectangle.level_4");
+  //     let buttonsArr = [];
+  //     let gradesObj = {};
+  //     rectangles.forEach(rectangle => {
+  //       let grade = rectangle.attributes.grade.value;
+  //       let level_1_id = rectangle.attributes.level_1_id.value;
+  //       buttonsArr.push({
+  //         level_4_id: Number(rectangle.attributes.level_4_id.value),
+  //         level_1_id: Number(rectangle.attributes.level_1_id.value),
+  //         good: grade === "good" ? true : false
+  //       });
+
+  //       if (!gradesObj.hasOwnProperty(level_1_id)) {
+  //         gradesObj[`${level_1_id}`] = { good: 0, bad: 0, neutral: 0 };
+  //       }
+  //       gradesObj[`${level_1_id}`][`${grade}`] += 1;
+  //     });
+  //     console.log(gradesObj);
+  //     return [buttonsArr, gradesObj];
+  //   }
+  // }
 
   useEffect(() => {
     // const routinesUrl = "https://api.d360test.com/api/coda/routines";
@@ -244,7 +253,7 @@ export default function Scoring() {
     // window.addEventListener("scroll", () => handleScroll(scrollPos));
     // window.addEventListener("wheel", handleScroll);
     document.addEventListener("keydown", handleKeydown);
-    document.addEventListener("keydown", submitScore);
+    // document.addEventListener("keydown", submitScore);
   }, []);
 
   return (

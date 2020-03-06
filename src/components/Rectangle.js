@@ -54,14 +54,14 @@ export default class Rectangle extends Component {
     e.preventDefault();
     const currentState = this.state;
     switch (currentState.grade) {
-      case "great-job":
-        this.setState({ grade: "needs-work", good: false });
+      case "good":
+        this.setState({ grade: "bad", good: false });
         break;
-      case "needs-work":
+      case "bad":
         this.setState({ grade: "neutral", good: false });
         break;
       default:
-        this.setState({ grade: "great-job", good: true });
+        this.setState({ grade: "good", good: true });
         break;
     }
   }
@@ -72,7 +72,7 @@ export default class Rectangle extends Component {
         level_4_id={level_4_id}
         level_1_id={level_1_id}
         // good={this.state.good}
-        good={`${this.state.good}`}
+        // good={`${this.state.good}`}
         grade={this.state.grade}
         className={`rectangle level_${isHeader ? level : 4} ${
           this.state.grade

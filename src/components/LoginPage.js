@@ -5,6 +5,7 @@ import {
   setUsername,
   setPassword,
   login,
+  isTabulator,
   toggleLoginModal
 } from "../redux/loginReducer";
 import logo from "../imgs/group-6.svg";
@@ -20,6 +21,10 @@ export default function LoginPage() {
     <span className="error-message">This field is required!</span>
   );
 
+  function tabulatorCheck(roles) {
+    return roles.includes("tabulator");
+  }
+
   function loginAsync() {
     return (dispatch, getState) => {
       const url = "https://api.d360test.com/api/auth/signin";
@@ -32,7 +37,9 @@ export default function LoginPage() {
         })
         .then(response => {
           if (response.status === 200) {
+            console.log(response);
             dispatch(login());
+            dispatch(isTabulator(tabulatorCheck(response.data.roles)));
             history.push("/events");
           }
         })
