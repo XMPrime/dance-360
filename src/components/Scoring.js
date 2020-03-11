@@ -94,6 +94,7 @@ export default function Scoring() {
       if (button.header_name) {
         return (
           <Rectangle
+            key={button.id}
             level={button.header_level}
             isHeader={true}
             text={button.header_name}
@@ -104,6 +105,7 @@ export default function Scoring() {
           //level 3 buttons
           return (
             <Rectangle
+              key={button.id}
               level={3}
               isHeader={false}
               text={button.level_3_name}
@@ -115,6 +117,7 @@ export default function Scoring() {
           //level 4 buttons
           return (
             <Rectangle
+              key={button.id}
               level={4}
               isHeader={false}
               text={button.level_4_name}

@@ -37,7 +37,6 @@ export default function LoginPage() {
         })
         .then(response => {
           if (response.status === 200) {
-            console.log(response);
             dispatch(login());
             dispatch(isTabulator(tabulatorCheck(response.data.roles)));
             history.push("/events");

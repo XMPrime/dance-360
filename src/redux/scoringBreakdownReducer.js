@@ -42,7 +42,7 @@ export function setWeakestLevel1Id(level_1_id, ratio) {
 
 const initialState = {
   score: 100,
-  notes: "",
+  note: "",
   familyFriendly: false,
   iChoreographed: false,
   strongestRatio: -1,
@@ -75,7 +75,7 @@ export default function scoringBreakdownReducer(
     case "EDIT_NOTE":
       return {
         ...scoringBreakdownState,
-        notes: action.note
+        note: action.note
       };
     case "TOGGLE_FAMILY_FRIENDLY":
       return {
@@ -92,16 +92,15 @@ export default function scoringBreakdownReducer(
         ? {
             ...scoringBreakdownState,
             strongestRatio: action.ratio,
-            strongestId: Number(action.level_1_id)
+            strongestId: action.level_1_id
           }
         : { ...scoringBreakdownState };
     case "SET_WEAKEST_LEVEL_1_ID":
-      console.log(scoringBreakdownState);
       return action.ratio < scoringBreakdownState.weakestRatio
         ? {
             ...scoringBreakdownState,
             weakestRatio: action.ratio,
-            weakestId: Number(action.level_1_id)
+            weakestId: action.level_1_id
           }
         : { ...scoringBreakdownState };
     default:

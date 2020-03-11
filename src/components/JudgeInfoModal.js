@@ -8,6 +8,10 @@ export default function JudgeInfoModal() {
   const { fname, lname } = useSelector(state => state.judgeInfo.modalState);
   const dispatch = useDispatch();
 
+  function handleConfirm() {
+    history.push("/scoring");
+  }
+
   return (
     <div>
       <div className="modal">
@@ -25,7 +29,10 @@ export default function JudgeInfoModal() {
           </button>
           <button
             className="btn btn-purple"
-            onClick={() => history.push("/scoring")}
+            onClick={() => {
+              dispatch(toggleJudgeInfoModal());
+              history.push("/scoring");
+            }}
           >
             YES
           </button>

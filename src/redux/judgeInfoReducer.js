@@ -96,6 +96,7 @@ export default function judgeInfoReducer(
       return {
         ...judgeInfoState,
         judgesData,
+        judgeId: judgesData[0].id,
         judgeFullName: `${judgesData[0].fname} ${judgesData[0].lname}`
       };
     case "SET_COMPETITION_GROUPS_DATA":
