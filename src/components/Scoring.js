@@ -247,7 +247,7 @@ export default function Scoring() {
         if (response.data.length !== 0) {
           const initialRoutine = response.data[0];
           dispatch(setRoutinesData(response.data));
-          dispatch(setTargetRoutine(initialRoutine));
+          dispatch(setTargetRoutine(initialRoutine, 0));
         }
       });
   }, []); // targetRoutine

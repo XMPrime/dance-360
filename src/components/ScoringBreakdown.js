@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useForm from "react-hook-form";
+import { setTargetRoutine, toggleSideMenu } from "../redux/scoringReducer";
 import {
   addScore,
   minusScore,
@@ -97,6 +98,13 @@ export default function ScoringBreakdown() {
       const scoreUrl = "https://api.d360test.com/api/coda/score";
       const socketUrl = "https://api.d360test.com/api/socket-scoring";
       const axios = require("axios");
+
+      //Preload next routine for when the user submits score
+      const { routinesData, targetRoutineIndex } = getState().scoring;
+      const nextRoutine = routinesData[targetRoutineIndex + 1];
+      const nextRoutineIndex = targetRoutineIndex + 1;
+      console.log(nextRoutineIndex);
+
       const isTabulator = getState().login.isTabulator;
       const event_id = getState().events.selectedEvent.id;
       const tour_date_id = getState().tourDates.tourDateId;
@@ -166,20 +174,25 @@ export default function ScoringBreakdown() {
         })
         .then(response => {
           console.log(response);
-          // if (response.status === 200) {
-          //   axios.post(socketUrl, {
-          //     tour_date_id,
-          //     coda: true,
-          //     data: {
-          //       competition_group_id: judgeGroupId,
-          //       date_routine_id
-          //     }
-          //   });
-          // }
+          if (response.status === 200) {
+            axios.post(socketUrl, {
+              tour_date_id,
+              coda: true,
+              data: {
+                competition_group_id: judgeGroupId,
+                date_routine_id
+              }.then(response => {
+                console.log(response);
+              })
+            });
+          }
         })
         .catch(function(error) {
           console.log(error);
         });
+
+      dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
+      window.scrollTo(0, 0);
     };
   }
 

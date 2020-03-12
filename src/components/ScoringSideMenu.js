@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setTargetRoutine } from "../redux/scoringReducer";
+import { setTargetRoutine, toggleSideMenu } from "../redux/scoringReducer";
 
 export default function ScoringSideMenu() {
   const dispatch = useDispatch();
   const selectedEvent = useSelector(state => state.events.selectedEvent);
   const tourDate = useSelector(state => state.tourDates.tourDate);
-  const { routinesData, targetRoutine } = useSelector(state => state.scoring);
+  const { routinesData, targetRoutine, targetRoutineIndex } = useSelector(
+    state => state.scoring
+  );
 
   const routineNumbers = numbersTransformer(
     routinesData.map(routine => {
@@ -40,7 +42,7 @@ export default function ScoringSideMenu() {
         }`}
         key={routine.date_routine_id}
         divisionId={routine.performance_division_level_id}
-        onClick={e => handleClick(routine, e)}
+        onClick={e => handleClick(routine, i)}
       >
         <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
         <div className="routine-text__routine-name">{routine.routine}</div>
@@ -48,8 +50,9 @@ export default function ScoringSideMenu() {
     );
   });
 
-  function handleClick(routine, e) {
-    dispatch(setTargetRoutine(routine));
+  function handleClick(routine, i) {
+    dispatch(setTargetRoutine(routine, i));
+    dispatch(toggleSideMenu());
   }
 
   function nextChar(c) {

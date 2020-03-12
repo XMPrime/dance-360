@@ -40,10 +40,11 @@ export function setDivisionId(id) {
   };
 }
 
-export function setTargetRoutine(targetRoutine) {
+export function setTargetRoutine(targetRoutine, i = 0) {
   return {
     type: "SET_TARGET_ROUTINE",
-    targetRoutine
+    targetRoutine,
+    targetRoutineIndex: i
   };
 }
 
@@ -57,6 +58,7 @@ export function setButtonGrades(grades) {
 const initialState = {
   routinesData: false,
   targetRoutine: {},
+  targetRoutineIndex: 0,
   buttonsData: false,
   scoringBreakdownData: [],
   scrollPos: 0,
@@ -90,7 +92,8 @@ export default function scoringReducer(scoringState = initialState, action) {
     case "SET_TARGET_ROUTINE":
       return {
         ...scoringState,
-        targetRoutine: action.targetRoutine
+        targetRoutine: action.targetRoutine,
+        targetRoutineIndex: action.targetRoutineIndex
       };
     case "SET_BUTTON_GRADES":
       return {
