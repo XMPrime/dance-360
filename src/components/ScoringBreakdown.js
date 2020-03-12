@@ -174,22 +174,22 @@ export default function ScoringBreakdown() {
         })
         .then(response => {
           console.log(response);
-          if (response.status === 200) {
-            axios.post(socketUrl, {
-              tour_date_id,
-              coda: true,
-              data: {
-                competition_group_id: judgeGroupId,
-                date_routine_id
-              }.then(response => {
-                console.log(response);
-              })
-            });
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
+          // if (response.status === 200) {
+          //   axios.post(socketUrl, {
+          //     tour_date_id,
+          //     coda: true,
+          //     data: {
+          //       competition_group_id: judgeGroupId,
+          //       date_routine_id
+          //     }.then(response => {
+          //       console.log(response);
+          //     })
+          //   });
+          // }
         });
+      // .catch(function(error) {
+      //   console.log(error);
+      // });
 
       dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
       window.scrollTo(0, 0);

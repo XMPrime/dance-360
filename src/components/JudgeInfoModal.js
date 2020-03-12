@@ -8,17 +8,13 @@ export default function JudgeInfoModal() {
   const { fname, lname } = useSelector(state => state.judgeInfo.modalState);
   const dispatch = useDispatch();
 
-  function handleConfirm() {
-    history.push("/scoring");
-  }
-
   return (
     <div>
       <div className="modal">
         <div className="modal-header">Alert</div>
         <div className="modal-body">
-          {`${fname} ${lname} already has scores from this position for this tour date.
-          If judges are being swapped, this is fine. Continue?`}
+          <div className="modal-text">{`${fname} ${lname} already has scores from this position for this tour date.
+          If judges are being swapped, this is fine. Continue?`}</div>
         </div>
         <div className="modal-footer">
           <button

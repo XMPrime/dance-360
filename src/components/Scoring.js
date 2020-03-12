@@ -243,11 +243,20 @@ export default function Scoring() {
         }
       })
       .then(response => {
-        // console.log(response);
+        console.log(response);
         if (response.data.length !== 0) {
-          const initialRoutine = response.data[0];
+          let initialRoutine;
+          let initialRoutineIndex;
+          for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].score === null) {
+              initialRoutine = response.data[i];
+              initialRoutineIndex = i;
+              console.log(initialRoutine, initialRoutineIndex);
+              break;
+            }
+          }
           dispatch(setRoutinesData(response.data));
-          dispatch(setTargetRoutine(initialRoutine, 0));
+          dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
         }
       });
   }, []); // targetRoutine

@@ -38,11 +38,13 @@ export default function ScoringSideMenu() {
         className={`scoring-side-menu__routine ${
           routine === targetRoutine
             ? "scoring-side-menu__routine--selected"
-            : ""
+            : routine.score === null
+            ? "scoring-side-menu__routine--unrestricted"
+            : "scoring-side-menu__routine--restricted"
         }`}
         key={routine.date_routine_id}
         divisionId={routine.performance_division_level_id}
-        onClick={e => handleClick(routine, i)}
+        onClick={routine.score === null ? e => handleClick(routine, i, e) : ""}
       >
         <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
         <div className="routine-text__routine-name">{routine.routine}</div>
@@ -50,10 +52,25 @@ export default function ScoringSideMenu() {
     );
   });
 
-  function handleClick(routine, i) {
+  function handleClick(routine, i, e) {
+    // if (
+    //   //maybe use ID instead for easier selection
+    //   e.target.classList.contains("scoring-side-menu__routine--selected") ||
+    //   !e.target.classList.contains("scoring-side-menu__routine")
+    // ) {
+    //   //make it so the user doesn't reset the page when clicking the already selected routine
+    //   return;
+    // } else {
     dispatch(setTargetRoutine(routine, i));
     dispatch(toggleSideMenu());
+    // }
   }
+
+  // function clickedOutsideMenu(e) {
+  //   if (e.target.classList.contains("scoring-side-menu__outside-area")) {
+
+  //   };
+  // }
 
   function nextChar(c) {
     return String.fromCharCode(c.charCodeAt(0) + 1);
@@ -87,10 +104,11 @@ export default function ScoringSideMenu() {
   }
 
   // useEffect(() => {
-  //   document.addEventListener("click")
-  // },[])
+  //   document.addEventListener("click", clickedOutsideMenu);
+  // }, []);
 
   return (
+    // <div className="scoring-side-menu__outside-area">
     <div className="scoring-side-menu">
       <div className="scoring-side-menu__routines-list">
         <div className="scoring-side-menu__header">
@@ -104,6 +122,7 @@ export default function ScoringSideMenu() {
         {routinesList}
       </div>
     </div>
+    // </div>
   );
 }
 

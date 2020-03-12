@@ -942,19 +942,28 @@ select:focus {
       -ms-flex-align: center;
           align-items: center;
   cursor: pointer;
-  -webkit-transition: background-color 0.5s, color 0.5s;
-  transition: background-color 0.5s, color 0.5s;
-}
-
-.scoring-side-menu__routine:focus,
-.scoring-side-menu__routine:hover {
-  background-color: #3123ae;
-  color: #ffffff;
 }
 
 .scoring-side-menu__routine--selected {
   background-color: #3123ae;
   color: #ffffff;
+  cursor: auto;
+}
+
+.scoring-side-menu__routine--unrestricted {
+  -webkit-transition: background-color 0.5s, color 0.5s;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.scoring-side-menu__routine--unrestricted:focus,
+.scoring-side-menu__routine--unrestricted:hover {
+  background-color: #3123ae;
+  color: #ffffff;
+}
+
+.scoring-side-menu__routine--restricted {
+  background-color: rgba(220, 53, 69, 0.25);
+  cursor: auto;
 }
 
 .routine-text__list-number {
