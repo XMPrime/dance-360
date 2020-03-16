@@ -578,6 +578,7 @@ select:focus {
 .scoring-side-menu {
   background-color: #131517;
   width: 410px;
+  min-height: 100vh;
   max-height: 100vh;
   padding: 0 30px 0 30px;
   position: fixed;

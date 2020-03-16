@@ -30,9 +30,7 @@ export default function ScoringModal() {
     note,
     familyFriendly,
     iChoreographed,
-    strongestRatio,
     strongestId,
-    weakestRatio,
     weakestId
   } = useSelector(state => state.scoringBreakdown);
 
@@ -63,6 +61,7 @@ export default function ScoringModal() {
     const scoreUrl = "https://api.d360test.com/api/coda/score";
     const socketUrl = "https://api.d360test.com/api/socket-scoring";
     const axios = require("axios");
+    console.log(postData);
 
     axios
       .post(scoreUrl, {
@@ -71,19 +70,24 @@ export default function ScoringModal() {
       .then(response => {
         console.log(response);
         if (response.status === 200) {
-          axios.post(socketUrl, {
-            tour_date_id,
-            coda: true,
-            data: {
-              competition_group_id: judgeGroupId,
-              date_routine_id
-            }.then(response => {
-              // console.log(response);
+          axios
+            .post(socketUrl, {
+              tour_date_id,
+              coda: true,
+              data: {
+                competition_group_id: judgeGroupId,
+                date_routine_id
+              }
+            })
+            .then(response => {
+              console.log(response);
               dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
               window.scrollTo(0, 0);
-            })
-          });
+            });
         }
+      })
+      .catch(error => {
+        console.log(error.response);
       });
   }
 
@@ -109,7 +113,7 @@ export default function ScoringModal() {
             className="btn btn-purple"
             onClick={() => {
               dispatch(toggleScoringModal());
-              submitScore(postData, strongestRatio, weakestRatio);
+              submitScore(postData);
             }}
           >
             SAVE

@@ -83,7 +83,7 @@ export function transformTourDateData(tourDateData) {
 
 const initialState = {
   tourDatesData: [],
-  tourDateId: null,
+  tourDateId: "",
   tourDate: ""
 };
 
@@ -94,9 +94,13 @@ export default function tourDatesReducer(
   switch (action.type) {
     case "SET_TOUR_DATES_DATA":
       const closestDate = findClosestDate(action.data);
-      const defaultTour = action.data.find(tourDateData => {
+      let defaultTour = action.data.find(tourDateData => {
         return tourDateData.end_date === closestDate;
       });
+
+      if (defaultTour === undefined) {
+        defaultTour = action.data[0];
+      }
 
       return {
         ...tourDatesState,

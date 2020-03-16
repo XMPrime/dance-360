@@ -10,11 +10,14 @@ export default function ScoringSideMenu() {
     state => state.scoring
   );
 
-  const routineNumbers = numbersTransformer(
-    routinesData.map(routine => {
-      return routine.number;
-    })
-  );
+  const routineNumbers = routinesData
+    ? numbersTransformer(
+        routinesData.map(routine => {
+          return routine.number;
+        })
+      )
+    : [];
+  console.log(routineNumbers);
 
   // function createRoutinesList(targetRoutine) {
   //   return routinesData.map((routine, i) => {
@@ -32,27 +35,31 @@ export default function ScoringSideMenu() {
   //   });
   // }
 
-  const routinesList = routinesData.map((routine, i) => {
-    return (
-      <div
-        className={`scoring-side-menu__routine ${
-          routine === targetRoutine
-            ? "scoring-side-menu__routine--selected"
-            : routine.score === null
-            ? "scoring-side-menu__routine--unrestricted"
-            : "scoring-side-menu__routine--restricted"
-        }`}
-        key={routine.date_routine_id}
-        // division_id={routine.performance_division_level_id}
-        onClick={
-          routine.score === null ? e => handleClick(routine, i, e) : null
-        }
-      >
-        <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
-        <div className="routine-text__routine-name">{routine.routine}</div>
-      </div>
-    );
-  });
+  const routinesList = routinesData
+    ? routinesData.map((routine, i) => {
+        return (
+          <div
+            className={`scoring-side-menu__routine ${
+              routine === targetRoutine
+                ? "scoring-side-menu__routine--selected"
+                : routine.score === null
+                ? "scoring-side-menu__routine--unrestricted"
+                : "scoring-side-menu__routine--restricted"
+            }`}
+            key={routine.date_routine_id}
+            // division_id={routine.performance_division_level_id}
+            onClick={
+              routine.score === null ? e => handleClick(routine, i, e) : null
+            }
+          >
+            <div className="routine-text__list-number">{`#${
+              routineNumbers[i].includes("null") ? "" : routineNumbers[i]
+            }`}</div>
+            <div className="routine-text__routine-name">{routine.routine}</div>
+          </div>
+        );
+      })
+    : [];
 
   function handleClick(routine, i, e) {
     dispatch(setTargetRoutine(routine, i));

@@ -30,22 +30,18 @@ export default function Scoring() {
   const {
     buttonsData,
     routinesData,
-    scoringBreakdownData,
-    targetRoutine,
     // scrollPos,
     displaySideMenu,
     modal
   } = useSelector(state => state.scoring);
   const {
     performance_division_level_id,
-    date_routine_id,
     number,
     routine,
     studio_code,
     age_division,
     performance_division,
-    routine_category,
-    online_scoring_id
+    routine_category
   } = useSelector(state => state.scoring.targetRoutine);
   const axios = require("axios");
 
@@ -76,10 +72,20 @@ export default function Scoring() {
     )}px`
   };
 
-  const scoringTitle = (
+  const scoringTitle = routine ? (
     <div>
-      <div className="scoring-title">{`#${number} - ${routine} (${studio_code})`}</div>
-      <div className="scoring-subtitle">{`${age_division} • ${performance_division} • ${routine_category}`}</div>
+      <div className="scoring-title">{`#${number ? number : ""} - ${
+        routine ? routine : ""
+      } (${studio_code ? studio_code : ""})`}</div>
+      <div className="scoring-subtitle">{`${
+        age_division ? age_division : ""
+      } • ${performance_division ? performance_division : ""} • ${
+        routine_category ? routine_category : ""
+      }`}</div>
+    </div>
+  ) : (
+    <div>
+      <div className="scoring-title">Nothing to see here...</div>
     </div>
   );
 
@@ -168,53 +174,10 @@ export default function Scoring() {
     }
   }
 
-  // function submitScore(e) {
-  //   // FAKE SUBMIT THAT CONSOLES CURRENT STATE OF BUTTON GRADES
-  //   if (e.code === "Enter") {
-  //     let rectangles = document.querySelectorAll("div.rectangle.level_4");
-  //     let buttonsArr = [];
-  //     let gradesObj = {};
-  //     rectangles.forEach(rectangle => {
-  //       let grade = rectangle.attributes.grade.value;
-  //       let level_1_id = rectangle.attributes.level_1_id.value;
-  //       buttonsArr.push({
-  //         level_4_id: Number(rectangle.attributes.level_4_id.value),
-  //         level_1_id: Number(rectangle.attributes.level_1_id.value),
-  //         good: grade === "good" ? true : false
-  //       });
-
-  //       if (!gradesObj.hasOwnProperty(level_1_id)) {
-  //         gradesObj[`${level_1_id}`] = { good: 0, bad: 0, neutral: 0 };
-  //       }
-  //       gradesObj[`${level_1_id}`][`${grade}`] += 1;
-  //     });
-  //     console.log(gradesObj);
-  //     return [buttonsArr, gradesObj];
-  //   }
-  // }
-
   useEffect(() => {
-    // const routinesUrl = "https://api.d360test.com/api/coda/routines";
     const buttonsUrl = "https://api.d360test.com/api/coda/buttons";
     const scoringBreakdownUrl =
       "https://api.d360test.com/api/coda/scoring-breakdown";
-
-    // axios
-    //   .get(routinesUrl, {
-    //     params: {
-    //       tour_date_id: tourDateId,
-    //       competition_group_id: judgeGroupId,
-    //       position: judgePosition
-    //     }
-    //   })
-    //   .then(response => {
-    //     console.log(response);
-    //     if (response.data.length !== 0) {
-    //       const initialRoutine = response.data[0];
-    //       dispatch(setRoutinesData(response.data));
-    //       dispatch(setTargetRoutine(initialRoutine));
-    //     }
-    //   });
 
     axios.get(buttonsUrl).then(response => {
       // console.log(response);
@@ -260,13 +223,12 @@ export default function Scoring() {
           dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
         }
       });
-  }, []); // targetRoutine
+  }, []);
 
   useEffect(() => {
     // window.addEventListener("scroll", () => handleScroll(scrollPos));
     // window.addEventListener("wheel", handleScroll);
     document.addEventListener("keydown", handleKeydown);
-    // document.addEventListener("keydown", submitScore);
   }, []);
 
   return (
