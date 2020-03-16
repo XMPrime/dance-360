@@ -88,22 +88,34 @@ export default function scoringBreakdownReducer(
         iChoreographed: !scoringBreakdownState.iChoreographed
       };
     case "SET_STRONGEST_LEVEL_1_ID":
-      return action.ratio > scoringBreakdownState.strongestRatio
-        ? {
-            ...scoringBreakdownState,
-            strongestRatio: action.ratio,
-            strongestId: action.level_1_id
-          }
-        : { ...scoringBreakdownState };
+      return {
+        ...scoringBreakdownState,
+        strongestRatio: action.ratio,
+        strongestId: action.level_1_id
+      };
     case "SET_WEAKEST_LEVEL_1_ID":
-      return action.ratio < scoringBreakdownState.weakestRatio
-        ? {
-            ...scoringBreakdownState,
-            weakestRatio: action.ratio,
-            weakestId: action.level_1_id
-          }
-        : { ...scoringBreakdownState };
+      return {
+        ...scoringBreakdownState,
+        weakestRatio: action.ratio,
+        weakestId: action.level_1_id
+      };
     default:
       return scoringBreakdownState;
   }
 }
+
+// return action.ratio > scoringBreakdownState.strongestRatio
+//         ? {
+//             ...scoringBreakdownState,
+//             strongestRatio: action.ratio,
+//             strongestId: action.level_1_id
+//           }
+//         : { ...scoringBreakdownState };
+
+//         return action.ratio < scoringBreakdownState.weakestRatio
+//         ? {
+//             ...scoringBreakdownState,
+//             weakestRatio: action.ratio,
+//             weakestId: action.level_1_id
+//           }
+//         : { ...scoringBreakdownState };

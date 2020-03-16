@@ -43,8 +43,10 @@ export default function ScoringSideMenu() {
             : "scoring-side-menu__routine--restricted"
         }`}
         key={routine.date_routine_id}
-        divisionId={routine.performance_division_level_id}
-        onClick={routine.score === null ? e => handleClick(routine, i, e) : ""}
+        // division_id={routine.performance_division_level_id}
+        onClick={
+          routine.score === null ? e => handleClick(routine, i, e) : null
+        }
       >
         <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
         <div className="routine-text__routine-name">{routine.routine}</div>
@@ -53,17 +55,8 @@ export default function ScoringSideMenu() {
   });
 
   function handleClick(routine, i, e) {
-    // if (
-    //   //maybe use ID instead for easier selection
-    //   e.target.classList.contains("scoring-side-menu__routine--selected") ||
-    //   !e.target.classList.contains("scoring-side-menu__routine")
-    // ) {
-    //   //make it so the user doesn't reset the page when clicking the already selected routine
-    //   return;
-    // } else {
     dispatch(setTargetRoutine(routine, i));
     dispatch(toggleSideMenu());
-    // }
   }
 
   // function clickedOutsideMenu(e) {
@@ -102,10 +95,6 @@ export default function ScoringSideMenu() {
     }
     return newArr;
   }
-
-  // useEffect(() => {
-  //   document.addEventListener("click", clickedOutsideMenu);
-  // }, []);
 
   return (
     // <div className="scoring-side-menu__outside-area">

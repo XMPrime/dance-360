@@ -4,6 +4,7 @@ import Header from "./Header";
 import ScoringSideMenu from "./ScoringSideMenu";
 import Rectangle from "./Rectangle";
 import ScoringBreakdown from "./ScoringBreakdown";
+import ScoringModal from "./ScoringModal";
 
 import {
   setButtonsData,
@@ -32,7 +33,8 @@ export default function Scoring() {
     scoringBreakdownData,
     targetRoutine,
     // scrollPos,
-    displaySideMenu
+    displaySideMenu,
+    modal
   } = useSelector(state => state.scoring);
   const {
     performance_division_level_id,
@@ -243,7 +245,7 @@ export default function Scoring() {
         }
       })
       .then(response => {
-        console.log(response);
+        // console.log(response);
         if (response.data.length !== 0) {
           let initialRoutine;
           let initialRoutineIndex;
@@ -251,7 +253,6 @@ export default function Scoring() {
             if (response.data[i].score === null) {
               initialRoutine = response.data[i];
               initialRoutineIndex = i;
-              console.log(initialRoutine, initialRoutineIndex);
               break;
             }
           }
@@ -271,6 +272,7 @@ export default function Scoring() {
   return (
     <div className="generic-page">
       <Header title={scoringTitle} barIcon={true}></Header>
+      {modal ? <ScoringModal /> : null}
       {displaySideMenu ? <ScoringSideMenu /> : null}
       {buttonsData === null || routinesData === null ? null : (
         <div className="scoring-body">

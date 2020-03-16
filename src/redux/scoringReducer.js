@@ -55,6 +55,12 @@ export function setButtonGrades(grades) {
   };
 }
 
+export function toggleScoringModal() {
+  return {
+    type: "TOGGLE_SCORING_MODAL"
+  };
+}
+
 const initialState = {
   routinesData: false,
   targetRoutine: {},
@@ -64,7 +70,8 @@ const initialState = {
   scrollPos: 0,
   topButtons: true,
   displaySideMenu: false,
-  buttonGrades: []
+  buttonGrades: {},
+  modal: false
 };
 
 export default function scoringReducer(scoringState = initialState, action) {
@@ -99,6 +106,11 @@ export default function scoringReducer(scoringState = initialState, action) {
       return {
         ...scoringState,
         buttonGrades: action.grades
+      };
+    case "TOGGLE_SCORING_MODAL":
+      return {
+        ...scoringState,
+        modal: !scoringState.modal
       };
     default:
       return scoringState;
