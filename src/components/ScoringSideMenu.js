@@ -17,7 +17,6 @@ export default function ScoringSideMenu() {
         })
       )
     : [];
-  console.log(routineNumbers);
 
   // function createRoutinesList(targetRoutine) {
   //   return routinesData.map((routine, i) => {
@@ -35,7 +34,7 @@ export default function ScoringSideMenu() {
   //   });
   // }
 
-  const routinesList = routinesData
+  const routinesList = routinesData.length
     ? routinesData.map((routine, i) => {
         return (
           <div
@@ -52,9 +51,7 @@ export default function ScoringSideMenu() {
               routine.score === null ? e => handleClick(routine, i, e) : null
             }
           >
-            <div className="routine-text__list-number">{`#${
-              routineNumbers[i].includes("null") ? "" : routineNumbers[i]
-            }`}</div>
+            <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
             <div className="routine-text__routine-name">{routine.routine}</div>
           </div>
         );
