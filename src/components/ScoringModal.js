@@ -64,9 +64,7 @@ export default function ScoringModal() {
     console.log(postData);
 
     axios
-      .post(scoreUrl, {
-        postData
-      })
+      .post(scoreUrl, postData)
       .then(response => {
         console.log(response);
         if (response.status === 200) {

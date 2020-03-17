@@ -40,6 +40,12 @@ export function setWeakestLevel1Id(level_1_id, ratio) {
   };
 }
 
+export function toggleScoringBreakdownModal() {
+  return {
+    type: "TOGGLE_SCORING_BREAKDOWN_MODAL"
+  };
+}
+
 const initialState = {
   score: 100,
   note: "",
@@ -48,7 +54,8 @@ const initialState = {
   strongestRatio: -1,
   strongestId: "",
   weakestRatio: 2,
-  weakestId: ""
+  weakestId: "",
+  modal: false
 };
 
 export default function scoringBreakdownReducer(
@@ -98,6 +105,12 @@ export default function scoringBreakdownReducer(
         ...scoringBreakdownState,
         weakestRatio: action.ratio,
         weakestId: action.level_1_id
+      };
+    case "TOGGLE_SCORING_BREAKDOWN_MODAL":
+      console.log("click");
+      return {
+        ...scoringBreakdownState,
+        modal: !scoringBreakdownState.modal
       };
     default:
       return scoringBreakdownState;

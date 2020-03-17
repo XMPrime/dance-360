@@ -5,6 +5,7 @@ import ScoringSideMenu from "./ScoringSideMenu";
 import Rectangle from "./Rectangle";
 import ScoringBreakdown from "./ScoringBreakdown";
 import ScoringModal from "./ScoringModal";
+import ScoringBreakdownModal from "./ScoringBreakdownModal";
 
 import {
   setButtonsData,
@@ -19,7 +20,7 @@ import {
 export default function Scoring() {
   // Variables for formatting button table
   const rectangleHeight = 30; //pixels
-  const minColumns = 6;
+  const minColumns = 5;
   const minRows = 4;
   const minRectangles = minColumns * minRows;
 
@@ -34,6 +35,7 @@ export default function Scoring() {
     displaySideMenu,
     modal
   } = useSelector(state => state.scoring);
+
   const {
     performance_division_level_id,
     number,
@@ -191,7 +193,7 @@ export default function Scoring() {
         }
       })
       .then(response => {
-        // console.log(response);
+        console.log(response);
         dispatch(setScoringBreakdownData(response.data));
       });
   }, []);
@@ -250,6 +252,7 @@ export default function Scoring() {
           </div>
         </div>
       )}
+
       <ScoringBreakdown />
     </div>
   );

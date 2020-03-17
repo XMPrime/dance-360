@@ -8,13 +8,18 @@ import {
   editNotes,
   toggleCheckbox,
   setStrongestLevel1Id,
-  setWeakestLevel1Id
+  setWeakestLevel1Id,
+  toggleScoringBreakdownModal
 } from "../redux/scoringBreakdownReducer";
+import ScoringBreakdownModal from "./ScoringBreakdownModal";
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
   const { score, note, familyFriendly, iChoreographed } = useSelector(
     state => state.scoringBreakdown
+  );
+  const scoringBreakdownModal = useSelector(
+    state => state.scoringBreakdown.modal
   );
 
   function handleChange(e) {
@@ -81,6 +86,7 @@ export default function ScoringBreakdown() {
 
   return (
     <div className="scoring-breakdown-container">
+      {scoringBreakdownModal ? <ScoringBreakdownModal /> : null}
       <form
         onSubmit={e => {
           dispatch(toggleScoringModal());
@@ -88,10 +94,11 @@ export default function ScoringBreakdown() {
         }}
       >
         <div className="scoring-breakdown-header">
-          <span className="scoring-breakdown-header-text">
-            Scoring Breakdown
-          </span>{" "}
-          <i className="fas fa-info-circle"></i>
+          <div className="scoring-breakdown-header-text">Scoring Breakdown</div>
+          <i
+            className="fas fa-info-circle"
+            onClick={() => dispatch(toggleScoringBreakdownModal())}
+          ></i>
         </div>
         <div className="score-container">
           <i
@@ -121,9 +128,9 @@ export default function ScoringBreakdown() {
             onClick={e => dispatch(toggleCheckbox(e))}
             value={familyFriendly}
           />
-          <label className="checkbox-label-style" htmlFor="family-friendly">
+          <div className="checkbox-label-style">
             Routine is not family-friendly
-          </label>
+          </div>
         </div>
         <div className="checkbox-container">
           <input
@@ -133,9 +140,9 @@ export default function ScoringBreakdown() {
             onClick={e => dispatch(toggleCheckbox(e))}
             value={iChoreographed}
           />
-          <label className="checkbox-label-style" htmlFor="i-choreographed">
+          <div className="checkbox-label-style">
             I choreographed this routine
-          </label>
+          </div>
         </div>
 
         <button className="btn btn-submit" type="submit">

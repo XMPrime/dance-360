@@ -2,19 +2,17 @@
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  // columns: 30px 6;
-  // column-count: 6;
-  // column-gap: 30px;
   margin-top: 10px;
-  padding-right: 30px;
+  // padding-right: 30px;
   width: 100%;
+  align-content: space-between;
 }
 
 .rectangle {
-  min-height: 30px;
-  width: calc(100% / 8);
+  height: 30px;
+  width: calc(100% / 6.75);
   // min-width: 205px;
-  margin-left: 30px;
+  // margin-right: 30px;
   font-family: Montserrat;
   font-size: 12px;
   font-weight: 900;
@@ -30,7 +28,7 @@
 .blank-rectangle {
   min-height: 30px;
   min-width: 205px;
-  margin-left: 30px;
+  // margin-left: 30px;
 }
 
 .level_1 {

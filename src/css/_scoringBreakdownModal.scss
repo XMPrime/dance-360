@@ -1,0 +1,68 @@
+.scoring-breakdown-modal {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 22.5%;
+  font-weight: 900;
+  letter-spacing: 1.33px;
+  text-transform: uppercase;
+  width: 100%;
+  font-size: 12px;
+  z-index: 2;
+}
+
+.scoring-breakdown-modal--divider {
+  height: 20px;
+  background-color: $background-gray;
+}
+
+.scoring-breakdown-modal--header {
+  background-color: $darkest-gray;
+  justify-self: center;
+  color: #dee2e6;
+  padding: 15px;
+  height: 100%;
+}
+
+.scoring-breakdown-modal--subheader {
+  display: flex;
+  background-color: $darker-gray;
+  justify-content: space-between;
+  color: #dee2e6;
+  padding: 15px;
+}
+
+.scoring-breakdown-modal--breakdown {
+  display: flex;
+  justify-content: space-between;
+  background-color: #2e3238;
+  color: #adb5bd;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  .award {
+    margin-left: 15px;
+    letter-spacing: 1px;
+  }
+
+  .score {
+    font-size: 13px;
+    font-weight: normal;
+    align-self: center;
+    margin-right: 15px;
+  }
+}
+
+.scoring-breakdown-modal--background {
+  background-color: transparent;
+  position: fixed;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
