@@ -1,14 +1,25 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setTargetRoutine, toggleSideMenu } from "../redux/scoringReducer";
+import {
+  setRoutinesData,
+  setTargetRoutine,
+  toggleSideMenu
+} from "../redux/scoringReducer";
 
 export default function ScoringSideMenu() {
   const dispatch = useDispatch();
   const selectedEvent = useSelector(state => state.events.selectedEvent);
-  const tourDate = useSelector(state => state.tourDates.tourDate);
-  const { routinesData, targetRoutine, targetRoutineIndex } = useSelector(
-    state => state.scoring
-  );
+  const { tourDate, tourDateId } = useSelector(state => state.tourDates);
+  const { routinesData, targetRoutine } = useSelector(state => state.scoring);
+  const { judgeGroupId, judgePosition } = useSelector(state => state.judgeInfo);
+
+  let getData = {
+    params: {
+      tour_date_id: tourDateId,
+      competition_group_id: judgeGroupId,
+      position: judgePosition
+    }
+  };
 
   const routineNumbers = routinesData
     ? numbersTransformer(
@@ -17,22 +28,6 @@ export default function ScoringSideMenu() {
         })
       )
     : [];
-
-  // function createRoutinesList(targetRoutine) {
-  //   return routinesData.map((routine, i) => {
-  //     return (
-  //       <div
-  //         className={`scoring-side-menu__routine ${routine === targetRoutine ? "scoring-side-menu__routine--selected" : ""}`}
-  //         key={routine.date_routine_id}
-  //         divisionId={routine.performance_division_level_id}
-  //         onClick={e => handleClick(routine, e)}
-  //       >
-  //         <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
-  //         <div className="routine-text__routine-name">{routine.routine}</div>
-  //       </div>
-  //     );
-  //   });
-  // }
 
   const routinesList = routinesData.length
     ? routinesData.map((routine, i) => {
@@ -46,7 +41,6 @@ export default function ScoringSideMenu() {
                 : "scoring-side-menu__routine--restricted"
             }`}
             key={routine.date_routine_id}
-            // division_id={routine.performance_division_level_id}
             onClick={
               routine.score === null ? e => handleClick(routine, i, e) : null
             }
@@ -62,12 +56,6 @@ export default function ScoringSideMenu() {
     dispatch(setTargetRoutine(routine, i));
     dispatch(toggleSideMenu());
   }
-
-  // function clickedOutsideMenu(e) {
-  //   if (e.target.classList.contains("scoring-side-menu__outside-area")) {
-
-  //   };
-  // }
 
   function nextChar(c) {
     return String.fromCharCode(c.charCodeAt(0) + 1);
@@ -100,23 +88,54 @@ export default function ScoringSideMenu() {
     return newArr;
   }
 
+  function refreshRoutines(getData) {
+    const routinesUrl = "https://api.d360test.com/api/coda/routines";
+    const axios = require("axios");
+
+    axios.get(routinesUrl, getData).then(response => {
+      console.log(response);
+      if (response.data.length !== 0) {
+        let initialRoutine = response.data[0];
+        let initialRoutineIndex = 0;
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].score === null) {
+            initialRoutine = response.data[i];
+            initialRoutineIndex = i;
+            dispatch(setRoutinesData(response.data));
+            dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
+            break;
+          }
+        }
+        dispatch(setRoutinesData(response.data));
+      }
+    });
+  }
+
   return (
-    // <div className="scoring-side-menu__outside-area">
-    <div className="scoring-side-menu">
-      <div className="scoring-side-menu__routines-list">
-        <div className="scoring-side-menu__header">
-          <img
-            src={`https://assets.dance360.com/coda/${selectedEvent.id}.svg`}
-            className="scoring-side-menu__image"
-            alt={selectedEvent.name}
-          />
-          <div className="scoring-side-menu__tour-date">{tourDate}</div>
+    <>
+      <div className="scoring-side-menu">
+        <div className="scoring-side-menu__routines-list">
+          <div className="scoring-side-menu__header">
+            <img
+              src={`https://assets.dance360.com/coda/${selectedEvent.id}.svg`}
+              className="scoring-side-menu__image"
+              alt={selectedEvent.name}
+            />
+            <div className="scoring-side-menu__tour-date">{tourDate}</div>
+          </div>
+          {routinesList}
         </div>
-        {routinesList}
+        <button
+          className="btn btn-refresh"
+          onClick={() => refreshRoutines(getData)}
+        >
+          <i className="fas fa-redo"></i>REFRESH
+        </button>
       </div>
-    </div>
-    // </div>
+      <div
+        className="modal-background transparent"
+        onClick={() => dispatch(toggleSideMenu())}
+      ></div>
+    </>
   );
 }
-
-//createRoutinesList(targetRoutine)

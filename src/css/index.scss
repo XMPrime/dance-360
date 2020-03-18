@@ -84,7 +84,7 @@ p {
 
 /* Judge Dropdown */
 .judge-dropdown {
-  width: 250px;
+  min-width: 220px;
   font-size: 14px;
   height: 100%;
   display: flex;
@@ -98,8 +98,8 @@ p {
   display: inline-block;
   vertical-align: middle;
   margin-right: 15px;
+  margin-left: 30px;
   text-align: right;
-  // width: 100px;
 }
 
 .profile-pic {
@@ -128,7 +128,7 @@ p {
   cursor: pointer;
 }
 .judge-dropdown-menu-rectangle {
-  width: 250px;
+  // width: 250px;
   height: 40px;
   font-family: Arial;
   font-size: 14px;
@@ -136,6 +136,7 @@ p {
   line-height: 1.29;
   color: lightgrey;
   background-color: #131517;
+  padding-left: 30px;
   padding-right: 30px;
   border-top: 1px solid #1c1e22;
   display: flex;
@@ -316,6 +317,7 @@ header {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  height: 100%;
 }
 
 .header-text {
@@ -517,6 +519,26 @@ select:focus {
   height: 45px;
 }
 
+.btn-refresh {
+  background-color: #02be6f;
+  position: fixed;
+  margin: 0 auto;
+  bottom: 15px;
+  left: 112.5px;
+  color: #fff;
+  font-family: "Arial";
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 1px;
+  width: 185px;
+  height: 45px;
+  z-index: 10;
+}
+
+.fa-redo {
+  margin-right: 7px;
+}
+
 .error-message {
   color: #b4b5b5;
   display: flex;
@@ -526,7 +548,6 @@ select:focus {
   background-color: #000000;
   opacity: 70%;
   position: fixed;
-  z-index: 1;
   height: 100%;
   width: 100%;
   top: 0;
@@ -535,6 +556,12 @@ select:focus {
   justify-content: center;
   align-items: center;
   z-index: 2; // envelope and lock icons on z-index 1
+}
+
+.transparent {
+  background-color: transparent;
+  opacity: default;
+  z-index: 1;
 }
 
 .modal {

@@ -24,12 +24,6 @@ export default function ScoringBreakdownModal() {
         <div>SCORE</div>
       </div>
       {scoringBreakdown}
-      <div className="scoring-breakdown-modal--divider"></div>
     </div>
   );
 }
-
-// <div
-//         className="scoring-breakdown-modal--background"
-//         onClick={() => dispatch(toggleScoringBreakdownModal())}
-//       ></div>

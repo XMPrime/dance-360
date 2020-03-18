@@ -87,6 +87,9 @@ export default function ScoringBreakdown() {
   return (
     <div className="scoring-breakdown-container">
       {scoringBreakdownModal ? <ScoringBreakdownModal /> : null}
+      {scoringBreakdownModal ? (
+        <div className="scoring-breakdown-modal--divider"></div>
+      ) : null}
       <form
         onSubmit={e => {
           dispatch(toggleScoringModal());
@@ -149,6 +152,12 @@ export default function ScoringBreakdown() {
           SUBMIT
         </button>
       </form>
+      {scoringBreakdownModal ? (
+        <div
+          className="modal-background transparent"
+          onClick={() => dispatch(toggleScoringBreakdownModal())}
+        ></div>
+      ) : null}
     </div>
   );
 }

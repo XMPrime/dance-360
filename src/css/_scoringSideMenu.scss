@@ -1,19 +1,33 @@
 .scoring-side-menu {
   background-color: #131517;
   width: 410px;
-  min-height: 100vh;
-  max-height: 100vh;
+  height: 92.5%;
   padding: 0 30px 0 30px;
   position: fixed;
   left: 0;
   top: $header-height;
-  z-index: 5;
   overflow-y: scroll;
   padding-top: 50px;
+  z-index: 2;
+  box-shadow: 2px 0 40px 0 #000;
 }
+
+.scoring-side-menu:after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 120px;
+  width: 100%;
+  background-image: linear-gradient(180deg, rgba(19, 21, 23, 0) 0, #131517);
+  z-index: 3;
+}
+
 .scoring-side-menu__routines-list {
   width: 350px;
-  // position: relative;
+  z-index: 3;
+  position: relative;
 }
 .scoring-side-menu__header {
   width: 350px;
@@ -27,6 +41,9 @@
 }
 .scoring-side-menu__image {
   width: 30%;
+  max-height: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 .scoring-side-menu__tour-date {
   color: white;
@@ -73,6 +90,7 @@
   width: 10%;
   background-color: transparent;
 }
+
 .routine-text__routine-name {
   margin-left: 15px;
   background-color: transparent;

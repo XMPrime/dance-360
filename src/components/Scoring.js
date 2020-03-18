@@ -141,10 +141,10 @@ export default function Scoring() {
     let top = fullButtonsList.slice(0, buttonsDivider);
     let bottom = fullButtonsList.slice(buttonsDivider);
 
-    while (top.length < minRectangles) {
+    while (top.length <= minRectangles) {
       top.push(<div className="blank-rectangle"></div>);
     }
-    while (bottom.length < minRectangles) {
+    while (bottom.length <= minRectangles) {
       bottom.push(<div className="blank-rectangle"></div>);
     }
 
@@ -193,7 +193,7 @@ export default function Scoring() {
         }
       })
       .then(response => {
-        console.log(response);
+        // console.log(response);
         dispatch(setScoringBreakdownData(response.data));
       });
   }, []);
@@ -212,17 +212,18 @@ export default function Scoring() {
       .then(response => {
         // console.log(response);
         if (response.data.length !== 0) {
-          let initialRoutine;
-          let initialRoutineIndex;
+          let initialRoutine = response.data[0];
+          let initialRoutineIndex = 0;
           for (let i = 0; i < response.data.length; i++) {
             if (response.data[i].score === null) {
               initialRoutine = response.data[i];
               initialRoutineIndex = i;
+              dispatch(setRoutinesData(response.data));
+              dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
               break;
             }
           }
           dispatch(setRoutinesData(response.data));
-          dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
         }
       });
   }, []);
