@@ -1,13 +1,13 @@
-import React from "react";
-import JudgeDropdown from "./JudgeDropdown";
-import { useSelector, useDispatch } from "react-redux";
-import { toggleSideMenu } from "../redux/scoringReducer";
+import React from 'react';
+import JudgeDropdown from './JudgeDropdown';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleSideMenu } from '../redux/scoringReducer';
 
 export default function Header(props) {
-  const barsIcon = "fas fa-bars";
-  const crossIcon = "fas fa-times";
+  const barsIcon = 'fas fa-bars';
+  const crossIcon = 'fas fa-times';
   const dispatch = useDispatch();
-  const { displaySideMenu } = useSelector(state => state.scoring);
+  const { displaySideMenu } = useSelector((state) => state.scoring);
   return (
     <header>
       <div className="header-text">{props.title}</div>

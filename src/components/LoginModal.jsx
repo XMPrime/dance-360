@@ -1,6 +1,6 @@
-import React from "react";
-import { toggleLoginModal } from "../redux/loginReducer";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import { toggleLoginModal } from '../redux/loginReducer';
+import { useDispatch } from 'react-redux';
 
 export default function LoginModal() {
   const dispatch = useDispatch();

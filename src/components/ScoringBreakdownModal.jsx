@@ -1,13 +1,11 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleScoringBreakdownModal } from "../redux/scoringBreakdownReducer";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 export default function ScoringBreakdownModal() {
-  const dispatch = useDispatch();
   const scoringBreakdownData = useSelector(
-    state => state.scoring.scoringBreakdownData
+    (state) => state.scoring.scoringBreakdownData,
   );
-  const scoringBreakdown = scoringBreakdownData.map(breakdown => {
+  const scoringBreakdown = scoringBreakdownData.map((breakdown) => {
     return (
       <div className="scoring-breakdown-modal--breakdown" key={breakdown.id}>
         <div className="award">{breakdown.award}</div>

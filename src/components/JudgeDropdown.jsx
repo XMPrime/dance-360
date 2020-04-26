@@ -1,15 +1,17 @@
-import React from "react";
-import anonymousJudge from "../imgs/default_profile_pic.png";
-import { useSelector, useDispatch } from "react-redux";
-import { toggleJudgeDropdown } from "../redux/judgeDropdownReducer";
-import JudgeDropdownMenu from "./JudgeDropdownMenu";
+import React from 'react';
+import anonymousJudge from '../imgs/default_profile_pic.png';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleJudgeDropdown } from '../redux/judgeDropdownReducer';
+import JudgeDropdownMenu from './JudgeDropdownMenu';
 
 export default function JudgeDropdown() {
   const dispatch = useDispatch();
   const { judgePosition, judgeFullName, judgeHeadshot } = useSelector(
-    state => state.judgeInfo
+    (state) => state.judgeInfo
   );
-  const judgeDropdownIsOpen = useSelector(state => state.judgeDropdown.isOpen);
+  const judgeDropdownIsOpen = useSelector(
+    (state) => state.judgeDropdown.isOpen
+  );
   return (
     <div
       className="judge-dropdown"

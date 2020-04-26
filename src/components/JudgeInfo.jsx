@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import Header from "../components/Header";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from 'react';
+import Header from '../components/Header';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   setJudgesData,
   setCompetitionGroupsData,
@@ -13,24 +13,24 @@ import {
   setJudgeHeadshot,
   toggleJudgeInfoModal,
   getModalJudgeName
-} from "../redux/judgeInfoReducer";
-import JudgeInfoModal from "./JudgeInfoModal";
-import { useHistory } from "react-router-dom";
+} from '../redux/judgeInfoReducer';
+import JudgeInfoModal from './JudgeInfoModal';
+import { useHistory } from 'react-router-dom';
 
 export default function JudgeInfo() {
   const history = useHistory();
-  const tourDateId = useSelector(state => state.tourDates.tourDateId);
+  const tourDateId = useSelector((state) => state.tourDates.tourDateId);
   const {
     competitionGroupsData,
     judgesData,
     judgePosition,
     judgeGroupId,
     modal
-  } = useSelector(state => state.judgeInfo);
+  } = useSelector((state) => state.judgeInfo);
   const dispatch = useDispatch();
-  const axios = require("axios");
+  const axios = require('axios');
 
-  const judgesList = judgesData.map(judge => {
+  const judgesList = judgesData.map((judge) => {
     return (
       <option
         key={judge.id}
@@ -43,7 +43,7 @@ export default function JudgeInfo() {
       </option>
     );
   });
-  const positionsList = [1, 2, 3, 4].map(position => {
+  const positionsList = [1, 2, 3, 4].map((position) => {
     return (
       <option
         key={position}
@@ -55,7 +55,7 @@ export default function JudgeInfo() {
       </option>
     );
   });
-  const competitionGroupsList = competitionGroupsData.map(group => {
+  const competitionGroupsList = competitionGroupsData.map((group) => {
     return (
       <option
         key={group.id}
@@ -74,34 +74,34 @@ export default function JudgeInfo() {
     const value = e.target.value;
 
     switch (name) {
-      case "judge":
-        const index = document.getElementById("judge").selectedIndex;
+      case 'judge':
+        const index = document.getElementById('judge').selectedIndex;
         console.log(judgesData[index]);
         dispatch(setJudgeFullName(value));
         dispatch(setJudgeHeadshot(judgesData[index].headshot));
         dispatch(setJudgeId(judgesData[index].id)); //or staff_type_id?
         break;
-      case "position":
+      case 'position':
         dispatch(setJudgePosition(value));
         break;
-      case "teacher":
+      case 'teacher':
         dispatch(setJudgeIsTeacher(value));
         break;
-      case "competition":
-        const competitionElem = document.getElementById("competition");
+      case 'competition':
+        const competitionElem = document.getElementById('competition');
         const groupId =
           competitionElem.options[competitionElem.selectedIndex].id;
         dispatch(setJudgeGroupName(value));
         dispatch(setJudgeGroupId(groupId));
         break;
       default:
-        console.log("error");
+        console.log('error');
     }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    const url = "https://api.d360test.com/api/coda/check-judge";
+    const url = 'https://api.d360test.com/api/coda/check-judge';
     axios
       .get(url, {
         params: {
@@ -110,12 +110,12 @@ export default function JudgeInfo() {
           position: judgePosition
         }
       })
-      .then(response => {
+      .then((response) => {
         let fname = response.data.fname;
         let lname = response.data.lname;
 
-        if (response.data === "") {
-          history.push("/scoring");
+        if (response.data === '') {
+          history.push('/scoring');
         } else {
           dispatch(getModalJudgeName(fname, lname));
           dispatch(toggleJudgeInfoModal());
@@ -124,13 +124,13 @@ export default function JudgeInfo() {
   }
 
   useEffect(() => {
-    axios.get("https://api.d360test.com/api/coda/judges").then(response => {
+    axios.get('https://api.d360test.com/api/coda/judges').then((response) => {
       dispatch(setJudgesData(response.data));
     });
 
     axios
-      .get("https://api.d360test.com/api/coda/competition-groups")
-      .then(response => {
+      .get('https://api.d360test.com/api/coda/competition-groups')
+      .then((response) => {
         dispatch(setCompetitionGroupsData(response.data));
       });
   }, []);
@@ -203,7 +203,7 @@ export default function JudgeInfo() {
           <div className="btn-block">
             <button
               className="btn btn-grey"
-              onClick={() => history.push("/tour-dates")}
+              onClick={() => history.push('/tour-dates')}
             >
               BACK
             </button>

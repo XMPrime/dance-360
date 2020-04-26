@@ -1,21 +1,22 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Header from "./Header";
-import ScoringSideMenu from "./ScoringSideMenu";
-import Rectangle from "./Rectangle";
-import ScoringBreakdown from "./ScoringBreakdown";
-import ScoringModal from "./ScoringModal";
-import ScoringBreakdownModal from "./ScoringBreakdownModal";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Header from './Header';
+import ScoringSideMenu from './ScoringSideMenu';
+import Rectangle from './Rectangle';
+import ScoringBreakdown from './ScoringBreakdown';
+import ScoringModal from './ScoringModal';
 
 import {
   setButtonsData,
   setRoutinesData,
   setScoringBreakdownData,
-  setTargetRoutine
+  setTargetRoutine,
   // setButtonGrades
   // setDivisionId
   // trackScrollPos
-} from "../redux/scoringReducer";
+} from '../redux/scoringReducer';
+
+const axios = require('axios');
 
 export default function Scoring() {
   // Variables for formatting button table
@@ -25,16 +26,18 @@ export default function Scoring() {
   const minRectangles = minColumns * minRows;
 
   const dispatch = useDispatch();
-  const selectedEvent = useSelector(state => state.events.selectedEvent);
-  const tourDateId = useSelector(state => state.tourDates.tourDateId);
-  const { judgeGroupId, judgePosition } = useSelector(state => state.judgeInfo);
+  const selectedEvent = useSelector((state) => state.events.selectedEvent);
+  const tourDateId = useSelector((state) => state.tourDates.tourDateId);
+  const { judgeGroupId, judgePosition } = useSelector(
+    (state) => state.judgeInfo,
+  );
   const {
     buttonsData,
     routinesData,
     // scrollPos,
     displaySideMenu,
-    modal
-  } = useSelector(state => state.scoring);
+    modal,
+  } = useSelector((state) => state.scoring);
 
   const {
     performance_division_level_id,
@@ -43,24 +46,23 @@ export default function Scoring() {
     studio_code,
     age_division,
     performance_division,
-    routine_category
-  } = useSelector(state => state.scoring.targetRoutine);
-  const axios = require("axios");
+    routine_category,
+  } = useSelector((state) => state.scoring.targetRoutine);
 
   const buttonsList =
     buttonsData !== false && performance_division_level_id !== undefined
       ? createButtonsList(buttonsData, performance_division_level_id)
-      : "";
+      : '';
 
   const topStyle = {
     height: `${Math.max(
       Math.floor(
         buttonsData !== false && performance_division_level_id !== undefined
           ? (buttonsList.top.length * rectangleHeight) / minColumns
-          : 0
+          : 0,
       ),
-      minRows * rectangleHeight
-    )}px`
+      minRows * rectangleHeight,
+    )}px`,
   };
 
   const bottomStyle = {
@@ -68,21 +70,21 @@ export default function Scoring() {
       Math.floor(
         buttonsData !== false && performance_division_level_id !== undefined
           ? (buttonsList.bottom.length * rectangleHeight) / minColumns
-          : 0
+          : 0,
       ),
-      minRows * rectangleHeight
-    )}px`
+      minRows * rectangleHeight,
+    )}px`,
   };
 
   const scoringTitle = routine ? (
     <div>
-      <div className="scoring-title">{`#${number ? number : ""} - ${
-        routine ? routine : ""
-      } (${studio_code ? studio_code : ""})`}</div>
+      <div className="scoring-title">{`#${number ? number : ''} - ${
+        routine ? routine : ''
+      } (${studio_code ? studio_code : ''})`}</div>
       <div className="scoring-subtitle">{`${
-        age_division ? age_division : ""
-      } • ${performance_division ? performance_division : ""} • ${
-        routine_category ? routine_category : ""
+        age_division ? age_division : ''
+      } • ${performance_division ? performance_division : ''} • ${
+        routine_category ? routine_category : ''
       }`}</div>
     </div>
   ) : (
@@ -92,15 +94,15 @@ export default function Scoring() {
   );
 
   function createButtonsList(buttonsData, performance_division_level_id) {
-    const targetButtonData = buttonsData.find(element => {
+    const targetButtonData = buttonsData.find((element) => {
       return element.level_id === performance_division_level_id;
     });
 
     const buttonsDivider = targetButtonData.level_4.findIndex(
-      element => element.header_name === "Performance"
+      (element) => element.header_name === 'Performance',
     );
 
-    const fullButtonsList = targetButtonData.level_4.map(button => {
+    const fullButtonsList = targetButtonData.level_4.map((button) => {
       if (button.header_name) {
         return (
           <Rectangle
@@ -166,22 +168,22 @@ export default function Scoring() {
   // }
 
   function handleKeydown(e) {
-    if (document.querySelector("textarea") !== document.activeElement) {
-      if (e.code === "ArrowUp") {
+    if (document.querySelector('textarea') !== document.activeElement) {
+      if (e.code === 'ArrowUp') {
         window.scrollTo(0, 0);
       }
-      if (e.code === "ArrowDown") {
+      if (e.code === 'ArrowDown') {
         window.scrollTo(0, document.body.scrollHeight);
       }
     }
   }
 
   useEffect(() => {
-    const buttonsUrl = "https://api.d360test.com/api/coda/buttons";
+    const buttonsUrl = 'https://api.d360test.com/api/coda/buttons';
     const scoringBreakdownUrl =
-      "https://api.d360test.com/api/coda/scoring-breakdown";
+      'https://api.d360test.com/api/coda/scoring-breakdown';
 
-    axios.get(buttonsUrl).then(response => {
+    axios.get(buttonsUrl).then((response) => {
       // console.log(response);
       dispatch(setButtonsData(response.data));
     });
@@ -189,27 +191,27 @@ export default function Scoring() {
     axios
       .get(scoringBreakdownUrl, {
         params: {
-          event_id: selectedEvent.id
-        }
+          event_id: selectedEvent.id,
+        },
       })
-      .then(response => {
+      .then((response) => {
         // console.log(response);
         dispatch(setScoringBreakdownData(response.data));
       });
   }, []);
 
   useEffect(() => {
-    const routinesUrl = "https://api.d360test.com/api/coda/routines";
+    const routinesUrl = 'https://api.d360test.com/api/coda/routines';
 
     axios
       .get(routinesUrl, {
         params: {
           tour_date_id: tourDateId,
           competition_group_id: judgeGroupId,
-          position: judgePosition
-        }
+          position: judgePosition,
+        },
       })
-      .then(response => {
+      .then((response) => {
         // console.log(response);
         if (response.data.length !== 0) {
           let initialRoutine = response.data[0];
@@ -231,7 +233,7 @@ export default function Scoring() {
   useEffect(() => {
     // window.addEventListener("scroll", () => handleScroll(scrollPos));
     // window.addEventListener("wheel", handleScroll);
-    document.addEventListener("keydown", handleKeydown);
+    document.addEventListener('keydown', handleKeydown);
   }, []);
 
   return (

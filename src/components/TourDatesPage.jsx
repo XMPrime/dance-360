@@ -1,21 +1,22 @@
-import React, { useEffect } from "react";
-import Header from "../components/Header";
-import { useHistory } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import Header from './Header';
 import {
   setTourDatesData,
   setSelectedTour,
-  transformTourDateData
-} from "../redux/tourDatesReducer";
+  transformTourDateData,
+} from '../redux/tourDatesReducer';
+
+const axios = require('axios');
 
 export default function TourDatesPage() {
-  const selectedEvent = useSelector(state => state.events.selectedEvent);
-  const { tourDatesData, tourDate } = useSelector(state => state.tourDates);
+  const selectedEvent = useSelector((state) => state.events.selectedEvent);
+  const { tourDatesData, tourDate } = useSelector((state) => state.tourDates);
   const dispatch = useDispatch();
-  const axios = require("axios");
   const history = useHistory();
 
-  const tourDatesList = tourDatesData.map(tourDateData => {
+  const tourDatesList = tourDatesData.map((tourDateData) => {
     return (
       <option
         key={tourDateData.id}
@@ -29,21 +30,21 @@ export default function TourDatesPage() {
   });
 
   function handleChange(e) {
-    var select = document.getElementById("tour-select");
+    const select = document.getElementById('tour-select');
     const tourId = select.options[select.selectedIndex].id;
-    const tourDate = e.target.value;
-    dispatch(setSelectedTour(tourId, tourDate));
+    const tourDateValue = e.target.value;
+    dispatch(setSelectedTour(tourId, tourDateValue));
   }
 
   useEffect(() => {
     axios
-      .get("https://api.d360test.com/api/coda/tour-dates", {
+      .get('https://api.d360test.com/api/coda/tour-dates', {
         params: {
           event_id: selectedEvent.id,
-          season_id: selectedEvent.current_season_id
-        }
+          season_id: selectedEvent.current_season_id,
+        },
       })
-      .then(response => {
+      .then((response) => {
         dispatch(setTourDatesData(response.data));
       });
   }, []);
@@ -69,7 +70,8 @@ export default function TourDatesPage() {
           <div className="btn-block">
             <button
               className="btn btn-grey"
-              onClick={() => history.push("/events")}
+              onClick={() => history.push('/events')}
+              type="button"
             >
               BACK
             </button>
@@ -77,7 +79,7 @@ export default function TourDatesPage() {
             <button
               className="btn btn-purple"
               type="submit"
-              onClick={() => history.push("/judge-info")}
+              onClick={() => history.push('/judge-info')}
             >
               NEXT
             </button>

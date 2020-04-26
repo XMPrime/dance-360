@@ -1,7 +1,7 @@
-import React from "react";
-import store from "../redux/index";
-import { useSelector, useDispatch } from "react-redux";
-import { toggleScoringModal, setButtonGrades } from "../redux/scoringReducer";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import store from '../redux/index';
+import { toggleScoringModal, setButtonGrades } from '../redux/scoringReducer';
 import {
   addScore,
   minusScore,
@@ -9,17 +9,17 @@ import {
   toggleCheckbox,
   setStrongestLevel1Id,
   setWeakestLevel1Id,
-  toggleScoringBreakdownModal
-} from "../redux/scoringBreakdownReducer";
-import ScoringBreakdownModal from "./ScoringBreakdownModal";
+  toggleScoringBreakdownModal,
+} from '../redux/scoringBreakdownReducer';
+import ScoringBreakdownModal from './ScoringBreakdownModal';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
   const { score, note, familyFriendly, iChoreographed } = useSelector(
-    state => state.scoringBreakdown
+    (state) => state.scoringBreakdown,
   );
   const scoringBreakdownModal = useSelector(
-    state => state.scoringBreakdown.modal
+    (state) => state.scoringBreakdown.modal,
   );
 
   function handleChange(e) {
@@ -30,23 +30,23 @@ export default function ScoringBreakdown() {
   // scoreTabultor needs to be able to access STATE while in its forEach loop via "store"
   function scoreTabultor(e, store) {
     e.preventDefault();
-    let rectangles = document.querySelectorAll("div.rectangle.level_4");
-    let buttonGrades = [];
-    let gradesObj = {};
+    const rectangles = document.querySelectorAll('div.rectangle.level_4');
+    const buttonGrades = [];
+    const gradesObj = {};
     rectangles.forEach((rectangle, i) => {
-      let grade = rectangle.attributes.grade.value;
-      let level_1_id = rectangle.attributes.level_1_id.value;
+      const grade = rectangle.attributes.grade.value;
+      const level_1_id = rectangle.attributes.level_1_id.value;
 
       const {
         strongestRatio,
-        weakestRatio
+        weakestRatio,
       } = store.getState().scoringBreakdown;
 
       // Creates "buttons" array for POST to score
       buttonGrades.push({
         level_4_id: Number(rectangle.attributes.level_4_id.value),
         level_1_id: Number(rectangle.attributes.level_1_id.value),
-        good: grade === "good" ? true : grade === "bad" ? false : null
+        good: grade === 'good' ? true : grade === 'bad' ? false : null,
       });
 
       // Counts number of "good", "bad", and "neutral" buttons under each level 1 Header
@@ -55,7 +55,7 @@ export default function ScoringBreakdown() {
           good: 0,
           bad: 0,
           neutral: 0,
-          ratio: 0
+          ratio: 0,
         };
       }
       gradesObj[`${level_1_id}`][`${grade}`] += 1;
@@ -81,17 +81,17 @@ export default function ScoringBreakdown() {
       }
     });
 
-    return buttonGrades.filter(button => button.good !== null);
+    return buttonGrades.filter((button) => button.good !== null);
   }
 
   return (
     <div className="scoring-breakdown-container">
       {scoringBreakdownModal ? <ScoringBreakdownModal /> : null}
       {scoringBreakdownModal ? (
-        <div className="scoring-breakdown-modal--divider"></div>
+        <div className="scoring-breakdown-modal--divider" />
       ) : null}
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           dispatch(toggleScoringModal());
           dispatch(setButtonGrades(scoreTabultor(e, store)));
         }}
@@ -122,13 +122,13 @@ export default function ScoringBreakdown() {
           className="textarea-notes"
           onChange={handleChange}
           value={note}
-        ></textarea>
+        />
         <div className="checkbox-container">
           <input
             className="checkbox-style"
             type="checkbox"
             name="family-friendly"
-            onClick={e => dispatch(toggleCheckbox(e))}
+            onClick={(e) => dispatch(toggleCheckbox(e))}
             value={familyFriendly}
           />
           <div className="checkbox-label-style">
@@ -140,7 +140,7 @@ export default function ScoringBreakdown() {
             className="checkbox-style"
             type="checkbox"
             name="i-choreographed"
-            onClick={e => dispatch(toggleCheckbox(e))}
+            onClick={(e) => dispatch(toggleCheckbox(e))}
             value={iChoreographed}
           />
           <div className="checkbox-label-style">
@@ -156,7 +156,7 @@ export default function ScoringBreakdown() {
         <div
           className="modal-background transparent"
           onClick={() => dispatch(toggleScoringBreakdownModal())}
-        ></div>
+        />
       ) : null}
     </div>
   );

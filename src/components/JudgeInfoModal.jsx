@@ -1,11 +1,11 @@
-import React from "react";
-import { toggleJudgeInfoModal } from "../redux/judgeInfoReducer";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import { toggleJudgeInfoModal } from '../redux/judgeInfoReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 export default function JudgeInfoModal() {
   const history = useHistory();
-  const { fname, lname } = useSelector(state => state.judgeInfo.modalState);
+  const { fname, lname } = useSelector((state) => state.judgeInfo.modalState);
   const dispatch = useDispatch();
 
   return (
@@ -27,7 +27,7 @@ export default function JudgeInfoModal() {
             className="btn btn-purple"
             onClick={() => {
               dispatch(toggleJudgeInfoModal());
-              history.push("/scoring");
+              history.push('/scoring');
             }}
           >
             YES

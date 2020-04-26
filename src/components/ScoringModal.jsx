@@ -1,29 +1,30 @@
-import React from "react";
-import { toggleScoringModal } from "../redux/scoringReducer";
-import { useDispatch, useSelector } from "react-redux";
-import { setTargetRoutine } from "../redux/scoringReducer";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleScoringModal, setTargetRoutine } from '../redux/scoringReducer';
 import {
   setStrongestLevel1Id,
-  setWeakestLevel1Id
-} from "../redux/scoringBreakdownReducer";
+  setWeakestLevel1Id,
+} from '../redux/scoringBreakdownReducer';
+
+const axios = require('axios');
 
 export default function ScoringModal() {
   const dispatch = useDispatch();
 
   const { routinesData, targetRoutineIndex, buttonGrades } = useSelector(
-    state => state.scoring
+    (state) => state.scoring,
   );
   const nextRoutine = routinesData[targetRoutineIndex + 1];
   const nextRoutineIndex = targetRoutineIndex + 1;
 
-  const isTabulator = useSelector(state => state.login.isTabulator);
-  const event_id = useSelector(state => state.events.selectedEvent.id);
-  const tour_date_id = useSelector(state => state.tourDates.tourDateId);
+  const isTabulator = useSelector((state) => state.login.isTabulator);
+  const event_id = useSelector((state) => state.events.selectedEvent.id);
+  const tour_date_id = useSelector((state) => state.tourDates.tourDateId);
   const { judgeGroupId, judgeId, judgePosition, judgeIsTeacher } = useSelector(
-    state => state.judgeInfo
+    (state) => state.judgeInfo,
   );
   const { date_routine_id, online_scoring_id } = useSelector(
-    state => state.scoring.targetRoutine
+    (state) => state.scoring.targetRoutine,
   );
   const {
     score,
@@ -31,10 +32,10 @@ export default function ScoringModal() {
     familyFriendly,
     iChoreographed,
     strongestId,
-    weakestId
-  } = useSelector(state => state.scoringBreakdown);
+    weakestId,
+  } = useSelector((state) => state.scoringBreakdown);
 
-  let postData = {
+  const postData = {
     isTabulator,
     competition_group_id: judgeGroupId,
     date_routine_id,
@@ -52,21 +53,17 @@ export default function ScoringModal() {
       is_coda: true,
       buttons: buttonGrades,
       strongest_level_1_id: strongestId,
-      weakest_level_1_id: weakestId
-    }
+      weakest_level_1_id: weakestId,
+    },
   };
-  console.log(postData);
 
-  function submitScore(postData) {
-    const scoreUrl = "https://api.d360test.com/api/coda/score";
-    const socketUrl = "https://api.d360test.com/api/socket-scoring";
-    const axios = require("axios");
-    console.log(postData);
+  function submitScore(data) {
+    const scoreUrl = 'https://api.d360test.com/api/coda/score';
+    const socketUrl = 'https://api.d360test.com/api/socket-scoring';
 
     axios
-      .post(scoreUrl, postData)
-      .then(response => {
-        console.log(response);
+      .post(scoreUrl, data)
+      .then((response) => {
         if (response.status === 200) {
           axios
             .post(socketUrl, {
@@ -74,17 +71,16 @@ export default function ScoringModal() {
               coda: true,
               data: {
                 competition_group_id: judgeGroupId,
-                date_routine_id
-              }
+                date_routine_id,
+              },
             })
-            .then(response => {
-              console.log(response);
+            .then(() => {
               dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
               window.scrollTo(0, 0);
             });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error.response);
       });
   }
@@ -101,9 +97,10 @@ export default function ScoringModal() {
             className="btn btn-grey"
             onClick={() => {
               dispatch(toggleScoringModal());
-              dispatch(setStrongestLevel1Id("", -1));
-              dispatch(setWeakestLevel1Id("", 2));
+              dispatch(setStrongestLevel1Id('', -1));
+              dispatch(setWeakestLevel1Id('', 2));
             }}
+            type="button"
           >
             CANCEL
           </button>
@@ -113,6 +110,7 @@ export default function ScoringModal() {
               dispatch(toggleScoringModal());
               submitScore(postData);
             }}
+            type="submit"
           >
             SAVE
           </button>
@@ -122,8 +120,8 @@ export default function ScoringModal() {
         className="modal-background"
         onClick={() => {
           dispatch(toggleScoringModal());
-          dispatch(setStrongestLevel1Id("reset", -1));
-          dispatch(setWeakestLevel1Id("reset", 2));
+          dispatch(setStrongestLevel1Id('reset', -1));
+          dispatch(setWeakestLevel1Id('reset', 2));
         }}
       ></div>
     </div>
