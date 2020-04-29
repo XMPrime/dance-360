@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 // ACTION CREATORS:
 export function addScore() {
   return {
@@ -67,7 +68,7 @@ export default function scoringBreakdownReducer(
       return {
         ...scoringBreakdownState,
         score: Math.min(
-          Math.max(parseInt(scoringBreakdownState.score + 1), 0),
+          Math.max(Number(scoringBreakdownState.score + 1), 0),
           100,
         ),
       };
@@ -75,7 +76,7 @@ export default function scoringBreakdownReducer(
       return {
         ...scoringBreakdownState,
         score: Math.min(
-          Math.max(parseInt(scoringBreakdownState.score - 1), 0),
+          Math.max(Number(scoringBreakdownState.score - 1), 0),
           100,
         ),
       };
@@ -115,19 +116,3 @@ export default function scoringBreakdownReducer(
       return scoringBreakdownState;
   }
 }
-
-// return action.ratio > scoringBreakdownState.strongestRatio
-//         ? {
-//             ...scoringBreakdownState,
-//             strongestRatio: action.ratio,
-//             strongestId: action.level_1_id
-//           }
-//         : { ...scoringBreakdownState };
-
-//         return action.ratio < scoringBreakdownState.weakestRatio
-//         ? {
-//             ...scoringBreakdownState,
-//             weakestRatio: action.ratio,
-//             weakestId: action.level_1_id
-//           }
-//         : { ...scoringBreakdownState };

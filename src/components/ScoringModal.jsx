@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleScoringModal, setTargetRoutine } from '../redux/scoringReducer';
@@ -81,6 +82,7 @@ export default function ScoringModal() {
         }
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.log(error.response);
       });
   }
@@ -123,7 +125,8 @@ export default function ScoringModal() {
           dispatch(setStrongestLevel1Id('reset', -1));
           dispatch(setWeakestLevel1Id('reset', 2));
         }}
-      ></div>
+        role="alertdialog"
+      />
     </div>
   );
 }

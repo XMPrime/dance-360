@@ -1,69 +1,64 @@
-//ACTION CREATORS:
+// ACTION CREATORS:
 export function setUsername(username) {
   return {
-    type: "SET_USERNAME",
-    username
+    type: 'SET_USERNAME',
+    username,
   };
 }
 
 export function setPassword(password) {
   return {
-    type: "SET_PASSWORD",
-    password
+    type: 'SET_PASSWORD',
+    password,
   };
 }
 
 export function login() {
   return {
-    type: "LOGIN"
+    type: 'LOGIN',
   };
 }
 
 export function logout() {
   return {
-    type: "LOGOUT"
+    type: 'LOGOUT',
   };
 }
 
 export function toggleLoginModal() {
   return {
-    type: "TOGGLE_LOGIN_MODAL"
+    type: 'TOGGLE_LOGIN_MODAL',
   };
 }
 
 export function isTabulator(boolean) {
   return {
-    type: "IS_TABULATOR",
-    boolean
+    type: 'IS_TABULATOR',
+    boolean,
   };
-}
-
-export function handleChange(e) {
-  const { value } = e.target;
-  e.target.id === "username" ? setUsername(value) : setPassword(value);
 }
 
 const initialState = {
   isLoggedIn: false,
-  username: "",
-  password: "",
+  username: '',
+  password: '',
   modal: false,
-  isTabulator: false
+  isTabulator: false,
 };
 
 export default function loginReducer(loginState = initialState, action) {
   switch (action.type) {
-    case "SET_USERNAME":
+    case 'SET_USERNAME':
       return { ...loginState, username: action.username };
-    case "SET_PASSWORD":
+    case 'SET_PASSWORD':
       return { ...loginState, password: action.password };
-    case "LOGIN":
+    case 'LOGIN':
       return { ...loginState, isLoggedIn: true };
-    case "LOGOUT":
+    case 'LOGOUT':
       return { ...loginState, isLoggedIn: false };
-    case "IS_TABULATOR":
+    case 'IS_TABULATOR':
       return { ...loginState, isTabulator: action.boolean };
-    case "TOGGLE_LOGIN_MODAL":
+    case 'TOGGLE_LOGIN_MODAL':
       return { ...loginState, modal: !loginState.modal };
     default:
       return loginState;

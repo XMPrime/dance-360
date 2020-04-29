@@ -1,50 +1,53 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import useForm from 'react-hook-form';
 import {
   setUsername,
   setPassword,
   login,
   isTabulator,
-  toggleLoginModal
-} from "../redux/loginReducer";
-import logo from "../imgs/group-6.svg";
-import useForm from "react-hook-form";
-import LoginModal from "../components/LoginModal";
+  toggleLoginModal,
+} from '../redux/loginReducer';
+import logo from '../imgs/group-6.svg';
+import LoginModal from './LoginModal';
+
+const axios = require('axios');
 
 export default function LoginPage() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const modal = useSelector(state => state.login.modal);
+  const modal = useSelector((state) => state.login.modal);
   const { register, handleSubmit, errors } = useForm();
   const errorMessage = (
     <span className="error-message">This field is required!</span>
   );
 
   function tabulatorCheck(roles) {
-    return roles.includes("tabulator");
+    return roles.includes('tabulator');
   }
 
   function loginAsync() {
-    return (dispatch, getState) => {
-      const url = "https://api.d360test.com/api/auth/signin";
-      const axios = require("axios");
-      const { username, password } = getState().login; //specific to react-hook-form?
+    return (loginDispatch, getState) => {
+      const url = 'https://api.d360test.com/api/auth/signin';
+
+      const { username, password } = getState().login; // specific to react-hook-form?
       axios
         .post(url, {
           name: username,
-          password: password
+          password,
         })
-        .then(response => {
+        .then((response) => {
           if (response.status === 200) {
-            dispatch(login());
-            dispatch(isTabulator(tabulatorCheck(response.data.roles)));
-            history.push("/events");
+            loginDispatch(login());
+            loginDispatch(isTabulator(tabulatorCheck(response.data.roles)));
+            history.push('/events');
           }
         })
-        .catch(function(error) {
+        .catch((error) => {
+          // eslint-disable-next-line no-console
           console.log(error);
-          //display modal
+          // display modal
           dispatch(toggleLoginModal());
         });
     };
@@ -57,28 +60,28 @@ export default function LoginPage() {
         <img src={logo} className="login-logo" alt="logo" />
         <form onSubmit={handleSubmit(() => dispatch(loginAsync()))}>
           <div className="input-container">
-            <i className="fa fa-envelope icon"></i>
+            <i className="fa fa-envelope icon" />
             <input
               type="text"
               id="username"
               name="name"
               className="input username"
               placeholder="Username"
-              onChange={e => dispatch(setUsername(e.target.value))}
+              onChange={(e) => dispatch(setUsername(e.target.value))}
               ref={register({ required: true })}
             />
             {errors.name && errorMessage}
           </div>
 
           <div className="input-container">
-            <i className="fa fa-lock icon" id="lock"></i>
+            <i className="fa fa-lock icon" id="lock" />
             <input
               type="password"
               id="password"
               name="password"
               className="input password"
               placeholder="Password"
-              onChange={e => dispatch(setPassword(e.target.value))}
+              onChange={(e) => dispatch(setPassword(e.target.value))}
               ref={register({ required: true })}
             />
             {errors.password && errorMessage}

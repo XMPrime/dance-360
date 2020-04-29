@@ -1,138 +1,136 @@
-//ACTION CREATORS:
+// ACTION CREATORS:
 export function setJudgesData(data) {
   return {
-    type: "SET_JUDGES_DATA",
-    data
+    type: 'SET_JUDGES_DATA',
+    data,
   };
 }
 
 export function setCompetitionGroupsData(data) {
   return {
-    type: "SET_COMPETITION_GROUPS_DATA",
-    data
+    type: 'SET_COMPETITION_GROUPS_DATA',
+    data,
   };
 }
 
 export function setJudgeId(id) {
   return {
-    type: "SET_JUDGE_ID",
-    id
+    type: 'SET_JUDGE_ID',
+    id,
   };
 }
 
 export function setJudgeFullName(value) {
   return {
-    type: "SET_JUDGE_FULL_NAME",
-    value
+    type: 'SET_JUDGE_FULL_NAME',
+    value,
   };
 }
 export function setJudgePosition(value) {
   return {
-    type: "SET_JUDGE_POSITION",
-    value
+    type: 'SET_JUDGE_POSITION',
+    value,
   };
 }
 export function setJudgeIsTeacher(value) {
   return {
-    type: "SET_JUDGE_IS_TEACHER",
-    value: value === "Yes" ? true : false
+    type: 'SET_JUDGE_IS_TEACHER',
+    value: value === 'Yes' && true,
   };
 }
 export function setJudgeGroupName(value) {
   return {
-    type: "SET_JUDGE_GROUP_NAME",
-    value
+    type: 'SET_JUDGE_GROUP_NAME',
+    value,
   };
 }
 export function setJudgeGroupId(id) {
   return {
-    type: "SET_JUDGE_GROUP_ID",
-    id
+    type: 'SET_JUDGE_GROUP_ID',
+    id,
   };
 }
 export function setJudgeHeadshot(img) {
   return {
-    type: "SET_JUDGE_HEADSHOT",
-    img
+    type: 'SET_JUDGE_HEADSHOT',
+    img,
   };
 }
 
 export function toggleJudgeInfoModal(judgeName) {
   return {
-    type: "TOGGLE_JUDGE_INFO_MODAL",
-    judgeName
+    type: 'TOGGLE_JUDGE_INFO_MODAL',
+    judgeName,
   };
 }
 
 export function getModalJudgeName(fname, lname) {
   return {
-    type: "GET_MODAL_JUDGE_NAME",
+    type: 'GET_MODAL_JUDGE_NAME',
     fname,
-    lname
+    lname,
   };
 }
 
 const initialState = {
   judgesData: [],
   competitionGroupsData: [],
-  judgeId: "",
-  judgeFullName: "Anonymous",
+  judgeId: '',
+  judgeFullName: 'Anonymous',
   judgePosition: 1,
   judgeIsTeacher: true,
   judgeGroupName: null,
   judgeGroupId: null,
   judgeHeadshot: null,
   modal: false,
-  modalState: { fname: "", lname: "" }
+  modalState: { fname: '', lname: '' },
 };
 
 export default function judgeInfoReducer(
   judgeInfoState = initialState,
-  action
+  action,
 ) {
   switch (action.type) {
-    case "SET_JUDGES_DATA":
-      const judgesData = action.data;
+    case 'SET_JUDGES_DATA':
       return {
         ...judgeInfoState,
-        judgesData,
-        judgeId: judgesData[0].id,
-        judgeFullName: `${judgesData[0].fname} ${judgesData[0].lname}`
+        judgesData: action.data,
+        judgeId: action.data[0].id,
+        judgeFullName: `${action.data[0].fname} ${action.data[0].lname}`,
       };
-    case "SET_COMPETITION_GROUPS_DATA":
-      const competitionGroupsData = action.data;
+    case 'SET_COMPETITION_GROUPS_DATA':
       return {
         ...judgeInfoState,
-        competitionGroupsData,
-        judgeGroupId: competitionGroupsData[0].id,
-        judgeGroupName: competitionGroupsData[0].name
+        competitionGroupsData: action.data,
+        judgeGroupId: action.data[0].id,
+        judgeGroupName: action.data[0].name,
       };
-    case "SET_JUDGE_ID":
+    case 'SET_JUDGE_ID':
       return { ...judgeInfoState, judgeId: action.id };
-    case "SET_JUDGE_FULL_NAME":
+    case 'SET_JUDGE_FULL_NAME':
       return { ...judgeInfoState, judgeFullName: action.value };
-    case "SET_JUDGE_POSITION":
+    case 'SET_JUDGE_POSITION':
       return { ...judgeInfoState, judgePosition: Number(action.value) };
-    case "SET_JUDGE_IS_TEACHER":
+    case 'SET_JUDGE_IS_TEACHER':
       return { ...judgeInfoState, judgeIsTeacher: action.value };
-    case "SET_JUDGE_GROUP_NAME":
+    case 'SET_JUDGE_GROUP_NAME':
       return { ...judgeInfoState, judgeGroupName: action.value };
-    case "SET_JUDGE_GROUP_ID":
+    case 'SET_JUDGE_GROUP_ID':
       return { ...judgeInfoState, judgeGroupId: Number(action.id) };
-    case "SET_JUDGE_HEADSHOT":
+    case 'SET_JUDGE_HEADSHOT':
       return { ...judgeInfoState, judgeHeadshot: action.img };
-    case "TOGGLE_JUDGE_INFO_MODAL":
+    case 'TOGGLE_JUDGE_INFO_MODAL':
       return {
         ...judgeInfoState,
-        modal: !judgeInfoState.modal
+        modal: !judgeInfoState.modal,
       };
-    case "GET_MODAL_JUDGE_NAME":
+    case 'GET_MODAL_JUDGE_NAME':
       return {
         ...judgeInfoState,
         modalState: {
           fname: action.fname,
-          lname: action.lname
-        }
+          lname: action.lname,
+        },
       };
     default:
       return judgeInfoState;

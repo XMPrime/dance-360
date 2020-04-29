@@ -1,6 +1,7 @@
 import React from 'react';
-import JudgeDropdown from './JudgeDropdown';
 import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import JudgeDropdown from './JudgeDropdown';
 import { toggleSideMenu } from '../redux/scoringReducer';
 
 export default function Header(props) {
@@ -8,22 +9,29 @@ export default function Header(props) {
   const crossIcon = 'fas fa-times';
   const dispatch = useDispatch();
   const { displaySideMenu } = useSelector((state) => state.scoring);
+  const { title, barIcon } = props;
   return (
     <header>
-      <div className="header-text">{props.title}</div>
+      <div className="header-text">{title}</div>
       <div className="inner-header">
-        <div
+        <button
           className="header-left-icon"
           onClick={() => dispatch(toggleSideMenu())}
+          type="button"
         >
-          {props.barIcon === true ? (
-            <i className={displaySideMenu ? crossIcon : barsIcon}></i>
+          {barIcon === true ? (
+            <i className={displaySideMenu ? crossIcon : barsIcon} />
           ) : (
-            <div></div>
+            <div />
           )}
-        </div>
+        </button>
         <JudgeDropdown />
       </div>
     </header>
   );
 }
+
+Header.propTypes = {
+  title: PropTypes.string.isRequired,
+  barIcon: PropTypes.bool.isRequired,
+};

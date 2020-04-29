@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import Header from '../components/Header';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import Header from './Header';
 import {
   setJudgesData,
   setCompetitionGroupsData,
@@ -12,10 +13,11 @@ import {
   setJudgeGroupId,
   setJudgeHeadshot,
   toggleJudgeInfoModal,
-  getModalJudgeName
+  getModalJudgeName,
 } from '../redux/judgeInfoReducer';
 import JudgeInfoModal from './JudgeInfoModal';
-import { useHistory } from 'react-router-dom';
+
+const axios = require('axios');
 
 export default function JudgeInfo() {
   const history = useHistory();
@@ -25,10 +27,9 @@ export default function JudgeInfo() {
     judgesData,
     judgePosition,
     judgeGroupId,
-    modal
+    modal,
   } = useSelector((state) => state.judgeInfo);
   const dispatch = useDispatch();
-  const axios = require('axios');
 
   const judgesList = judgesData.map((judge) => {
     return (
@@ -71,30 +72,32 @@ export default function JudgeInfo() {
 
   function handleFormChange(e) {
     const name = e.target.id;
-    const value = e.target.value;
+    const { value } = e.target;
 
     switch (name) {
-      case 'judge':
+      case 'judge': {
         const index = document.getElementById('judge').selectedIndex;
-        console.log(judgesData[index]);
         dispatch(setJudgeFullName(value));
         dispatch(setJudgeHeadshot(judgesData[index].headshot));
-        dispatch(setJudgeId(judgesData[index].id)); //or staff_type_id?
+        dispatch(setJudgeId(judgesData[index].id)); // or staff_type_id?
         break;
+      }
       case 'position':
         dispatch(setJudgePosition(value));
         break;
       case 'teacher':
         dispatch(setJudgeIsTeacher(value));
         break;
-      case 'competition':
+      case 'competition': {
         const competitionElem = document.getElementById('competition');
         const groupId =
           competitionElem.options[competitionElem.selectedIndex].id;
         dispatch(setJudgeGroupName(value));
         dispatch(setJudgeGroupId(groupId));
         break;
+      }
       default:
+        // eslint-disable-next-line no-console
         console.log('error');
     }
   }
@@ -107,12 +110,12 @@ export default function JudgeInfo() {
         params: {
           tour_date_id: tourDateId,
           competition_group_id: judgeGroupId,
-          position: judgePosition
-        }
+          position: judgePosition,
+        },
       })
       .then((response) => {
-        let fname = response.data.fname;
-        let lname = response.data.lname;
+        const { fname } = response.data;
+        const { lname } = response.data;
 
         if (response.data === '') {
           history.push('/scoring');
@@ -147,63 +150,66 @@ export default function JudgeInfo() {
         >
           <div className="label-container">
             <label className="custom-label" htmlFor="judge">
-              What is this judge's name?
+              What is this judge&apos;s name?
+              <select
+                className="custom-select"
+                id="judge"
+                onChange={handleFormChange}
+              >
+                {judgesList}
+              </select>
             </label>
           </div>
 
-          <select
-            className="custom-select"
-            id="judge"
-            onChange={handleFormChange}
-          >
-            {judgesList}
-          </select>
           <div className="label-container">
             <label className="custom-label" htmlFor="position">
               What position are they?
-            </label>
-          </div>
-          <select
-            className="custom-select"
-            id="position"
-            onChange={handleFormChange}
-          >
-            {positionsList}
-          </select>
-          <div className="label-container">
-            <label className="custom-label" htmlFor="teacher">
-              Is the judge also a teacher?
-            </label>
-          </div>
-          <select
-            className="custom-select"
-            id="teacher"
-            onChange={handleFormChange}
-          >
-            <option className="tour-dates" name="isTeacher" value={true}>
-              Yes
-            </option>
-            <option className="tour-dates" name="isTeacher" value={false}>
-              No
-            </option>
-          </select>
-          <div className="label-container">
-            <label className="custom-label" htmlFor="competition">
-              What competition group is this for?
+              <select
+                className="custom-select"
+                id="position"
+                onChange={handleFormChange}
+              >
+                {positionsList}
+              </select>
             </label>
           </div>
 
-          <select
-            className="custom-select"
-            id="competition"
-            onChange={handleFormChange}
-          >
-            {competitionGroupsList}
-          </select>
+          <div className="label-container">
+            <label className="custom-label" htmlFor="teacher">
+              Is the judge also a teacher?
+              <select
+                className="custom-select"
+                id="teacher"
+                onChange={handleFormChange}
+              >
+                <option className="tour-dates" name="isTeacher" value>
+                  Yes
+                </option>
+                <option className="tour-dates" name="isTeacher" value={false}>
+                  No
+                </option>
+              </select>
+            </label>
+          </div>
+
+          <div className="label-container">
+            <label className="custom-label" htmlFor="competition">
+              What competition group is this for?
+              <select
+                className="custom-select"
+                id="competition"
+                onChange={handleFormChange}
+              >
+                {competitionGroupsList}
+              </select>
+            </label>
+          </div>
+
           <div className="btn-block">
             <button
               className="btn btn-grey"
               onClick={() => history.push('/tour-dates')}
+              type="button"
             >
               BACK
             </button>

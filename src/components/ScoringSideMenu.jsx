@@ -1,3 +1,6 @@
+/* eslint-disable no-nested-ternary */
+/* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
+
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -34,7 +37,9 @@ export default function ScoringSideMenu() {
     for (let i = 0, char = 'a'; i < numbers.length; i++) {
       const checker = numbers.filter((number) => number === numbers[i]);
       if (checker.length > 1) {
-        if (numbers[i] === numbers[i + 1]) {
+        if (numbers[i] === null) {
+          newArr[i] = i + 1;
+        } else if (numbers[i] === numbers[i + 1]) {
           newArr[i] = numbers[i] + char;
           char = nextChar(char);
         } else if (numbers[i] < numbers[i + 1]) {
@@ -54,40 +59,12 @@ export default function ScoringSideMenu() {
     return newArr;
   }
 
-  const routineNumbers = routinesData
-    ? numbersTransformer(
-        routinesData.map((routine) => {
-          return routine.number;
-        }),
-      )
-    : [];
-
-  const routinesList = routinesData.length
-    ? routinesData.map((routine, i) => {
-        return (
-          <div
-            className={`scoring-side-menu__routine ${
-              routine === targetRoutine
-                ? 'scoring-side-menu__routine--selected'
-                : routine.score === null
-                ? 'scoring-side-menu__routine--unrestricted'
-                : 'scoring-side-menu__routine--restricted'
-            }`}
-            key={routine.date_routine_id}
-            onClick={
-              routine.score === null ? (e) => handleClick(routine, i, e) : null
-            }
-          >
-            <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
-            <div className="routine-text__routine-name">{routine.routine}</div>
-          </div>
-        );
-      })
-    : [];
-
   function handleClick(routine, i) {
-    dispatch(setTargetRoutine(routine, i));
-    dispatch(toggleSideMenu());
+    if (routine.score === null) {
+      dispatch(setTargetRoutine(routine, i));
+      dispatch(toggleSideMenu());
+    }
+    return null;
   }
 
   function refreshRoutines(data) {
@@ -110,6 +87,38 @@ export default function ScoringSideMenu() {
       }
     });
   }
+
+  function handleKeyPress(e, routine, i) {
+    if (e.key === 'Enter' && routine.score === null) {
+      handleClick(routine, i);
+    }
+  }
+
+  const routineNumbers = routinesData
+    ? numbersTransformer(routinesData.map((routine) => routine.number))
+    : [];
+
+  const routinesList = routinesData.length
+    ? routinesData.map((routine, i) => (
+      <div
+          className={`scoring-side-menu__routine ${
+            routine === targetRoutine
+              ? 'scoring-side-menu__routine--selected'
+              : routine.score === null
+              ? 'scoring-side-menu__routine--unrestricted'
+              : 'scoring-side-menu__routine--restricted'
+          }`}
+          key={routine.date_routine_id}
+          onClick={() => handleClick(routine, i)}
+          onKeyDown={(e) => handleKeyPress(e, routine, i)}
+          tabIndex={i}
+          role="button"
+        >
+          <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
+          <div className="routine-text__routine-name">{routine.routine}</div>
+        </div>
+      ))
+    : [];
 
   return (
     <>
@@ -137,6 +146,7 @@ export default function ScoringSideMenu() {
       <div
         className="modal-background transparent"
         onClick={() => dispatch(toggleSideMenu())}
+        role="alertdialog"
       />
     </>
   );

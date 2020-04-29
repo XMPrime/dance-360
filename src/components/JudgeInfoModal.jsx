@@ -1,7 +1,7 @@
 import React from 'react';
-import { toggleJudgeInfoModal } from '../redux/judgeInfoReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { toggleJudgeInfoModal } from '../redux/judgeInfoReducer';
 
 export default function JudgeInfoModal() {
   const history = useHistory();
@@ -13,13 +13,16 @@ export default function JudgeInfoModal() {
       <div className="modal">
         <div className="modal-header">Alert</div>
         <div className="modal-body">
-          <div className="modal-text">{`${fname} ${lname} already has scores from this position for this tour date.
-          If judges are being swapped, this is fine. Continue?`}</div>
+          <div className="modal-text">
+            {`${fname} ${lname} already has scores from this position for this tour date.
+          If judges are being swapped, this is fine. Continue?`}
+          </div>
         </div>
         <div className="modal-footer">
           <button
             className="btn btn-grey"
             onClick={() => dispatch(toggleJudgeInfoModal())}
+            type="button"
           >
             CANCEL
           </button>
@@ -29,6 +32,7 @@ export default function JudgeInfoModal() {
               dispatch(toggleJudgeInfoModal());
               history.push('/scoring');
             }}
+            type="button"
           >
             YES
           </button>
@@ -37,7 +41,8 @@ export default function JudgeInfoModal() {
       <div
         className="modal-background"
         onClick={() => dispatch(toggleJudgeInfoModal())}
-      ></div>
+        role="alertdialog"
+      />
     </div>
   );
 }

@@ -1,12 +1,18 @@
 import React from 'react';
-import { toggleLoginModal } from '../redux/loginReducer';
 import { useDispatch } from 'react-redux';
+import { toggleLoginModal } from '../redux/loginReducer';
 
 export default function LoginModal() {
   const dispatch = useDispatch();
 
+  function handleKeyDown(e) {
+    if (e.key === 'Enter' || e.key === 'Escape') {
+      dispatch(toggleLoginModal());
+    }
+  }
+
   return (
-    <div>
+    <>
       <div className="modal">
         <div className="modal-header">Sorry</div>
         <div className="modal-body">
@@ -16,6 +22,7 @@ export default function LoginModal() {
           <button
             className="btn btn-purple"
             onClick={() => dispatch(toggleLoginModal())}
+            type="button"
           >
             OK
           </button>
@@ -24,7 +31,9 @@ export default function LoginModal() {
       <div
         className="modal-background"
         onClick={() => dispatch(toggleLoginModal())}
-      ></div>
-    </div>
+        onKeyDown={(e) => handleKeyDown(e)}
+        role="alertdialog"
+      />
+    </>
   );
 }

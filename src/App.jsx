@@ -1,22 +1,21 @@
-import React from "react";
-import "./App.css";
-import "./css/index.css";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import './App.css';
+import './css/index.css';
 import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect
-} from "react-router-dom";
-import LoginPage from "./components/LoginPage";
-import EventPage from "./components/EventPage";
-import TourDatesPage from "./components/TourDatesPage";
-import JudgeInfo from "./components/JudgeInfo";
-import Scoring from "./components/Scoring";
-
-import { useSelector } from "react-redux";
+  Redirect,
+} from 'react-router-dom';
+import LoginPage from './components/LoginPage';
+import EventPage from './components/EventPage';
+import TourDatesPage from './components/TourDatesPage';
+import JudgeInfo from './components/JudgeInfo';
+import Scoring from './components/Scoring';
 
 function App() {
-  const isLoggedIn = useSelector(state => state.login.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
 
   return (
     <Router>

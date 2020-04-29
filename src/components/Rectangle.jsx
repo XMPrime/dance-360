@@ -1,52 +1,11 @@
-// import React from "react";
-
-// export default function Rectangle(props) {
-//   const { level_4_id, level_1_id, isHeader, level, text, good } = this.props;
-
-//   function goodToggle(e) {
-//     e.preventDefault();
-//     let clickedRectangleClasses = e.target.classList;
-//     const currentState = this.state;
-//     switch (currentState.grade) {
-//       case "great-job":
-//         clickedRectangleClasses.remove("great-job");
-//         clickedRectangleClasses.add("needs-work");
-//         break;
-//       case "needs-work":
-//         clickedRectangleClasses.remove("needs-work");
-//         clickedRectangleClasses.add("neutral");
-//         break;
-//       case "neutral":
-//         clickedRectangleClasses.remove("neutral");
-//         clickedRectangleClasses.add("great-job");
-//         break;
-//       default:
-//         clickedRectangleClasses.remove("neutral");
-//         clickedRectangleClasses.add("great-job");
-//         break;
-//     }
-//   }
-
-//   return (
-//     <div
-//       level_4_id={level_4_id}
-//       level_1_id={level_1_id}
-//       good={good}
-//       className={`rectangle level_${isHeader ? level : 4} ${this.state.grade}`}
-//       onClick={!isHeader ? goodToggle : null}
-//     >
-//       {isHeader ? null : <div className="scoring-button-indent"></div>}
-//       {text}
-//     </div>
-//   );
-// }
-
-import React, { Component } from "react";
+/* eslint-disable camelcase */
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Rectangle extends Component {
   constructor(props) {
     super(props);
-    this.state = { grade: "neutral", good: false };
+    this.state = { grade: 'neutral' };
     this.goodToggle = this.goodToggle.bind(this);
   }
 
@@ -54,34 +13,49 @@ export default class Rectangle extends Component {
     e.preventDefault();
     const currentState = this.state;
     switch (currentState.grade) {
-      case "good":
-        this.setState({ grade: "bad", good: false });
+      case 'good':
+        this.setState({ grade: 'bad' });
         break;
-      case "bad":
-        this.setState({ grade: "neutral", good: false });
+      case 'bad':
+        this.setState({ grade: 'neutral' });
         break;
       default:
-        this.setState({ grade: "good", good: true });
+        this.setState({ grade: 'good' });
         break;
     }
   }
+
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.goodToggle(e);
+    }
+  }
+
   render() {
     const { level_4_id, level_1_id, isHeader, level, text } = this.props;
+    const { grade } = this.state;
     return (
       <div
         level_4_id={level_4_id}
         level_1_id={level_1_id}
-        // good={this.state.good}
-        // good={`${this.state.good}`}
-        grade={this.state.grade}
-        className={`rectangle level_${isHeader ? level : 4} ${
-          this.state.grade
-        }`}
+        grade={grade}
+        className={`rectangle level_${isHeader ? level : 4} ${grade}`}
         onClick={!isHeader ? this.goodToggle : null}
+        onKeyDown={(e) => this.handleKeyPress(e)}
+        role="button"
+        tabIndex={0}
       >
-        {isHeader ? null : <div className="scoring-button-indent"></div>}
+        {isHeader ? null : <div className="scoring-button-indent" />}
         {text}
       </div>
     );
   }
 }
+
+Rectangle.propTypes = {
+  level_4_id: PropTypes.number.isRequired,
+  level_1_id: PropTypes.number.isRequired,
+  isHeader: PropTypes.bool.isRequired,
+  level: PropTypes.number.isRequired,
+  text: PropTypes.string.isRequired,
+};

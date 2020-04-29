@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-plusplus */
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Header from './Header';
@@ -20,7 +22,7 @@ const axios = require('axios');
 
 export default function Scoring() {
   // Variables for formatting button table
-  const rectangleHeight = 30; //pixels
+  const rectangleHeight = 30; // pixels
   const minColumns = 5;
   const minRows = 4;
   const minRectangles = minColumns * minRows;
@@ -48,6 +50,91 @@ export default function Scoring() {
     performance_division,
     routine_category,
   } = useSelector((state) => state.scoring.targetRoutine);
+
+  function createButtonsList(data, id) {
+    const targetButtonData = data.find((element) => {
+      return element.level_id === id;
+    });
+
+    const buttonsDivider = targetButtonData.level_4.findIndex(
+      (element) => element.header_name === 'Performance',
+    );
+
+    const fullButtonsList = targetButtonData.level_4.map((button) => {
+      if (button.header_name) {
+        return (
+          <Rectangle
+            key={button.id}
+            level={button.header_level}
+            isHeader
+            text={button.header_name}
+          />
+        );
+      }
+
+      if (button.level_4_name === null) {
+        // level 3 buttons
+        return (
+          <Rectangle
+            key={button.id}
+            level={3}
+            isHeader={false}
+            text={button.level_3_name}
+            level_4_id={button.id}
+            level_1_id={button.level_1_id}
+          />
+        );
+      }
+
+      // level 4 buttons
+      return (
+        <Rectangle
+          key={button.id}
+          level={4}
+          isHeader={false}
+          text={button.level_4_name}
+          level_4_id={button.id}
+          level_1_id={button.level_1_id}
+        />
+      );
+    });
+    const top = fullButtonsList.slice(0, buttonsDivider);
+    const bottom = fullButtonsList.slice(buttonsDivider);
+
+    while (top.length <= minRectangles) {
+      top.push(<div className="blank-rectangle" />);
+    }
+    while (bottom.length <= minRectangles) {
+      bottom.push(<div className="blank-rectangle" />);
+    }
+
+    return { top, bottom };
+  }
+
+  // function handleScroll(e) {
+
+  //   console.log(e.deltaY);
+  //   const body = document.querySelector(".App");
+  //   if (e.deltaY === -100) {
+  //     console.log("up");
+  //     body.scrollBy(0, -1000);
+  //   }
+  //   if (e.deltaY === 100) {
+  //     console.log("down");
+  //     body.scrollBy(0, 1000);
+  //   }
+  // }
+
+  function handleKeydown(e) {
+    if (document.querySelector('textarea') !== document.activeElement) {
+      if (e.code === 'ArrowUp') {
+        window.scrollTo(0, 0);
+      }
+      if (e.code === 'ArrowDown') {
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+    }
+  }
 
   const buttonsList =
     buttonsData !== false && performance_division_level_id !== undefined
@@ -78,105 +165,22 @@ export default function Scoring() {
 
   const scoringTitle = routine ? (
     <div>
-      <div className="scoring-title">{`#${number ? number : ''} - ${
-        routine ? routine : ''
-      } (${studio_code ? studio_code : ''})`}</div>
-      <div className="scoring-subtitle">{`${
-        age_division ? age_division : ''
-      } • ${performance_division ? performance_division : ''} • ${
-        routine_category ? routine_category : ''
-      }`}</div>
+      <div className="scoring-title">
+        {`#${number && number} - ${routine && routine} (${
+          studio_code && studio_code
+        })`}
+      </div>
+      <div className="scoring-subtitle">
+        {`${age_division && age_division} • ${
+          performance_division && performance_division
+        } • ${routine_category && routine_category}`}
+      </div>
     </div>
   ) : (
     <div>
       <div className="scoring-title">Nothing to see here...</div>
     </div>
   );
-
-  function createButtonsList(buttonsData, performance_division_level_id) {
-    const targetButtonData = buttonsData.find((element) => {
-      return element.level_id === performance_division_level_id;
-    });
-
-    const buttonsDivider = targetButtonData.level_4.findIndex(
-      (element) => element.header_name === 'Performance',
-    );
-
-    const fullButtonsList = targetButtonData.level_4.map((button) => {
-      if (button.header_name) {
-        return (
-          <Rectangle
-            key={button.id}
-            level={button.header_level}
-            isHeader={true}
-            text={button.header_name}
-          />
-        );
-      } else {
-        if (button.level_4_name === null) {
-          //level 3 buttons
-          return (
-            <Rectangle
-              key={button.id}
-              level={3}
-              isHeader={false}
-              text={button.level_3_name}
-              level_4_id={button.id}
-              level_1_id={button.level_1_id}
-            />
-          );
-        } else {
-          //level 4 buttons
-          return (
-            <Rectangle
-              key={button.id}
-              level={4}
-              isHeader={false}
-              text={button.level_4_name}
-              level_4_id={button.id}
-              level_1_id={button.level_1_id}
-            />
-          );
-        }
-      }
-    });
-    let top = fullButtonsList.slice(0, buttonsDivider);
-    let bottom = fullButtonsList.slice(buttonsDivider);
-
-    while (top.length <= minRectangles) {
-      top.push(<div className="blank-rectangle"></div>);
-    }
-    while (bottom.length <= minRectangles) {
-      bottom.push(<div className="blank-rectangle"></div>);
-    }
-
-    return { top, bottom };
-  }
-
-  // function handleScroll(e) {
-
-  //   console.log(e.deltaY);
-  //   const body = document.querySelector(".App");
-  //   if (e.deltaY === -100) {
-  //     console.log("up");
-  //     body.scrollBy(0, -1000);
-  //   }
-  //   if (e.deltaY === 100) {
-  //     console.log("down");
-  //     body.scrollBy(0, 1000);
-  //   }
-  // }
-
-  function handleKeydown(e) {
-    if (document.querySelector('textarea') !== document.activeElement) {
-      if (e.code === 'ArrowUp') {
-        window.scrollTo(0, 0);
-      }
-      if (e.code === 'ArrowDown') {
-        window.scrollTo(0, document.body.scrollHeight);
-      }
-    }
-  }
 
   useEffect(() => {
     const buttonsUrl = 'https://api.d360test.com/api/coda/buttons';
@@ -238,7 +242,7 @@ export default function Scoring() {
 
   return (
     <div className="generic-page">
-      <Header title={scoringTitle} barIcon={true}></Header>
+      <Header title={scoringTitle} barIcon />
       {modal ? <ScoringModal /> : null}
       {displaySideMenu ? <ScoringSideMenu /> : null}
       {buttonsData === null || routinesData === null ? null : (

@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable camelcase */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import store from '../redux/index';
@@ -28,7 +30,7 @@ export default function ScoringBreakdown() {
   }
 
   // scoreTabultor needs to be able to access STATE while in its forEach loop via "store"
-  function scoreTabultor(e, store) {
+  function scoreTabultor(e, reduxStore) {
     e.preventDefault();
     const rectangles = document.querySelectorAll('div.rectangle.level_4');
     const buttonGrades = [];
@@ -40,7 +42,7 @@ export default function ScoringBreakdown() {
       const {
         strongestRatio,
         weakestRatio,
-      } = store.getState().scoringBreakdown;
+      } = reduxStore.getState().scoringBreakdown;
 
       // Creates "buttons" array for POST to score
       buttonGrades.push({
@@ -50,7 +52,7 @@ export default function ScoringBreakdown() {
       });
 
       // Counts number of "good", "bad", and "neutral" buttons under each level 1 Header
-      if (!gradesObj.hasOwnProperty(level_1_id)) {
+      if (!Object.prototype.hasOwnProperty.call(gradesObj, level_1_id)) {
         gradesObj[`${level_1_id}`] = {
           good: 0,
           bad: 0,
@@ -60,7 +62,7 @@ export default function ScoringBreakdown() {
       }
       gradesObj[`${level_1_id}`][`${grade}`] += 1;
 
-      //Calculates the good/bad ratio for each level 1 header category and determines which is strongest & weakest
+      // Calculates the good/bad ratio for each level 1 header category and determines which is strongest & weakest
       if (
         i === rectangles.length - 1 ||
         level_1_id !== rectangles[i + 1].attributes.level_1_id.value
@@ -69,6 +71,7 @@ export default function ScoringBreakdown() {
           gradesObj[`${level_1_id}`].good /
           (gradesObj[`${level_1_id}`].good + gradesObj[`${level_1_id}`].bad);
 
+        // eslint-disable-next-line no-restricted-globals
         if (isNaN(ratio)) {
           ratio = 0;
         }
@@ -98,21 +101,21 @@ export default function ScoringBreakdown() {
       >
         <div className="scoring-breakdown-header">
           <div className="scoring-breakdown-header-text">Scoring Breakdown</div>
-          <i
-            className="fas fa-info-circle"
+          <button
             onClick={() => dispatch(toggleScoringBreakdownModal())}
-          ></i>
+            type="button"
+          >
+            <i className="fas fa-info-circle" />
+          </button>
         </div>
         <div className="score-container">
-          <i
-            className="fas fa-minus minus"
-            onClick={() => dispatch(minusScore())}
-          ></i>
+          <button onClick={() => dispatch(minusScore())} type="button">
+            <i className="fas fa-minus minus" />
+          </button>
           <span className="score">{score}</span>
-          <i
-            className="fas fa-plus plus"
-            onClick={() => dispatch(addScore())}
-          ></i>
+          <button onClick={() => dispatch(addScore())} type="button">
+            <i className="fas fa-plus plus" />
+          </button>
         </div>
 
         <div className="scoring-breakdown-header">
@@ -156,6 +159,7 @@ export default function ScoringBreakdown() {
         <div
           className="modal-background transparent"
           onClick={() => dispatch(toggleScoringBreakdownModal())}
+          role="alertdialog"
         />
       ) : null}
     </div>
