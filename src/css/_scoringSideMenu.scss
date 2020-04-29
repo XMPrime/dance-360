@@ -13,9 +13,9 @@
 }
 
 .scoring-side-menu:after {
-  content: "";
+  content: '';
   display: block;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   height: 120px;
