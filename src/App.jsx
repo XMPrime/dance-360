@@ -21,7 +21,7 @@ function App() {
     <Router>
       <div className="App">
         <Switch>
-          <Route exact path="/">
+          <Route exact path={`${process.env.PUBLIC_URL}/`}>
             <LoginPage />
           </Route>
           <Route exact path="/events">

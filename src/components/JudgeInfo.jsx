@@ -70,6 +70,20 @@ export default function JudgeInfo() {
     );
   });
 
+  const dropdowns = [
+    { id: 'judge', label: "What is this judge's name?", options: judgesList },
+    {
+      id: 'position',
+      label: 'What position are they?',
+      options: positionsList,
+    },
+    {
+      id: 'competition',
+      label: 'What competition group is this for?',
+      options: competitionGroupsList,
+    },
+  ];
+
   function handleFormChange(e) {
     const name = e.target.id;
     const { value } = e.target;
@@ -148,63 +162,22 @@ export default function JudgeInfo() {
           id="judgeInfoForm"
           onSubmit={handleSubmit}
         >
-          <div className="label-container">
-            <label className="custom-label" htmlFor="judge">
-              What is this judge&apos;s name?
-              <select
-                className="custom-select"
-                id="judge"
-                onChange={handleFormChange}
-              >
-                {judgesList}
-              </select>
-            </label>
-          </div>
-
-          <div className="label-container">
-            <label className="custom-label" htmlFor="position">
-              What position are they?
-              <select
-                className="custom-select"
-                id="position"
-                onChange={handleFormChange}
-              >
-                {positionsList}
-              </select>
-            </label>
-          </div>
-
-          <div className="label-container">
-            <label className="custom-label" htmlFor="teacher">
-              Is the judge also a teacher?
-              <select
-                className="custom-select"
-                id="teacher"
-                onChange={handleFormChange}
-              >
-                <option className="tour-dates" name="isTeacher" value>
-                  Yes
-                </option>
-                <option className="tour-dates" name="isTeacher" value={false}>
-                  No
-                </option>
-              </select>
-            </label>
-          </div>
-
-          <div className="label-container">
-            <label className="custom-label" htmlFor="competition">
-              What competition group is this for?
-              <select
-                className="custom-select"
-                id="competition"
-                onChange={handleFormChange}
-              >
-                {competitionGroupsList}
-              </select>
-            </label>
-          </div>
-
+          {dropdowns.map((dropdown) => {
+            return (
+              <div className="label-container">
+                <label className="custom-label" htmlFor={`${dropdown.id}`}>
+                  {dropdown.label}
+                  <select
+                    className="custom-select"
+                    id={`${dropdown.id}`}
+                    onChange={handleFormChange}
+                  >
+                    {dropdown.options}
+                  </select>
+                </label>
+              </div>
+            );
+          })}
           <div className="btn-block">
             <button
               className="btn btn-grey"
