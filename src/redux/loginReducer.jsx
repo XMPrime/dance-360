@@ -1,15 +1,12 @@
 // ACTION CREATORS:
-export function setUsername(username) {
-  return {
-    type: 'SET_USERNAME',
-    username,
-  };
-}
+import axios from 'axios';
 
-export function setPassword(password) {
+export function setTextInput(e) {
+  const { id, value } = e.target;
   return {
-    type: 'SET_PASSWORD',
-    password,
+    type: 'SET_TEXT_INPUT',
+    id,
+    value,
   };
 }
 
@@ -38,6 +35,38 @@ export function isTabulator(boolean) {
   };
 }
 
+export function tabulatorCheck(data) {
+  return {
+    type: 'TABULATOR_CHECK',
+    boolean: data.includes('tabulator'),
+  };
+}
+
+export function tryLogin(username, password) {
+  return async (dispatch) => {
+    const url = 'https://api.d360test.com/api/auth/signin';
+
+    try {
+      await axios
+        .post(url, {
+          name: username,
+          password,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            dispatch(login());
+            dispatch(tabulatorCheck(response.data.roles));
+          }
+        });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+      // display modal
+      dispatch(toggleLoginModal());
+    }
+  };
+}
+
 const initialState = {
   isLoggedIn: false,
   username: '',
@@ -48,15 +77,15 @@ const initialState = {
 
 export default function loginReducer(loginState = initialState, action) {
   switch (action.type) {
-    case 'SET_USERNAME':
-      return { ...loginState, username: action.username };
-    case 'SET_PASSWORD':
-      return { ...loginState, password: action.password };
+    case 'SET_TEXT_INPUT':
+      return { ...loginState, [`${action.id}`]: action.value };
     case 'LOGIN':
       return { ...loginState, isLoggedIn: true };
     case 'LOGOUT':
       return { ...loginState, isLoggedIn: false };
     case 'IS_TABULATOR':
+      return { ...loginState, isTabulator: action.boolean };
+    case 'TABULATOR_CHECK':
       return { ...loginState, isTabulator: action.boolean };
     case 'TOGGLE_LOGIN_MODAL':
       return { ...loginState, modal: !loginState.modal };
