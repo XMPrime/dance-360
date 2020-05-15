@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEventsData, setSelectedEvent } from '../redux/eventsReducer';
+import { getEventsData, setSelectedEvent } from '../redux/eventsReducer';
 import Header from './Header';
-
-const axios = require('axios');
 
 export default function EventPage() {
   const history = useHistory();
@@ -18,10 +16,13 @@ export default function EventPage() {
     }
   }
 
+  function handleClick(event) {
+    dispatch(setSelectedEvent(event));
+    history.push('/tour-dates');
+  }
+
   useEffect(() => {
-    axios.get('https://api.d360test.com/api/coda/events').then((response) => {
-      dispatch(setEventsData(response.data));
-    });
+    dispatch(getEventsData());
   }, []);
 
   return (
@@ -34,10 +35,7 @@ export default function EventPage() {
             className="grid-item"
             event_id={event.id}
             season_id={event.current_season_id}
-            onClick={() => {
-              dispatch(setSelectedEvent(event));
-              history.push('/tour-dates');
-            }}
+            onClick={() => handleClick(event)}
             onKeyDown={(e) => handleKeyPress(e, event)}
             role="link"
             tabIndex={i}

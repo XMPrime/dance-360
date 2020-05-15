@@ -1,8 +1,25 @@
 // ACTION CREATORS:
+const axios = require('axios');
+
 export function setEventsData(data) {
   return {
     type: 'SET_EVENTS_DATA',
     data,
+  };
+}
+
+export function getEventsData() {
+  return async (dispatch) => {
+    const url = 'https://api.d360test.com/api/coda/events';
+
+    try {
+      await axios.get(url).then((response) => {
+        dispatch(setEventsData(response.data));
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
   };
 }
 

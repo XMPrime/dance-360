@@ -811,7 +811,10 @@ header {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  width: 800px;
+  top: 10%;
+  min-width: 30%;
+  max-width: 60%;
+  margin-top: 70px;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
 }
