@@ -49,9 +49,9 @@ export default function LoginPage() {
       <div className="container-fluid">
         <img src={logo} className="login-logo" alt="logo" />
         <form onSubmit={handleSubmit(() => onSubmit())}>
-          {textInputs.map((input) => {
+          {textInputs.map((input, i) => {
             return (
-              <div className="input-container">
+              <div key={input.id} className="input-container">
                 <i className={`fa ${input.icon} icon`} />
                 <input
                   type={input.type}

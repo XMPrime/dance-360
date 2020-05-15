@@ -36,6 +36,15 @@ export default function TourDatesPage() {
     dispatch(setSelectedTour(tourId, tourDateValue));
   }
 
+  const buttons = [
+    { color: 'grey', clickFunc: () => history.push('/events'), text: 'BACK' },
+    {
+      color: 'purple',
+      clickFunc: () => history.push('/judge-info'),
+      text: 'NEXT',
+    },
+  ];
+
   useEffect(() => {
     axios
       .get('https://api.d360test.com/api/coda/tour-dates', {
@@ -58,7 +67,7 @@ export default function TourDatesPage() {
           className="group-logo"
           alt="logo"
         />
-        <form className="form-container">
+        <div className="form-container">
           <select
             id="tour-select"
             className="custom-select"
@@ -68,23 +77,18 @@ export default function TourDatesPage() {
             {tourDatesList}
           </select>
           <div className="btn-block">
-            <button
-              className="btn btn-grey"
-              onClick={() => history.push('/events')}
-              type="button"
-            >
-              BACK
-            </button>
-
-            <button
-              className="btn btn-purple"
-              type="submit"
-              onClick={() => history.push('/judge-info')}
-            >
-              NEXT
-            </button>
+            {buttons.map((button) => (
+              <button
+                key={button.text}
+                className={`btn btn-${button.color}`}
+                onClick={button.clickFunc}
+                type="button"
+              >
+                {button.text}
+              </button>
+            ))}
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

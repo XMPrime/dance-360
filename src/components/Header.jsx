@@ -33,5 +33,9 @@ export default function Header(props) {
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
-  barIcon: PropTypes.bool.isRequired,
+  barIcon: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  barIcon: false,
 };

@@ -7,22 +7,30 @@ export default function JudgeDropdownMenu() {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const buttons = [
+    {
+      text: 'CHANGE JUDGE INFO',
+      clickFunction: () => history.push('/judge-info'),
+    },
+    {
+      text: 'SIGN OUT',
+      clickFunction: () => dispatch(logout()),
+    },
+  ];
+
   return (
     <div className="judge-dropdown-menu">
-      <button
-        className="judge-dropdown-menu-rectangle"
-        onClick={() => history.push('/judge-info')}
-        type="button"
-      >
-        CHANGE JUDGE INFO
-      </button>
-      <button
-        className="judge-dropdown-menu-rectangle"
-        onClick={() => dispatch(logout())}
-        type="button"
-      >
-        SIGN OUT
-      </button>
+      {buttons.map((button) => {
+        return (
+          <button
+            className="judge-dropdown-menu-rectangle"
+            onClick={button.clickFunction}
+            type="button"
+          >
+            {button.text}
+          </button>
+        );
+      })}
     </div>
   );
 }

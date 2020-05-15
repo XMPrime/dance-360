@@ -21,14 +21,10 @@ const axios = require('axios');
 
 export default function JudgeInfo() {
   const history = useHistory();
-  const tourDateId = useSelector((state) => state.tourDates.tourDateId);
-  const {
-    competitionGroupsData,
-    judgesData,
-    judgePosition,
-    judgeGroupId,
-    modal,
-  } = useSelector((state) => state.judgeInfo);
+  const [
+    { tourDateId },
+    { competitionGroupsData, judgesData, judgePosition, judgeGroupId, modal },
+  ] = useSelector((state) => [state.tourDates, state.judgeInfo]);
   const dispatch = useDispatch();
 
   const judgesList = judgesData.map((judge) => {
@@ -119,6 +115,7 @@ export default function JudgeInfo() {
   function handleSubmit(e) {
     e.preventDefault();
     const url = 'https://api.d360test.com/api/coda/check-judge';
+
     axios
       .get(url, {
         params: {
@@ -137,6 +134,10 @@ export default function JudgeInfo() {
           dispatch(getModalJudgeName(fname, lname));
           dispatch(toggleJudgeInfoModal());
         }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
       });
   }
 
@@ -164,7 +165,7 @@ export default function JudgeInfo() {
         >
           {dropdowns.map((dropdown) => {
             return (
-              <div className="label-container">
+              <div key={dropdown.id} className="label-container">
                 <label className="custom-label" htmlFor={`${dropdown.id}`}>
                   {dropdown.label}
                   <select
