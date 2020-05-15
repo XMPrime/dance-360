@@ -28,13 +28,6 @@ export function toggleLoginModal() {
   };
 }
 
-export function isTabulator(boolean) {
-  return {
-    type: 'IS_TABULATOR',
-    boolean,
-  };
-}
-
 export function tabulatorCheck(data) {
   return {
     type: 'TABULATOR_CHECK',
@@ -83,8 +76,6 @@ export default function loginReducer(loginState = initialState, action) {
       return { ...loginState, isLoggedIn: true };
     case 'LOGOUT':
       return { ...loginState, isLoggedIn: false };
-    case 'IS_TABULATOR':
-      return { ...loginState, isTabulator: action.boolean };
     case 'TABULATOR_CHECK':
       return { ...loginState, isTabulator: action.boolean };
     case 'TOGGLE_LOGIN_MODAL':
