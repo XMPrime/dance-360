@@ -3,15 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Header from './Header';
 import {
-  setJudgesData,
-  setCompetitionGroupsData,
-  setJudgeId,
-  setJudgeFullName,
-  setJudgePosition,
-  setJudgeIsTeacher,
-  setJudgeGroupName,
-  setJudgeGroupId,
-  setJudgeHeadshot,
+  getJudgesData,
+  getCompetitionGroupsData,
+  setJudgeInfo,
   toggleJudgeInfoModal,
   getModalJudgeName,
 } from '../redux/judgeInfoReducer';
@@ -52,6 +46,18 @@ export default function JudgeInfo() {
       </option>
     );
   });
+  const isTeacherList = ['No', 'Yes'].map((isTeacher) => {
+    return (
+      <option
+        key={isTeacher}
+        className="tour-dates"
+        name="position"
+        value={isTeacher === 'Yes' && true}
+      >
+        {isTeacher}
+      </option>
+    );
+  });
   const competitionGroupsList = competitionGroupsData.map((group) => {
     return (
       <option
@@ -74,6 +80,11 @@ export default function JudgeInfo() {
       options: positionsList,
     },
     {
+      id: 'teacher',
+      label: 'Is this judge a teacher?',
+      options: isTeacherList,
+    },
+    {
       id: 'competition',
       label: 'What competition group is this for?',
       options: competitionGroupsList,
@@ -81,29 +92,28 @@ export default function JudgeInfo() {
   ];
 
   function handleFormChange(e) {
-    const name = e.target.id;
-    const { value } = e.target;
+    const { id, value } = e.target;
 
-    switch (name) {
+    switch (id) {
       case 'judge': {
         const index = document.getElementById('judge').selectedIndex;
-        dispatch(setJudgeFullName(value));
-        dispatch(setJudgeHeadshot(judgesData[index].headshot));
-        dispatch(setJudgeId(judgesData[index].id)); // or staff_type_id?
+        dispatch(setJudgeInfo('judgeFullName', value));
+        dispatch(setJudgeInfo('judgeHeadshot', judgesData[index].headshot));
+        dispatch(setJudgeInfo('judgeId', judgesData[index].id));
         break;
       }
       case 'position':
-        dispatch(setJudgePosition(value));
+        dispatch(setJudgeInfo('judgePosition', value));
         break;
       case 'teacher':
-        dispatch(setJudgeIsTeacher(value));
+        dispatch(setJudgeInfo('judgeIsTeacher', value));
         break;
       case 'competition': {
         const competitionElem = document.getElementById('competition');
-        const groupId =
-          competitionElem.options[competitionElem.selectedIndex].id;
-        dispatch(setJudgeGroupName(value));
-        dispatch(setJudgeGroupId(groupId));
+        const index = competitionElem.selectedIndex;
+        const groupId = competitionElem.options[index].id;
+        dispatch(setJudgeInfo('judgeGroupName', value));
+        dispatch(setJudgeInfo('judgeGroupId', groupId));
         break;
       }
       default:
@@ -142,16 +152,11 @@ export default function JudgeInfo() {
   }
 
   useEffect(() => {
-    axios.get('https://api.d360test.com/api/coda/judges').then((response) => {
-      dispatch(setJudgesData(response.data));
-    });
-
-    axios
-      .get('https://api.d360test.com/api/coda/competition-groups')
-      .then((response) => {
-        dispatch(setCompetitionGroupsData(response.data));
-      });
-  }, []);
+    Promise.all([
+      dispatch(getJudgesData()),
+      dispatch(getCompetitionGroupsData()),
+    ]);
+  }, [dispatch]);
   return (
     <div className="generic-page">
       <Header barIcon={false} title="JUDGE INFORMATION:" />

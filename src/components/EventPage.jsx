@@ -23,7 +23,7 @@ export default function EventPage() {
 
   useEffect(() => {
     dispatch(getEventsData());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="generic-page">

@@ -49,23 +49,21 @@ export default function LoginPage() {
       <div className="container-fluid">
         <img src={logo} className="login-logo" alt="logo" />
         <form onSubmit={handleSubmit(() => onSubmit())}>
-          {textInputs.map((input, i) => {
-            return (
-              <div key={input.id} className="input-container">
-                <i className={`fa ${input.icon} icon`} />
-                <input
-                  type={input.type}
-                  id={input.id}
-                  name={input.id}
-                  className={`input ${input.id}`}
-                  placeholder={input.placeholder}
-                  onChange={(e) => dispatch(setTextInput(e))}
-                  ref={register({ required: true })}
-                />
-                {input.errors}
-              </div>
-            );
-          })}
+          {textInputs.map((input, i) => (
+            <div key={input.id} className="input-container">
+              <i className={`fa ${input.icon} icon`} />
+              <input
+                type={input.type}
+                id={input.id}
+                name={input.id}
+                className={`input ${input.id}`}
+                placeholder={input.placeholder}
+                onChange={(e) => dispatch(setTextInput(e))}
+                ref={register({ required: true })}
+              />
+              {input.errors}
+            </div>
+          ))}
           <button className="btn btn-login" type="submit">
             LOGIN
           </button>

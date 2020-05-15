@@ -3,12 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Header from './Header';
 import {
-  setTourDatesData,
+  getTourDatesData,
   setSelectedTour,
   transformTourDateData,
 } from '../redux/tourDatesReducer';
-
-const axios = require('axios');
 
 export default function TourDatesPage() {
   const selectedEvent = useSelector((state) => state.events.selectedEvent);
@@ -16,18 +14,16 @@ export default function TourDatesPage() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const tourDatesList = tourDatesData.map((tourDateData) => {
-    return (
-      <option
-        key={tourDateData.id}
-        id={tourDateData.id}
-        className="tour-dates"
-        value={transformTourDateData(tourDateData)}
-      >
-        {transformTourDateData(tourDateData)}
-      </option>
-    );
-  });
+  const tourDatesList = tourDatesData.map((tourDateData) => (
+    <option
+      key={tourDateData.id}
+      id={tourDateData.id}
+      className="tour-dates"
+      value={transformTourDateData(tourDateData)}
+    >
+      {transformTourDateData(tourDateData)}
+    </option>
+  ));
 
   function handleChange(e) {
     const select = document.getElementById('tour-select');
@@ -46,17 +42,8 @@ export default function TourDatesPage() {
   ];
 
   useEffect(() => {
-    axios
-      .get('https://api.d360test.com/api/coda/tour-dates', {
-        params: {
-          event_id: selectedEvent.id,
-          season_id: selectedEvent.current_season_id,
-        },
-      })
-      .then((response) => {
-        dispatch(setTourDatesData(response.data));
-      });
-  }, []);
+    dispatch(getTourDatesData(selectedEvent));
+  }, [dispatch, selectedEvent]);
 
   return (
     <div className="generic-page">
