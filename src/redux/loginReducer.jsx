@@ -22,9 +22,11 @@ export function logout() {
   };
 }
 
-export function toggleLoginModal() {
+export function toggleModal(e) {
+  const { id } = e.target;
   return {
-    type: 'TOGGLE_LOGIN_MODAL',
+    type: 'TOGGLE_MODAL',
+    id,
   };
 }
 
@@ -55,7 +57,7 @@ export function tryLogin(username, password) {
       // eslint-disable-next-line no-console
       console.log(error);
       // display modal
-      dispatch(toggleLoginModal());
+      dispatch(toggleModal({ target: { id: 'auth' } }));
     }
   };
 }
@@ -64,7 +66,8 @@ const initialState = {
   isLoggedIn: false,
   username: '',
   password: '',
-  modal: false,
+  authModal: false,
+  welcomeModal: true,
   isTabulator: false,
 };
 
@@ -78,8 +81,11 @@ export default function loginReducer(loginState = initialState, action) {
       return { ...loginState, isLoggedIn: false };
     case 'TABULATOR_CHECK':
       return { ...loginState, isTabulator: action.boolean };
-    case 'TOGGLE_LOGIN_MODAL':
-      return { ...loginState, modal: !loginState.modal };
+    case 'TOGGLE_MODAL':
+      return {
+        ...loginState,
+        [`${action.id}Modal`]: !loginState[`${action.id}Modal`],
+      };
     default:
       return loginState;
   }
