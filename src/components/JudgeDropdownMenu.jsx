@@ -23,6 +23,7 @@ export default function JudgeDropdownMenu() {
       {buttons.map((button) => {
         return (
           <button
+            key={button.text}
             className="judge-dropdown-menu-rectangle"
             onClick={button.clickFunction}
             type="button"

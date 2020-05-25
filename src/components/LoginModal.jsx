@@ -5,7 +5,7 @@ import { toggleModal } from '../redux/loginReducer';
 
 export default function LoginModal(props) {
   const dispatch = useDispatch();
-  const { header, linkText, linkAddress, body1, body2, type } = props;
+  const { header, body, type } = props;
 
   function handleKeyDown(e) {
     if (e.key === 'Enter' || e.key === 'Escape') {
@@ -17,11 +17,7 @@ export default function LoginModal(props) {
     <>
       <div className="modal">
         <div className="modal-header">{header}</div>
-        <div className="modal-body">
-          {body1}
-          <a href={linkAddress}>{linkText}</a>
-          {body2}
-        </div>
+        <div className="modal-body">{body}</div>
         <div className="modal-footer">
           <button
             id={type}
@@ -49,12 +45,10 @@ LoginModal.propTypes = {
   header: PropTypes.string.isRequired,
   linkText: PropTypes.string,
   linkAddress: PropTypes.string,
-  body1: PropTypes.string.isRequired,
-  body2: PropTypes.string,
+  body: PropTypes.string.isRequired,
 };
 
 LoginModal.defaultProps = {
   linkText: '',
   linkAddress: '',
-  body2: '',
 };

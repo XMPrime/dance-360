@@ -1,4 +1,6 @@
 // ACTION CREATORS:
+const axios = require('axios');
+
 export function toggleSideMenu() {
   return {
     type: 'TOGGLE_SIDE_MENU',
@@ -23,6 +25,72 @@ export function setScoringBreakdownData(data) {
   return {
     type: 'SET_SCORING_BREAKDOWN_DATA',
     data,
+  };
+}
+
+export function getButtonsData() {
+  return async (dispatch) => {
+    const url = 'https://api.d360test.com/api/coda/buttons';
+    try {
+      await axios.get(url).then((response) => {
+        dispatch(setButtonsData(response.data));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function getScoringBreakdownData(selectedEvent) {
+  return async (dispatch) => {
+    const url = 'https://api.d360test.com/api/coda/scoring-breakdown';
+    try {
+      await axios
+        .get(url, {
+          params: {
+            event_id: selectedEvent.id,
+          },
+        })
+        .then((response) => {
+          dispatch(setScoringBreakdownData(response.data));
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function getRoutinesData(tourDateId, judgeGroupId, judgePosition) {
+  return async (dispatch) => {
+    const url = 'https://api.d360test.com/api/coda/routines';
+    try {
+      await axios
+        .get(url, {
+          params: {
+            tour_date_id: tourDateId,
+            competition_group_id: judgeGroupId,
+            position: judgePosition,
+          },
+        })
+        .then((response) => {
+          if (response.data.length !== 0) {
+            let initialRoutine = response.data[0];
+            let initialRoutineIndex = 0;
+            for (let i = 0; i < response.data.length; i++) {
+              if (response.data[i].score === null) {
+                initialRoutine = response.data[i];
+                initialRoutineIndex = i;
+                dispatch(setRoutinesData(response.data));
+                dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
+                break;
+              }
+            }
+            dispatch(setRoutinesData(response.data));
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 }
 

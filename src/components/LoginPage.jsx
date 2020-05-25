@@ -38,19 +38,22 @@ export default function LoginPage() {
   const invalidAuthText = {
     type: 'auth',
     header: 'Sorry',
-    body1: 'You have entered an invalid username or password.',
+    body: 'You have entered an invalid username or password.',
   };
 
+  const userStoriesLink =
+    'https://docs.google.com/document/d/1ZPotc3MEnf29pgsx-e4CkHbBqTkfszn_brS6hbAXhj0/edit?usp=sharing';
   const welcomeText = {
     type: 'welcome',
     header: 'Welcome to my Dance Judge app!',
-    linkText: 'click here',
-    linkAddress:
-      'https://docs.google.com/document/d/1ZPotc3MEnf29pgsx-e4CkHbBqTkfszn_brS6hbAXhj0/edit?usp=sharing',
-    body1:
-      'To login and look around, use "jason" and "testtest" as the username and password respectively. Additionally, ',
-    body2:
-      ' for a link to the User Stories for this app. Thanks for your consideration!',
+    body: (
+      <>
+        To login and look around, use &quot;jason&quot; and &quot;testtest&quot;
+        as the username and password respectively. Additionally,{' '}
+        <a href={userStoriesLink}>click here</a> for a link to the User Stories
+        for this app. Thanks for your consideration!
+      </>
+    ),
   };
 
   async function onSubmit() {
@@ -71,7 +74,7 @@ export default function LoginPage() {
           header={welcomeText.header}
           linkText={welcomeText.linkText}
           linkAddress={welcomeText.linkAddress}
-          body1={welcomeText.body1}
+          body={welcomeText.body}
           body2={welcomeText.body2}
         />
       ) : null}
@@ -79,7 +82,7 @@ export default function LoginPage() {
         <LoginModal
           type="auth"
           header={invalidAuthText.header}
-          body1={invalidAuthText.body1}
+          body={invalidAuthText.body}
         />
       ) : null}
       <div className="container-fluid">

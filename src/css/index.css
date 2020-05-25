@@ -1080,7 +1080,7 @@ select:focus {
   position: fixed;
   left: 0;
   right: 0;
-  top: 40%;
+  top: 35%;
   margin: 0 auto;
   border: 1px solid #131517;
   border-radius: 0.25rem;

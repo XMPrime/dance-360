@@ -9,10 +9,14 @@ import ScoringBreakdown from './ScoringBreakdown';
 import ScoringModal from './ScoringModal';
 
 import {
+  getButtonsData,
+  getScoringBreakdownData,
+  getRoutinesData,
   setButtonsData,
   setRoutinesData,
   setScoringBreakdownData,
   setTargetRoutine,
+
   // setButtonGrades
   // setDivisionId
   // trackScrollPos
@@ -183,56 +187,10 @@ export default function Scoring() {
   );
 
   useEffect(() => {
-    const buttonsUrl = 'https://api.d360test.com/api/coda/buttons';
-    const scoringBreakdownUrl =
-      'https://api.d360test.com/api/coda/scoring-breakdown';
-
-    axios.get(buttonsUrl).then((response) => {
-      // console.log(response);
-      dispatch(setButtonsData(response.data));
-    });
-
-    axios
-      .get(scoringBreakdownUrl, {
-        params: {
-          event_id: selectedEvent.id,
-        },
-      })
-      .then((response) => {
-        // console.log(response);
-        dispatch(setScoringBreakdownData(response.data));
-      });
-  }, []);
-
-  useEffect(() => {
-    const routinesUrl = 'https://api.d360test.com/api/coda/routines';
-
-    axios
-      .get(routinesUrl, {
-        params: {
-          tour_date_id: tourDateId,
-          competition_group_id: judgeGroupId,
-          position: judgePosition,
-        },
-      })
-      .then((response) => {
-        // console.log(response);
-        if (response.data.length !== 0) {
-          let initialRoutine = response.data[0];
-          let initialRoutineIndex = 0;
-          for (let i = 0; i < response.data.length; i++) {
-            if (response.data[i].score === null) {
-              initialRoutine = response.data[i];
-              initialRoutineIndex = i;
-              dispatch(setRoutinesData(response.data));
-              dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
-              break;
-            }
-          }
-          dispatch(setRoutinesData(response.data));
-        }
-      });
-  }, []);
+    dispatch(getButtonsData());
+    dispatch(getScoringBreakdownData(selectedEvent));
+    dispatch(getRoutinesData(tourDateId, judgeGroupId, judgePosition));
+  }, [dispatch, selectedEvent, tourDateId, judgeGroupId, judgePosition]);
 
   useEffect(() => {
     // window.addEventListener("scroll", () => handleScroll(scrollPos));
