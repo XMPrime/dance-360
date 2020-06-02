@@ -1,18 +1,20 @@
-import LoginPage from './components/LoginPage';
-import EventPage from './components/EventPage';
-import TourDatesPage from './components/TourDatesPage';
-import JudgeInfo from './components/JudgeInfo';
-import Scoring from './components/Scoring';
+import Login from './components/pages/Login';
+import Events from './components/pages/Events';
+import TourDates from './components/pages/TourDates';
+import JudgeInfo from './components/pages/JudgeInfo';
+import Scoring from './components/pages/Scoring';
 
-export default [
-  { path: '/', exact: true, private: false, component: LoginPage },
-  { path: '/events', exact: true, private: true, component: EventPage },
+const routes = [
+  { path: '/', exact: true, private: false, component: Login },
+  { path: '/events', exact: true, private: true, component: Events },
   {
     path: '/tour-dates',
     exact: true,
     private: true,
-    component: TourDatesPage,
+    component: TourDates,
   },
   { path: '/judge-info', exact: true, private: true, component: JudgeInfo },
   { path: '/scoring', exact: true, private: true, component: Scoring },
 ];
+
+export { routes };

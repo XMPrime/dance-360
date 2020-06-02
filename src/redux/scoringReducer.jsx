@@ -130,6 +130,35 @@ export function toggleScoringModal() {
   };
 }
 
+export function submitScore(postData, nextRoutine, nextRoutineIndex) {
+  return async (dispatch) => {
+    const scoreUrl = 'https://api.d360test.com/api/coda/score';
+    const socketUrl = 'https://api.d360test.com/api/socket-scoring';
+
+    try {
+      await axios.post(scoreUrl, postData).then((response) => {
+        if (response.status === 200) {
+          axios
+            .post(socketUrl, {
+              tour_date_id: postData.tour_date_id,
+              coda: true,
+              data: {
+                competition_group_id: postData.competition_group_id,
+                date_routine_id: postData.date_routine_id,
+              },
+            })
+            .then(() => {
+              dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
+              window.scrollTo(0, 0);
+            });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
 const initialState = {
   routinesData: false,
   targetRoutine: {},

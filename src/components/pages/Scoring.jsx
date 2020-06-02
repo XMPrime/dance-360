@@ -17,10 +17,8 @@ import {
   getScoringBreakdownData,
   getRoutinesData,
   toggleScoringModal,
-  setTargetRoutine,
+  submitScore,
 } from '../../redux/scoringReducer';
-
-const axios = require('axios');
 
 export default function Scoring() {
   // Variables for formatting button table
@@ -91,35 +89,6 @@ export default function Scoring() {
       weakest_level_1_id: weakestId,
     },
   };
-
-  function submitScore(data) {
-    const scoreUrl = 'https://api.d360test.com/api/coda/score';
-    const socketUrl = 'https://api.d360test.com/api/socket-scoring';
-
-    axios
-      .post(scoreUrl, data)
-      .then((response) => {
-        if (response.status === 200) {
-          axios
-            .post(socketUrl, {
-              tour_date_id,
-              coda: true,
-              data: {
-                competition_group_id: judgeGroupId,
-                date_routine_id,
-              },
-            })
-            .then(() => {
-              dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
-              window.scrollTo(0, 0);
-            });
-        }
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log(error.response);
-      });
-  }
 
   function createButtonsList(data, id) {
     const targetButtonData = data.find((element) => {
@@ -197,27 +166,18 @@ export default function Scoring() {
       ? createButtonsList(buttonsData, performance_division_level_id)
       : '';
 
-  const topStyle = {
-    height: `${Math.max(
-      Math.floor(
-        buttonsData !== false && performance_division_level_id !== undefined
-          ? (buttonsList.top.length * rectangleHeight) / minColumns
-          : 0,
-      ),
-      minRows * rectangleHeight,
-    )}px`,
-  };
-
-  const bottomStyle = {
-    height: `${Math.max(
-      Math.floor(
-        buttonsData !== false && performance_division_level_id !== undefined
-          ? (buttonsList.bottom.length * rectangleHeight) / minColumns
-          : 0,
-      ),
-      minRows * rectangleHeight,
-    )}px`,
-  };
+  function calcStyle(buttons) {
+    return {
+      height: `${Math.max(
+        Math.floor(
+          buttonsData !== false && performance_division_level_id !== undefined
+            ? (buttons.length * rectangleHeight) / minColumns
+            : 0,
+        ),
+        minRows * rectangleHeight,
+      )}px`,
+    };
+  }
 
   const scoringTitle = routine ? (
     <div>
@@ -254,7 +214,7 @@ export default function Scoring() {
       text: 'SAVE',
       func: () => {
         dispatch(toggleScoringModal());
-        submitScore(postData);
+        dispatch(submitScore(postData, nextRoutine, nextRoutineIndex));
       },
     },
     bgFunc: () => {
@@ -265,10 +225,13 @@ export default function Scoring() {
   };
 
   useEffect(() => {
-    dispatch(getButtonsData());
-    dispatch(getScoringBreakdownData(selectedEvent));
-    dispatch(getRoutinesData(tourDateId, judgeGroupId, judgePosition));
-  }, [dispatch, selectedEvent, tourDateId, judgeGroupId, judgePosition]);
+    Promise.all([
+      dispatch(getButtonsData()),
+      dispatch(getScoringBreakdownData(selectedEvent)),
+      dispatch(getRoutinesData(tourDateId, judgeGroupId, judgePosition)),
+    ]);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeydown);
@@ -291,12 +254,18 @@ export default function Scoring() {
       {buttonsData === null || routinesData === null ? null : (
         <div className="scoring-body">
           <div id="top-buttons">
-            <div className="rectangles-container" style={topStyle}>
+            <div
+              className="rectangles-container"
+              style={calcStyle(buttonsList.top)}
+            >
               {buttonsList.top}
             </div>
           </div>
           <div id="bottom-buttons">
-            <div className="rectangles-container" style={bottomStyle}>
+            <div
+              className="rectangles-container"
+              style={calcStyle(buttonsList.bottom)}
+            >
               {buttonsList.bottom}
             </div>
           </div>

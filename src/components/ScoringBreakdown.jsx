@@ -11,17 +11,17 @@ import {
   toggleCheckbox,
   setStrongestLevel1Id,
   setWeakestLevel1Id,
-  toggleScoringBreakdownModal,
+  toggleScoringBreakdownPopUp,
 } from '../redux/scoringBreakdownReducer';
-import ScoringBreakdownModal from './ScoringBreakdownModal';
+import ScoringBreakdownPopUp from './ScoringBreakdownPopUp';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
   const { score, note, familyFriendly, iChoreographed } = useSelector(
     (state) => state.scoringBreakdown,
   );
-  const scoringBreakdownModal = useSelector(
-    (state) => state.scoringBreakdown.modal,
+  const scoringBreakdownPopUp = useSelector(
+    (state) => state.scoringBreakdown.popUp,
   );
 
   function handleChange(e) {
@@ -89,9 +89,9 @@ export default function ScoringBreakdown() {
 
   return (
     <div className="scoring-breakdown-container">
-      {scoringBreakdownModal ? <ScoringBreakdownModal /> : null}
-      {scoringBreakdownModal ? (
-        <div className="scoring-breakdown-modal--divider" />
+      {scoringBreakdownPopUp ? <ScoringBreakdownPopUp /> : null}
+      {scoringBreakdownPopUp ? (
+        <div className="scoring-breakdown-pop-up--divider" />
       ) : null}
       <form
         onSubmit={(e) => {
@@ -102,7 +102,7 @@ export default function ScoringBreakdown() {
         <div className="scoring-breakdown-header">
           <div className="scoring-breakdown-header-text">Scoring Breakdown</div>
           <button
-            onClick={() => dispatch(toggleScoringBreakdownModal())}
+            onClick={() => dispatch(toggleScoringBreakdownPopUp())}
             type="button"
           >
             <i className="fas fa-info-circle" />
@@ -155,10 +155,10 @@ export default function ScoringBreakdown() {
           SUBMIT
         </button>
       </form>
-      {scoringBreakdownModal ? (
+      {scoringBreakdownPopUp ? (
         <div
           className="modal-background transparent"
-          onClick={() => dispatch(toggleScoringBreakdownModal())}
+          onClick={() => dispatch(toggleScoringBreakdownPopUp())}
           role="alertdialog"
         />
       ) : null}

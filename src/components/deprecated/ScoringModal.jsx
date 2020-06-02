@@ -1,11 +1,14 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleScoringModal, setTargetRoutine } from '../redux/scoringReducer';
+import {
+  toggleScoringModal,
+  setTargetRoutine,
+} from '../../redux/scoringReducer';
 import {
   setStrongestLevel1Id,
   setWeakestLevel1Id,
-} from '../redux/scoringBreakdownReducer';
+} from '../../redux/scoringBreakdownReducer';
 
 const axios = require('axios');
 

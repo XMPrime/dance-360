@@ -182,7 +182,8 @@ export default function JudgeInfo() {
       dispatch(getJudgesData()),
       dispatch(getCompetitionGroupsData()),
     ]);
-  }, [dispatch]);
+    // eslint-disable-next-line
+  }, []);
   return (
     <div className="generic-page">
       <Header barIcon={false} title="JUDGE INFORMATION:" />

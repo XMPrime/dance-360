@@ -41,9 +41,9 @@ export function setWeakestLevel1Id(level_1_id, ratio) {
   };
 }
 
-export function toggleScoringBreakdownModal() {
+export function toggleScoringBreakdownPopUp() {
   return {
-    type: 'TOGGLE_SCORING_BREAKDOWN_MODAL',
+    type: 'TOGGLE_SCORING_BREAKDOWN_POP_UP',
   };
 }
 
@@ -56,7 +56,7 @@ const initialState = {
   strongestId: '',
   weakestRatio: 2,
   weakestId: '',
-  modal: false,
+  popUp: false,
 };
 
 export default function scoringBreakdownReducer(
@@ -107,10 +107,10 @@ export default function scoringBreakdownReducer(
         weakestRatio: action.ratio,
         weakestId: action.level_1_id,
       };
-    case 'TOGGLE_SCORING_BREAKDOWN_MODAL':
+    case 'TOGGLE_SCORING_BREAKDOWN_POP_UP':
       return {
         ...scoringBreakdownState,
-        modal: !scoringBreakdownState.modal,
+        popUp: !scoringBreakdownState.popUp,
       };
     default:
       return scoringBreakdownState;

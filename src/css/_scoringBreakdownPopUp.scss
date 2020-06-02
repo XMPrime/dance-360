@@ -1,4 +1,4 @@
-.scoring-breakdown-modal {
+.scoring-breakdown-pop-up {
   display: flex;
   flex-direction: column;
   position: relative;
@@ -12,12 +12,12 @@
   z-index: 2;
 }
 
-.scoring-breakdown-modal--divider {
+.scoring-breakdown-pop-up--divider {
   height: 20px;
   background-color: $background-gray;
 }
 
-.scoring-breakdown-modal--header {
+.scoring-breakdown-pop-up--header {
   background-color: $darkest-gray;
   justify-self: center;
   text-align: center;
@@ -26,7 +26,7 @@
   height: 100%;
 }
 
-.scoring-breakdown-modal--subheader {
+.scoring-breakdown-pop-up--subheader {
   display: flex;
   background-color: $darker-gray;
   justify-content: space-between;
@@ -34,7 +34,7 @@
   padding: 15px;
 }
 
-.scoring-breakdown-modal--breakdown {
+.scoring-breakdown-pop-up--breakdown {
   display: flex;
   justify-content: space-between;
   background-color: #2e3238;

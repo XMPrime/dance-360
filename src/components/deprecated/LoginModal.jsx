@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { toggleModal } from '../redux/loginReducer';
+import { toggleModal } from '../../redux/loginReducer';
 
 export default function LoginModal(props) {
   const dispatch = useDispatch();

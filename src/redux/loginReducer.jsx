@@ -24,7 +24,6 @@ export function logout() {
 
 export function toggleModal(e) {
   const { id } = e.target;
-  console.log(id);
   return {
     type: 'TOGGLE_MODAL',
     id,
@@ -83,7 +82,6 @@ export default function loginReducer(loginState = initialState, action) {
     case 'TABULATOR_CHECK':
       return { ...loginState, isTabulator: action.boolean };
     case 'TOGGLE_MODAL':
-      console.log(loginState.welcomeModal);
       return {
         ...loginState,
         [`${action.id}Modal`]: !loginState[`${action.id}Modal`],
