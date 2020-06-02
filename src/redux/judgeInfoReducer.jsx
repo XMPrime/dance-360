@@ -84,7 +84,8 @@ const initialState = {
   judgeGroupId: null,
   judgeHeadshot: null,
   modal: false,
-  modalState: { fname: '', lname: '' },
+  modalFName: '',
+  modalLName: '',
 };
 
 export default function judgeInfoReducer(
@@ -116,10 +117,8 @@ export default function judgeInfoReducer(
     case 'GET_MODAL_JUDGE_NAME':
       return {
         ...judgeInfoState,
-        modalState: {
-          fname: action.fname,
-          lname: action.lname,
-        },
+        modalFName: action.fname,
+        modalLName: action.lname,
       };
     default:
       return judgeInfoState;

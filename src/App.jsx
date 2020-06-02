@@ -8,11 +8,11 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import LoginPage from './components/LoginPage';
-import EventPage from './components/EventPage';
-import TourDatesPage from './components/TourDatesPage';
-import JudgeInfo from './components/JudgeInfo';
-import Scoring from './components/Scoring';
+import Login from './components/pages/Login';
+import Events from './components/pages/Events';
+import TourDates from './components/pages/TourDates';
+import JudgeInfo from './components/pages/JudgeInfo';
+import Scoring from './components/pages/Scoring';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
@@ -22,13 +22,13 @@ function App() {
       <div className="App">
         <Switch>
           <Route exact path={`${process.env.PUBLIC_URL}/`}>
-            <LoginPage />
+            <Login />
           </Route>
           <Route exact path="/events">
-            {isLoggedIn ? <EventPage /> : <Redirect to="/" />}
+            {isLoggedIn ? <Events /> : <Redirect to="/" />}
           </Route>
           <Route exact path="/tour-dates">
-            {isLoggedIn ? <TourDatesPage /> : <Redirect to="/" />}
+            {isLoggedIn ? <TourDates /> : <Redirect to="/" />}
           </Route>
           <Route exact path="/judge-info">
             {isLoggedIn ? <JudgeInfo /> : <Redirect to="/" />}

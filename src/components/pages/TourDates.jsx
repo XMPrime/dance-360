@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import Header from './Header';
+import Header from '../generic/Header';
 import {
   getTourDatesData,
   setSelectedTour,
   transformTourDateData,
-} from '../redux/tourDatesReducer';
+} from '../../redux/tourDatesReducer';
 
 export default function TourDatesPage() {
   const selectedEvent = useSelector((state) => state.events.selectedEvent);

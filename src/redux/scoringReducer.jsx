@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // ACTION CREATORS:
 const axios = require('axios');
 

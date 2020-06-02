@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import JudgeDropdown from './JudgeDropdown';
-import { toggleSideMenu } from '../redux/scoringReducer';
+import JudgeDropdown from '../JudgeDropdown';
+import { toggleSideMenu } from '../../redux/scoringReducer';
 
 export default function Header(props) {
   const barsIcon = 'fas fa-bars';

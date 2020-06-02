@@ -94,20 +94,24 @@ export default function ScoringSideMenu() {
     }
   }
 
+  function getClassName(routine) {
+    if (routine === targetRoutine) {
+      return 'scoring-side-menu__routine--selected';
+    }
+    if (!routine.score) {
+      return 'scoring-side-menu__routine--unrestricted';
+    }
+    return 'scoring-side-menu__routine--restricted';
+  }
+
   const routineNumbers = routinesData
     ? numbersTransformer(routinesData.map((routine) => routine.number))
     : [];
 
   const routinesList = routinesData.length
     ? routinesData.map((routine, i) => (
-      <div
-          className={`scoring-side-menu__routine ${
-            routine === targetRoutine
-              ? 'scoring-side-menu__routine--selected'
-              : routine.score === null
-              ? 'scoring-side-menu__routine--unrestricted'
-              : 'scoring-side-menu__routine--restricted'
-          }`}
+        <div
+          className={`scoring-side-menu__routine ${getClassName(routine)}`}
           key={routine.date_routine_id}
           onClick={() => handleClick(routine, i)}
           onKeyDown={(e) => handleKeyPress(e, routine, i)}

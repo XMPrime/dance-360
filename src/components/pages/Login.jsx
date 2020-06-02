@@ -3,16 +3,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import useForm from 'react-hook-form';
 
-import { setTextInput, tryLogin } from '../redux/loginReducer';
-import logo from '../imgs/group-6.svg';
-import LoginModal from './LoginModal';
+import { setTextInput, tryLogin, toggleModal } from '../../redux/loginReducer';
+import logo from '../../imgs/group-6.svg';
+import Modal from '../generic/Modal';
 
-export default function LoginPage() {
+export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
   const { username, password, welcomeModal, authModal } = useSelector(
     (state) => state.login,
   );
+  // welcomeModal, authModal
   const { register, handleSubmit, errors } = useForm();
 
   const errorMessage = (
@@ -35,25 +36,38 @@ export default function LoginPage() {
     },
   ];
 
-  const invalidAuthText = {
+  const invalidAuth = {
     type: 'auth',
     header: 'Sorry',
     body: 'You have entered an invalid username or password.',
+    cancel: {
+      text: 'OK',
+      func: (e) => dispatch(toggleModal(e)),
+    },
+    confirm: {
+      text: 'OK',
+      func: (e) => dispatch(toggleModal(e)),
+    },
+    bgFunc: (e) => dispatch(toggleModal(e)),
   };
 
-  const userStoriesLink =
-    'https://docs.google.com/document/d/1ZPotc3MEnf29pgsx-e4CkHbBqTkfszn_brS6hbAXhj0/edit?usp=sharing';
-  const welcomeText = {
+  const welcome = {
     type: 'welcome',
     header: 'Welcome to my Dance Judge app!',
     body: (
       <>
         To login and look around, use &quot;jason&quot; and &quot;testtest&quot;
         as the username and password respectively. Additionally,{' '}
-        <a href={userStoriesLink}>click here</a> for a link to the User Stories
-        for this app. Thanks for your consideration!
+        <a href="https://tinyurl.com/yb5dz9dr">click here</a> for a link to the
+        User Stories for this app. Thanks for stopping by!
       </>
     ),
+    cancel: false,
+    confirm: {
+      text: 'OK',
+      func: (e) => dispatch(toggleModal(e)),
+    },
+    bgFunc: (e) => dispatch(toggleModal(e)),
   };
 
   async function onSubmit() {
@@ -69,20 +83,23 @@ export default function LoginPage() {
   return (
     <div className="judge-1">
       {welcomeModal ? (
-        <LoginModal
-          type="welcome"
-          header={welcomeText.header}
-          linkText={welcomeText.linkText}
-          linkAddress={welcomeText.linkAddress}
-          body={welcomeText.body}
-          body2={welcomeText.body2}
+        <Modal
+          type={welcome.type}
+          header={welcome.header}
+          body={welcome.body}
+          cancel={welcome.cancel}
+          confirm={welcome.confirm}
+          bgFunc={welcome.bgFunc}
         />
       ) : null}
       {authModal ? (
-        <LoginModal
+        <Modal
           type="auth"
-          header={invalidAuthText.header}
-          body={invalidAuthText.body}
+          header={invalidAuth.header}
+          body={invalidAuth.body}
+          cancel={welcome.cancel}
+          confirm={welcome.confirm}
+          bgFunc={welcome.bgFunc}
         />
       ) : null}
       <div className="container-fluid">

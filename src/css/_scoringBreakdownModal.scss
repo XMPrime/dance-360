@@ -6,6 +6,7 @@
   font-weight: 900;
   letter-spacing: 1.33px;
   text-transform: uppercase;
+  text-align: left;
   width: 100%;
   font-size: 12px;
   z-index: 2;
@@ -19,6 +20,7 @@
 .scoring-breakdown-modal--header {
   background-color: $darkest-gray;
   justify-self: center;
+  text-align: center;
   color: #dee2e6;
   padding: 15px;
   height: 100%;

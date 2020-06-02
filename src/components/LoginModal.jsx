@@ -43,12 +43,5 @@ export default function LoginModal(props) {
 LoginModal.propTypes = {
   type: PropTypes.string.isRequired,
   header: PropTypes.string.isRequired,
-  linkText: PropTypes.string,
-  linkAddress: PropTypes.string,
   body: PropTypes.string.isRequired,
-};
-
-LoginModal.defaultProps = {
-  linkText: '',
-  linkAddress: '',
 };

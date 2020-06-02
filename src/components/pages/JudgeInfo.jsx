@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import Header from './Header';
+import Header from '../generic/Header';
 import {
   getJudgesData,
   getCompetitionGroupsData,
   setJudgeInfo,
   toggleJudgeInfoModal,
   getModalJudgeName,
-} from '../redux/judgeInfoReducer';
-import JudgeInfoModal from './JudgeInfoModal';
+} from '../../redux/judgeInfoReducer';
+import Modal from '../generic/Modal';
 
 const axios = require('axios');
 
@@ -17,7 +17,15 @@ export default function JudgeInfo() {
   const history = useHistory();
   const [
     { tourDateId },
-    { competitionGroupsData, judgesData, judgePosition, judgeGroupId, modal },
+    {
+      competitionGroupsData,
+      judgesData,
+      judgePosition,
+      judgeGroupId,
+      modal,
+      modalFName,
+      modalLName,
+    },
   ] = useSelector((state) => [state.tourDates, state.judgeInfo]);
   const dispatch = useDispatch();
 
@@ -91,6 +99,24 @@ export default function JudgeInfo() {
     },
   ];
 
+  const alert = {
+    type: 'alert',
+    header: 'Alert',
+    body: `${modalFName} ${modalLName} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`,
+    cancel: {
+      text: 'CANCEL',
+      func: (e) => dispatch(toggleJudgeInfoModal(e)),
+    },
+    confirm: {
+      text: 'OK',
+      func: (e) => {
+        dispatch(toggleJudgeInfoModal(e));
+        history.push('/scoring');
+      },
+    },
+    bgFunc: (e) => dispatch(toggleJudgeInfoModal(e)),
+  };
+
   function handleFormChange(e) {
     const { id, value } = e.target;
 
@@ -160,7 +186,16 @@ export default function JudgeInfo() {
   return (
     <div className="generic-page">
       <Header barIcon={false} title="JUDGE INFORMATION:" />
-      {modal ? <JudgeInfoModal /> : null}
+      {modal ? (
+        <Modal
+          type={alert.type}
+          header={alert.header}
+          body={alert.body}
+          cancel={alert.cancel}
+          confirm={alert.confirm}
+          bgFunc={alert.bgFunc}
+        />
+      ) : null}
       <div className="tour-dates-menu">
         <p>JUDGE INFORMATION</p>
         <form

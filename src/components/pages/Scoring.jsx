@@ -2,25 +2,23 @@
 /* eslint-disable no-plusplus */
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Header from './Header';
-import ScoringSideMenu from './ScoringSideMenu';
-import Rectangle from './Rectangle';
-import ScoringBreakdown from './ScoringBreakdown';
-import ScoringModal from './ScoringModal';
+import Header from '../generic/Header';
+import ScoringSideMenu from '../ScoringSideMenu';
+import Rectangle from '../Rectangle';
+import ScoringBreakdown from '../ScoringBreakdown';
+import Modal from '../generic/Modal';
 
+import {
+  setStrongestLevel1Id,
+  setWeakestLevel1Id,
+} from '../../redux/scoringBreakdownReducer';
 import {
   getButtonsData,
   getScoringBreakdownData,
   getRoutinesData,
-  setButtonsData,
-  setRoutinesData,
-  setScoringBreakdownData,
+  toggleScoringModal,
   setTargetRoutine,
-
-  // setButtonGrades
-  // setDivisionId
-  // trackScrollPos
-} from '../redux/scoringReducer';
+} from '../../redux/scoringReducer';
 
 const axios = require('axios');
 
@@ -34,26 +32,94 @@ export default function Scoring() {
   const dispatch = useDispatch();
   const selectedEvent = useSelector((state) => state.events.selectedEvent);
   const tourDateId = useSelector((state) => state.tourDates.tourDateId);
-  const { judgeGroupId, judgePosition } = useSelector(
+  const { judgeGroupId, judgePosition, judgeId, judgeIsTeacher } = useSelector(
     (state) => state.judgeInfo,
   );
   const {
     buttonsData,
     routinesData,
-    // scrollPos,
     displaySideMenu,
     modal,
+    targetRoutineIndex,
+    buttonGrades,
   } = useSelector((state) => state.scoring);
+  const nextRoutine = routinesData[targetRoutineIndex + 1];
+  const nextRoutineIndex = targetRoutineIndex + 1;
 
   const {
     performance_division_level_id,
-    number,
     routine,
     studio_code,
     age_division,
     performance_division,
     routine_category,
+    date_routine_id,
+    online_scoring_id,
   } = useSelector((state) => state.scoring.targetRoutine);
+
+  const {
+    score,
+    note,
+    familyFriendly,
+    iChoreographed,
+    strongestId,
+    weakestId,
+  } = useSelector((state) => state.scoringBreakdown);
+
+  const isTabulator = useSelector((state) => state.login.isTabulator);
+  const event_id = useSelector((state) => state.events.selectedEvent.id);
+  const tour_date_id = useSelector((state) => state.tourDates.tourDateId);
+
+  const postData = {
+    isTabulator,
+    competition_group_id: judgeGroupId,
+    date_routine_id,
+    event_id,
+    tour_date_id,
+    data: {
+      online_scoring_id,
+      staff_id: judgeId,
+      note,
+      score,
+      not_friendly: familyFriendly,
+      i_choreographed: iChoreographed,
+      position: judgePosition,
+      teacher_critique: judgeIsTeacher,
+      is_coda: true,
+      buttons: buttonGrades,
+      strongest_level_1_id: strongestId,
+      weakest_level_1_id: weakestId,
+    },
+  };
+
+  function submitScore(data) {
+    const scoreUrl = 'https://api.d360test.com/api/coda/score';
+    const socketUrl = 'https://api.d360test.com/api/socket-scoring';
+
+    axios
+      .post(scoreUrl, data)
+      .then((response) => {
+        if (response.status === 200) {
+          axios
+            .post(socketUrl, {
+              tour_date_id,
+              coda: true,
+              data: {
+                competition_group_id: judgeGroupId,
+                date_routine_id,
+              },
+            })
+            .then(() => {
+              dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
+              window.scrollTo(0, 0);
+            });
+        }
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error.response);
+      });
+  }
 
   function createButtonsList(data, id) {
     const targetButtonData = data.find((element) => {
@@ -115,20 +181,6 @@ export default function Scoring() {
     return { top, bottom };
   }
 
-  // function handleScroll(e) {
-
-  //   console.log(e.deltaY);
-  //   const body = document.querySelector(".App");
-  //   if (e.deltaY === -100) {
-  //     console.log("up");
-  //     body.scrollBy(0, -1000);
-  //   }
-  //   if (e.deltaY === 100) {
-  //     console.log("down");
-  //     body.scrollBy(0, 1000);
-  //   }
-  // }
-
   function handleKeydown(e) {
     if (document.querySelector('textarea') !== document.activeElement) {
       if (e.code === 'ArrowUp') {
@@ -170,8 +222,8 @@ export default function Scoring() {
   const scoringTitle = routine ? (
     <div>
       <div className="scoring-title">
-        {`#${number && number} - ${routine && routine} (${
-          studio_code && studio_code
+        {`#${targetRoutineIndex + 1} - ${routine && routine} (${
+          studio_code !== null ? studio_code : ' '
         })`}
       </div>
       <div className="scoring-subtitle">
@@ -186,6 +238,32 @@ export default function Scoring() {
     </div>
   );
 
+  const alert = {
+    type: 'alert',
+    header: 'Alert',
+    body: 'Are you sure you want to save?',
+    cancel: {
+      text: 'CANCEL',
+      func: () => {
+        dispatch(toggleScoringModal());
+        dispatch(setStrongestLevel1Id('', -1));
+        dispatch(setWeakestLevel1Id('', 2));
+      },
+    },
+    confirm: {
+      text: 'SAVE',
+      func: () => {
+        dispatch(toggleScoringModal());
+        submitScore(postData);
+      },
+    },
+    bgFunc: () => {
+      dispatch(toggleScoringModal());
+      dispatch(setStrongestLevel1Id('reset', -1));
+      dispatch(setWeakestLevel1Id('reset', 2));
+    },
+  };
+
   useEffect(() => {
     dispatch(getButtonsData());
     dispatch(getScoringBreakdownData(selectedEvent));
@@ -193,15 +271,22 @@ export default function Scoring() {
   }, [dispatch, selectedEvent, tourDateId, judgeGroupId, judgePosition]);
 
   useEffect(() => {
-    // window.addEventListener("scroll", () => handleScroll(scrollPos));
-    // window.addEventListener("wheel", handleScroll);
     document.addEventListener('keydown', handleKeydown);
   }, []);
 
   return (
     <div className="generic-page">
       <Header title={scoringTitle} barIcon />
-      {modal ? <ScoringModal /> : null}
+      {modal ? (
+        <Modal
+          type={alert.type}
+          header={alert.header}
+          body={alert.body}
+          cancel={alert.cancel}
+          confirm={alert.confirm}
+          bgFunc={alert.bgFunc}
+        />
+      ) : null}
       {displaySideMenu ? <ScoringSideMenu /> : null}
       {buttonsData === null || routinesData === null ? null : (
         <div className="scoring-body">

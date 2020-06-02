@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import anonymousJudge from '../imgs/default_profile_pic.png';
+import anonymousJudge from '../imgs/default.png';
 import { toggleJudgeDropdown } from '../redux/judgeDropdownReducer';
 import JudgeDropdownMenu from './JudgeDropdownMenu';
 

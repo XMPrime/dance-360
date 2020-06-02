@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getEventsData, setSelectedEvent } from '../redux/eventsReducer';
-import Header from './Header';
+import { getEventsData, setSelectedEvent } from '../../redux/eventsReducer';
+import Header from '../generic/Header';
 
-export default function EventPage() {
+export default function Events() {
   const history = useHistory();
   const eventsData = useSelector((state) => state.events.eventsData);
   const dispatch = useDispatch();
