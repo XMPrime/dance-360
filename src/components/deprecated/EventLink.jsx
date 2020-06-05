@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../imgs/group-6.svg';
+import logo from '../../imgs/group-6.svg';
 
 export default function EventLink() {
   return (

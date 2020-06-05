@@ -61,40 +61,6 @@ export function getScoringBreakdownData(selectedEvent) {
   };
 }
 
-export function getRoutinesData(tourDateId, judgeGroupId, judgePosition) {
-  return async (dispatch) => {
-    const url = 'https://api.d360test.com/api/coda/routines';
-    try {
-      await axios
-        .get(url, {
-          params: {
-            tour_date_id: tourDateId,
-            competition_group_id: judgeGroupId,
-            position: judgePosition,
-          },
-        })
-        .then((response) => {
-          if (response.data.length !== 0) {
-            let initialRoutine = response.data[0];
-            let initialRoutineIndex = 0;
-            for (let i = 0; i < response.data.length; i++) {
-              if (response.data[i].score === null) {
-                initialRoutine = response.data[i];
-                initialRoutineIndex = i;
-                dispatch(setRoutinesData(response.data));
-                dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
-                break;
-              }
-            }
-            dispatch(setRoutinesData(response.data));
-          }
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-}
-
 export function trackScrollPos(scrollPos) {
   return {
     type: 'TRACK_SCROLL_POS',
@@ -114,6 +80,40 @@ export function setTargetRoutine(targetRoutine, i = 0) {
     type: 'SET_TARGET_ROUTINE',
     targetRoutine,
     targetRoutineIndex: i,
+  };
+}
+
+export function getRoutinesData(tourDateId, judgeGroupId, judgePosition) {
+  return async (dispatch) => {
+    const url = 'https://api.d360test.com/api/coda/routines';
+    try {
+      await axios
+        .get(url, {
+          params: {
+            tour_date_id: tourDateId,
+            competition_group_id: judgeGroupId,
+            position: judgePosition,
+          },
+        })
+        .then((response) => {
+          if (response.data.length !== 0) {
+            let initialRoutine = response.data[0];
+            let initialRoutineIndex = 0;
+            for (let i = 0; i < response.data.length; i += 1) {
+              if (response.data[i].score === null) {
+                initialRoutine = response.data[i];
+                initialRoutineIndex = i;
+                dispatch(setRoutinesData(response.data));
+                dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
+                break;
+              }
+            }
+            dispatch(setRoutinesData(response.data));
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 }
 

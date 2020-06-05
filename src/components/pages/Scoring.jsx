@@ -100,6 +100,7 @@ export default function Scoring() {
     );
 
     const fullButtonsList = targetButtonData.level_4.map((button) => {
+      // header buttons
       if (button.header_name) {
         return (
           <Rectangle
@@ -111,8 +112,8 @@ export default function Scoring() {
         );
       }
 
+      // level 3 buttons
       if (button.level_4_name === null) {
-        // level 3 buttons
         return (
           <Rectangle
             key={button.id}
