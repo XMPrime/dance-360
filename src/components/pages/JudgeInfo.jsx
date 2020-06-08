@@ -33,9 +33,7 @@ export default function JudgeInfo() {
     return (
       <option
         key={judge.id}
-        id={judge.id}
         className="tour-dates"
-        name="fullName"
         value={`${judge.fname} ${judge.lname}`}
       >
         {`${judge.fname} ${judge.lname}`}
