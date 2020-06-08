@@ -29,18 +29,24 @@ export default function JudgeInfo() {
   ] = useSelector((state) => [state.tourDates, state.judgeInfo]);
   const dispatch = useDispatch();
 
+  // TODO refactor all options
   const judgesList = judgesData.map((judge) => {
-    return (
-      <option
-        key={judge.id}
-        id={judge.id}
-        className="tour-dates"
-        name="fullName"
-        value={`${judge.fname} ${judge.lname}`}
-      >
-        {`${judge.fname} ${judge.lname}`}
-      </option>
-    );
+    // TODO destructure + implicit return
+    // return (
+    //   <option
+    //     key={judge.id}
+    //     id={judge.id}
+    //     className="tour-dates"
+    //     name="fullName"
+    //     value={`${judge.fname} ${judge.lname}`}
+    //   >
+    //     {`${judge.fname} ${judge.lname}`}
+    //   </option>
+    // );
+    return {
+      value: judge.id,
+      name: (o) => `${o.fname} ${o.lname}`,
+    };
   });
   const positionsList = [1, 2, 3, 4].map((position) => {
     return (
@@ -214,7 +220,13 @@ export default function JudgeInfo() {
                     id={`${dropdown.id}`}
                     onChange={handleFormChange}
                   >
-                    {dropdown.options}
+                    {dropdown.options.map(({ value, name }) => (
+                      <option key={value} className="tour-dates" value={value}>
+                        {typeof name === 'function'
+                          ? name({ value, name })
+                          : name}
+                      </option>
+                    ))}
                   </select>
                 </label>
               </div>

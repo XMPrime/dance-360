@@ -20,6 +20,7 @@ function App() {
   return (
     <Router>
       <div className="App">
+        {/* TODO import from routes.js + map them + create a private route isntead of all these if logged in statements */}
         <Switch>
           <Route exact path={`${process.env.PUBLIC_URL}/`}>
             <Login />

@@ -4,21 +4,29 @@ import PropTypes from 'prop-types';
 
 export default function Rectangle(props) {
   const [grade, setGrade] = useState('neutral');
+  // TODO
   const { level_4_id, level_1_id, isHeader, level, text } = props;
 
   function goodToggle(e) {
     e.preventDefault();
-    switch (grade) {
-      case 'good':
-        setGrade('bad');
-        break;
-      case 'bad':
-        setGrade('neutral');
-        break;
-      default:
-        setGrade('good');
-        break;
-    }
+    // TODO do not need switch statement here
+    // switch (grade) {
+    //   case 'good':
+    //     setGrade('bad');
+    //     break;
+    //   case 'bad':
+    //     setGrade('neutral');
+    //     break;
+    //   default:
+    //     setGrade('good');
+    //     break;
+    // }
+    setGrade(
+      {
+        good: 'bad',
+        bad: 'neutral',
+      }[grade] || 'good',
+    );
   }
 
   function handleKeyPress(e) {

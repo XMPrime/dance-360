@@ -21,6 +21,7 @@ export default function JudgeDropdownMenu() {
   return (
     <div className="judge-dropdown-menu">
       {buttons.map((button) => {
+        // TODO turn into implicit return + destructure props
         return (
           <button
             key={button.text}
