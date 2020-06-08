@@ -55,4 +55,7 @@ Modal.propTypes = {
   type: PropTypes.string.isRequired,
   header: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
+  cancel: PropTypes.func.isRequired,
+  confirm: PropTypes.func.isRequired,
+  bgFunc: PropTypes.func.isRequired,
 };
