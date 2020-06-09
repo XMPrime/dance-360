@@ -18,7 +18,6 @@ export default function TourDatesPage() {
     <option
       key={tourDateData.id}
       id={tourDateData.id}
-      className="tour-dates"
       value={transformTourDateData(tourDateData)}
     >
       {transformTourDateData(tourDateData)}

@@ -1,16 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function Modal(props) {
-  // TODO
-  const { header, body, type, cancel, confirm, bgFunc } = props;
-
-  //   function handleKeyDown(e) {
-  //     if (e.key === 'Enter' || e.key === 'Escape') {
-  //       dispatch(toggleModal());
-  //     }
-  //   }
-
+export default function Modal({ header, body, type, cancel, confirm, bgFunc }) {
   return (
     <>
       <div className="modal">
@@ -41,12 +32,10 @@ export default function Modal(props) {
           )}
         </div>
       </div>
-      {/* TODO remove jsx-a11y from eslint */}
       <div
         id={type}
         className="modal-background"
         onClick={bgFunc}
-        // onKeyDown={(e) => handleKeyDown(e)}
         role="alertdialog"
       />
     </>

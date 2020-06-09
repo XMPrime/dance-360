@@ -20,19 +20,16 @@ export default function JudgeDropdownMenu() {
 
   return (
     <div className="judge-dropdown-menu">
-      {buttons.map((button) => {
-        // TODO turn into implicit return + destructure props
-        return (
-          <button
-            key={button.text}
-            className="judge-dropdown-menu-rectangle"
-            onClick={button.clickFunction}
-            type="button"
-          >
-            {button.text}
-          </button>
-        );
-      })}
+      {buttons.map(({ text, clickFunction }) => (
+        <button
+          key={text}
+          className="judge-dropdown-menu-rectangle"
+          onClick={clickFunction}
+          type="button"
+        >
+          {text}
+        </button>
+      ))}
     </div>
   );
 }

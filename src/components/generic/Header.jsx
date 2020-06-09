@@ -5,11 +5,9 @@ import JudgeDropdown from '../JudgeDropdown';
 import { toggleSideMenu } from '../../redux/scoringReducer';
 import { barsIcon, crossIcon } from '../../utils/constants';
 
-export default function Header(props) {
+export default function Header({ title, barIcon }) {
   const dispatch = useDispatch();
   const { displaySideMenu } = useSelector((state) => state.scoring);
-  // TODO instead of creating new variables, destructure directly in the arguments of function
-  const { title, barIcon } = props;
   return (
     <header>
       <div className="header-text">{title}</div>
@@ -19,13 +17,7 @@ export default function Header(props) {
           onClick={() => dispatch(toggleSideMenu())}
           type="button"
         >
-          {barIcon === true ? (
-            // TODO create icon component
-            <i className={displaySideMenu ? crossIcon : barsIcon} />
-          ) : (
-            // TODO fix empty divs / hacky divs
-            <div />
-          )}
+          {barIcon && <i className={displaySideMenu ? crossIcon : barsIcon} />}
         </button>
         <JudgeDropdown />
       </div>

@@ -4,17 +4,25 @@ import TourDates from './components/pages/TourDates';
 import JudgeInfo from './components/pages/JudgeInfo';
 import Scoring from './components/pages/Scoring';
 
-const routes = [
-  { path: '/', exact: true, private: false, component: Login },
-  { path: '/events', exact: true, private: true, component: Events },
+export default [
+  {
+    path: `${process.env.PUBLIC_URL}/`,
+    exact: true,
+    privateRoute: false,
+    component: Login,
+  },
+  { path: '/events', exact: true, privateRoute: true, component: Events },
   {
     path: '/tour-dates',
     exact: true,
-    private: true,
+    privateRoute: true,
     component: TourDates,
   },
-  { path: '/judge-info', exact: true, private: true, component: JudgeInfo },
-  { path: '/scoring', exact: true, private: true, component: Scoring },
+  {
+    path: '/judge-info',
+    exact: true,
+    privateRoute: true,
+    component: JudgeInfo,
+  },
+  { path: '/scoring', exact: true, privateRoute: true, component: Scoring },
 ];
-
-export { routes };

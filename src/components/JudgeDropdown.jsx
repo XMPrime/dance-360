@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import anonymousJudge from '../imgs/default.png';
 import { toggleJudgeDropdown } from '../redux/judgeDropdownReducer';
 import JudgeDropdownMenu from './JudgeDropdownMenu';
+import { caretDownIcon } from '../utils/constants';
 
 export default function JudgeDropdown() {
   const dispatch = useDispatch();
@@ -20,9 +21,8 @@ export default function JudgeDropdown() {
     >
       <div className="judge-id-name">
         {/* TODO when doing conditional strings, use DRY */}
-        {judgePosition
-          ? `#${judgePosition} ${judgeFullName}`
-          : `${judgeFullName}`}
+
+        {judgePosition && `${`#${judgePosition} `}${judgeFullName}`}
       </div>
       <img
         className="profile-pic"
@@ -33,9 +33,8 @@ export default function JudgeDropdown() {
         }
         alt="your profile pic"
       />
-      <i className="fas fa-caret-down" />
-      {/* TODO change to && */}
-      {judgeDropdownIsOpen ? <JudgeDropdownMenu /> : null}
+      <i className={caretDownIcon} />
+      {judgeDropdownIsOpen && <JudgeDropdownMenu />}
     </nav>
   );
 }
