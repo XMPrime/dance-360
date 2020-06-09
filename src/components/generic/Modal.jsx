@@ -45,8 +45,8 @@ export default function Modal({ header, body, type, cancel, confirm, bgFunc }) {
 Modal.propTypes = {
   type: PropTypes.string.isRequired,
   header: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired,
-  cancel: PropTypes.func.isRequired,
-  confirm: PropTypes.func.isRequired,
-  bgFunc: PropTypes.func.isRequired,
+  body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+  cancel: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]).isRequired,
+  confirm: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
+  bgFunc: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]).isRequired,
 };

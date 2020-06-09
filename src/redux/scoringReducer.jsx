@@ -84,6 +84,7 @@ export function setTargetRoutine(targetRoutine, i = 0) {
 }
 
 export function getRoutinesData(tourDateId, judgeGroupId, judgePosition) {
+  console.log(tourDateId, judgeGroupId, judgePosition);
   return async (dispatch) => {
     const url = 'https://api.d360test.com/api/coda/routines';
     try {

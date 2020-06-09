@@ -7,22 +7,18 @@ import { caretDownIcon } from '../utils/constants';
 
 export default function JudgeDropdown() {
   const dispatch = useDispatch();
-  // TODO combine useSelector
-  const { judgePosition, judgeFullName, judgeHeadshot } = useSelector(
-    (state) => state.judgeInfo,
-  );
-  const judgeDropdownIsOpen = useSelector(
-    (state) => state.judgeDropdown.isOpen,
-  );
+  const [
+    { judgePosition, judgeFullName, judgeHeadshot },
+    judgeDropdownIsOpen,
+  ] = useSelector((state) => [state.judgeInfo, state.judgeDropdown.isOpen]);
+
   return (
     <nav
       className="judge-dropdown"
       onClick={() => dispatch(toggleJudgeDropdown())}
     >
       <div className="judge-id-name">
-        {/* TODO when doing conditional strings, use DRY */}
-
-        {judgePosition && `${`#${judgePosition} `}${judgeFullName}`}
+        {`#${judgePosition} ${judgeFullName}`}
       </div>
       <img
         className="profile-pic"

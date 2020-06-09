@@ -28,21 +28,29 @@ export default function Scoring() {
   const minRectangles = minColumns * minRows;
 
   const dispatch = useDispatch();
-  const selectedEvent = useSelector((state) => state.events.selectedEvent);
-  const tourDateId = useSelector((state) => state.tourDates.tourDateId);
-  const { judgeGroupId, judgePosition, judgeId, judgeIsTeacher } = useSelector(
-    (state) => state.judgeInfo,
-  );
-  const {
-    buttonsData,
-    routinesData,
-    displaySideMenu,
-    modal,
-    targetRoutineIndex,
-    buttonGrades,
-  } = useSelector((state) => state.scoring);
-  const nextRoutine = routinesData[targetRoutineIndex + 1];
-  const nextRoutineIndex = targetRoutineIndex + 1;
+  const [
+    selectedEvent,
+    tourDateId,
+    { judgeGroupId, judgePosition, judgeId, judgeIsTeacher },
+    {
+      buttonsData,
+      routinesData,
+      displaySideMenu,
+      modal,
+      targetRoutine,
+      targetRoutineIndex,
+      buttonGrades,
+    },
+    { score, note, familyFriendly, iChoreographed, strongestId, weakestId },
+    isTabulator,
+  ] = useSelector((state) => [
+    state.events.selectedEvent,
+    state.tourDates.tourDateId,
+    state.judgeInfo,
+    state.scoring,
+    state.scoringBreakdown,
+    state.login.isTabulator,
+  ]);
 
   const {
     performance_division_level_id,
@@ -53,27 +61,16 @@ export default function Scoring() {
     routine_category,
     date_routine_id,
     online_scoring_id,
-  } = useSelector((state) => state.scoring.targetRoutine);
-
-  const {
-    score,
-    note,
-    familyFriendly,
-    iChoreographed,
-    strongestId,
-    weakestId,
-  } = useSelector((state) => state.scoringBreakdown);
-
-  const isTabulator = useSelector((state) => state.login.isTabulator);
-  const event_id = useSelector((state) => state.events.selectedEvent.id);
-  const tour_date_id = useSelector((state) => state.tourDates.tourDateId);
+  } = targetRoutine;
+  const nextRoutine = routinesData[targetRoutineIndex + 1];
+  const nextRoutineIndex = targetRoutineIndex + 1;
 
   const postData = {
     isTabulator,
     competition_group_id: judgeGroupId,
     date_routine_id,
-    event_id,
-    tour_date_id,
+    event_id: selectedEvent.id,
+    tour_date_id: tourDateId,
     data: {
       online_scoring_id,
       staff_id: judgeId,
@@ -166,7 +163,6 @@ export default function Scoring() {
     buttonsData !== false && performance_division_level_id !== undefined
       ? createButtonsList(buttonsData, performance_division_level_id)
       : '';
-
   function calcStyle(buttons) {
     return {
       height: `${Math.max(
@@ -194,9 +190,7 @@ export default function Scoring() {
       </div>
     </div>
   ) : (
-    <div>
-      <div className="scoring-title">Nothing to see here...</div>
-    </div>
+    <div className="scoring-title">Nothing to see here...</div>
   );
 
   const alert = {

@@ -2,10 +2,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export default function Rectangle(props) {
+export default function Rectangle({
+  level_4_id,
+  level_1_id,
+  isHeader,
+  level,
+  text,
+}) {
   const [grade, setGrade] = useState('neutral');
-  // TODO
-  const { level_4_id, level_1_id, isHeader, level, text } = props;
 
   function goodToggle(e) {
     e.preventDefault();

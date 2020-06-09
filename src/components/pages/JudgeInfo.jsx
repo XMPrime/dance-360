@@ -67,7 +67,12 @@ export default function JudgeInfo() {
     </option>
   ));
   const competitionGroupsList = competitionGroupsData.map((group) => (
-    <option key={group.id} className="tour-dates" value={group.name}>
+    <option
+      key={group.id}
+      id={group.id}
+      className="tour-dates"
+      value={group.name}
+    >
       {group.name}
     </option>
   ));
@@ -117,7 +122,7 @@ export default function JudgeInfo() {
         const index = document.getElementById('judge').selectedIndex;
         dispatch(setJudgeInfo('judgeFullName', value));
         dispatch(setJudgeInfo('judgeHeadshot', judgesData[index].headshot));
-        dispatch(setJudgeInfo('judgeId', judgesData[index].id));
+        dispatch(setJudgeInfo('judgeId', judgesData[index].key));
         break;
       }
       case 'position':
@@ -129,7 +134,7 @@ export default function JudgeInfo() {
       case 'competition': {
         const competitionElem = document.getElementById('competition');
         const index = competitionElem.selectedIndex;
-        const groupId = competitionElem.options[index].id;
+        const groupId = competitionElem[index].id;
         dispatch(setJudgeInfo('judgeGroupName', value));
         dispatch(setJudgeInfo('judgeGroupId', groupId));
         break;

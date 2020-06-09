@@ -9,10 +9,12 @@ import {
 } from '../../redux/tourDatesReducer';
 
 export default function TourDatesPage() {
-  const selectedEvent = useSelector((state) => state.events.selectedEvent);
-  const { tourDatesData, tourDate } = useSelector((state) => state.tourDates);
   const dispatch = useDispatch();
   const history = useHistory();
+  const [selectedEvent, { tourDatesData, tourDate }] = useSelector((state) => [
+    state.events.selectedEvent,
+    state.tourDates,
+  ]);
 
   const tourDatesList = tourDatesData.map((tourDateData) => (
     <option
