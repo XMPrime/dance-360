@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function Modal(props) {
+  // TODO
   const { header, body, type, cancel, confirm, bgFunc } = props;
 
   //   function handleKeyDown(e) {
@@ -40,6 +41,7 @@ export default function Modal(props) {
           )}
         </div>
       </div>
+      {/* TODO remove jsx-a11y from eslint */}
       <div
         id={type}
         className="modal-background"

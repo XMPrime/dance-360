@@ -29,54 +29,48 @@ export default function JudgeInfo() {
   ] = useSelector((state) => [state.tourDates, state.judgeInfo]);
   const dispatch = useDispatch();
 
-  const judgesList = judgesData.map((judge) => {
-    return (
-      <option
-        key={judge.id}
-        className="tour-dates"
-        value={`${judge.fname} ${judge.lname}`}
-      >
-        {`${judge.fname} ${judge.lname}`}
-      </option>
-    );
-  });
-  const positionsList = [1, 2, 3, 4].map((position) => {
-    return (
-      <option
-        key={position}
-        className="tour-dates"
-        name="position"
-        value={position}
-      >
-        {position}
-      </option>
-    );
-  });
-  const isTeacherList = ['No', 'Yes'].map((isTeacher) => {
-    return (
-      <option
-        key={isTeacher}
-        className="tour-dates"
-        name="position"
-        value={isTeacher === 'Yes' && true}
-      >
-        {isTeacher}
-      </option>
-    );
-  });
-  const competitionGroupsList = competitionGroupsData.map((group) => {
-    return (
-      <option
-        key={group.id}
-        id={group.id}
-        className="tour-dates"
-        name="groupName"
-        value={group.name}
-      >
-        {group.name}
-      </option>
-    );
-  });
+  const judgesList = judgesData.map((judge) => (
+    <option key={judge.id} value={`${judge.fname} ${judge.lname}`}>
+      {`${judge.fname} ${judge.lname}`}
+    </option>
+  ));
+
+  // const judgesList = judgesData.map((judge) => {
+  //   return {
+  //     value: judge.id,
+  //     name: (o) => `${o.fname} ${o.lname}`,
+  //   };
+  // });
+
+  // {dropdown.options.map((option) => (
+  //   <option
+  //     key={option.value}
+  //     className="tour-dates"
+  //     value={option.name}
+  //   >
+  //     {`${option.name}`}
+  //   </option>
+  // ))}
+
+  const positionsList = [1, 2, 3, 4].map((position) => (
+    <option key={position} className="tour-dates" value={position}>
+      {position}
+    </option>
+  ));
+  const isTeacherList = ['No', 'Yes'].map((isTeacher) => (
+    <option
+      key={isTeacher}
+      className="tour-dates"
+      value={isTeacher === 'Yes' && true}
+    >
+      {isTeacher}
+    </option>
+  ));
+  const competitionGroupsList = competitionGroupsData.map((group) => (
+    <option key={group.id} className="tour-dates" value={group.name}>
+      {group.name}
+    </option>
+  ));
 
   const dropdowns = [
     { id: 'judge', label: "What is this judge's name?", options: judgesList },

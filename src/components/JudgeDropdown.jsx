@@ -6,6 +6,7 @@ import JudgeDropdownMenu from './JudgeDropdownMenu';
 
 export default function JudgeDropdown() {
   const dispatch = useDispatch();
+  // TODO combine useSelector
   const { judgePosition, judgeFullName, judgeHeadshot } = useSelector(
     (state) => state.judgeInfo,
   );
@@ -18,6 +19,7 @@ export default function JudgeDropdown() {
       onClick={() => dispatch(toggleJudgeDropdown())}
     >
       <div className="judge-id-name">
+        {/* TODO when doing conditional strings, use DRY */}
         {judgePosition
           ? `#${judgePosition} ${judgeFullName}`
           : `${judgeFullName}`}
@@ -32,6 +34,7 @@ export default function JudgeDropdown() {
         alt="your profile pic"
       />
       <i className="fas fa-caret-down" />
+      {/* TODO change to && */}
       {judgeDropdownIsOpen ? <JudgeDropdownMenu /> : null}
     </nav>
   );
