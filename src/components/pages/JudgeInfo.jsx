@@ -5,11 +5,11 @@ import Header from '../generic/Header';
 import {
   getJudgesData,
   getCompetitionGroupsData,
-  setJudgeInfo,
   toggleJudgeInfoModal,
   getModalJudgeName,
 } from '../../redux/judgeInfoReducer';
 import Modal from '../generic/Modal';
+import CustomSelect from '../generic/CustomSelect';
 
 const axios = require('axios');
 
@@ -29,70 +29,22 @@ export default function JudgeInfo() {
   ] = useSelector((state) => [state.tourDates, state.judgeInfo]);
   const dispatch = useDispatch();
 
-  const judgesList = judgesData.map((judge) => (
-    <option key={judge.id} value={`${judge.fname} ${judge.lname}`}>
-      {`${judge.fname} ${judge.lname}`}
-    </option>
-  ));
-
-  // const judgesList = judgesData.map((judge) => {
-  //   return {
-  //     value: judge.id,
-  //     name: (o) => `${o.fname} ${o.lname}`,
-  //   };
-  // });
-
-  // {dropdown.options.map((option) => (
-  //   <option
-  //     key={option.value}
-  //     className="tour-dates"
-  //     value={option.name}
-  //   >
-  //     {`${option.name}`}
-  //   </option>
-  // ))}
-
-  const positionsList = [1, 2, 3, 4].map((position) => (
-    <option key={position} className="tour-dates" value={position}>
-      {position}
-    </option>
-  ));
-  const isTeacherList = ['No', 'Yes'].map((isTeacher) => (
-    <option
-      key={isTeacher}
-      className="tour-dates"
-      value={isTeacher === 'Yes' && true}
-    >
-      {isTeacher}
-    </option>
-  ));
-  const competitionGroupsList = competitionGroupsData.map((group) => (
-    <option
-      key={group.id}
-      id={group.id}
-      className="tour-dates"
-      value={group.name}
-    >
-      {group.name}
-    </option>
-  ));
-
-  const dropdowns = [
-    { id: 'judge', label: "What is this judge's name?", options: judgesList },
+  const selectMenus = [
+    { id: 'judge', label: "What is this judge's name?", options: judgesData },
     {
       id: 'position',
       label: 'What position are they?',
-      options: positionsList,
+      options: [1, 2, 3, 4],
     },
     {
       id: 'teacher',
       label: 'Is this judge a teacher?',
-      options: isTeacherList,
+      options: [false, true],
     },
     {
       id: 'competition',
       label: 'What competition group is this for?',
-      options: competitionGroupsList,
+      options: competitionGroupsData,
     },
   ];
 
@@ -113,37 +65,6 @@ export default function JudgeInfo() {
     },
     bgFunc: (e) => dispatch(toggleJudgeInfoModal(e)),
   };
-
-  function handleFormChange(e) {
-    const { id, value } = e.target;
-
-    switch (id) {
-      case 'judge': {
-        const index = document.getElementById('judge').selectedIndex;
-        dispatch(setJudgeInfo('judgeFullName', value));
-        dispatch(setJudgeInfo('judgeHeadshot', judgesData[index].headshot));
-        dispatch(setJudgeInfo('judgeId', judgesData[index].key));
-        break;
-      }
-      case 'position':
-        dispatch(setJudgeInfo('judgePosition', value));
-        break;
-      case 'teacher':
-        dispatch(setJudgeInfo('judgeIsTeacher', value));
-        break;
-      case 'competition': {
-        const competitionElem = document.getElementById('competition');
-        const index = competitionElem.selectedIndex;
-        const groupId = competitionElem[index].id;
-        dispatch(setJudgeInfo('judgeGroupName', value));
-        dispatch(setJudgeInfo('judgeGroupId', groupId));
-        break;
-      }
-      default:
-        // eslint-disable-next-line no-console
-        console.log('error');
-    }
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -184,7 +105,7 @@ export default function JudgeInfo() {
   return (
     <div className="generic-page">
       <Header barIcon={false} title="JUDGE INFORMATION:" />
-      {modal ? (
+      {modal && (
         <Modal
           type={alert.type}
           header={alert.header}
@@ -193,7 +114,7 @@ export default function JudgeInfo() {
           confirm={alert.confirm}
           bgFunc={alert.bgFunc}
         />
-      ) : null}
+      )}
       <div className="tour-dates-menu">
         <p>JUDGE INFORMATION</p>
         <form
@@ -201,22 +122,14 @@ export default function JudgeInfo() {
           id="judgeInfoForm"
           onSubmit={handleSubmit}
         >
-          {dropdowns.map((dropdown) => {
-            return (
-              <div key={dropdown.id} className="label-container">
-                <label className="custom-label" htmlFor={`${dropdown.id}`}>
-                  {dropdown.label}
-                  <select
-                    className="custom-select"
-                    id={`${dropdown.id}`}
-                    onChange={handleFormChange}
-                  >
-                    {dropdown.options}
-                  </select>
-                </label>
-              </div>
-            );
-          })}
+          {selectMenus.map((dropdown) => (
+            <CustomSelect
+              key={dropdown.id}
+              id={dropdown.id}
+              label={dropdown.label}
+              options={dropdown.options}
+            />
+          ))}
           <div className="btn-block">
             <button
               className="btn btn-grey"

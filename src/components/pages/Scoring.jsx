@@ -81,7 +81,7 @@ export default function Scoring() {
       position: judgePosition,
       teacher_critique: judgeIsTeacher,
       is_coda: true,
-      buttons: buttonGrades,
+      buttons: buttonGrades.filter((button) => button.good !== null),
       strongest_level_1_id: strongestId,
       weakest_level_1_id: weakestId,
     },
@@ -163,12 +163,12 @@ export default function Scoring() {
     buttonsData !== false && performance_division_level_id !== undefined
       ? createButtonsList(buttonsData, performance_division_level_id)
       : '';
-  function calcStyle(buttons) {
+  function calcStyle(rectangles) {
     return {
       height: `${Math.max(
         Math.floor(
           buttonsData !== false && performance_division_level_id !== undefined
-            ? (buttons.length * rectangleHeight) / minColumns
+            ? (rectangles.length * rectangleHeight) / minColumns
             : 0,
         ),
         minRows * rectangleHeight,
@@ -177,7 +177,7 @@ export default function Scoring() {
   }
 
   const scoringTitle = routine ? (
-    <div>
+    <>
       <div className="scoring-title">
         {`#${targetRoutineIndex + 1} - ${routine && routine} (${
           studio_code !== null ? studio_code : ' '
@@ -188,7 +188,7 @@ export default function Scoring() {
           performance_division && performance_division
         } • ${routine_category && routine_category}`}
       </div>
-    </div>
+    </>
   ) : (
     <div className="scoring-title">Nothing to see here...</div>
   );
@@ -235,7 +235,7 @@ export default function Scoring() {
   return (
     <div className="generic-page">
       <Header title={scoringTitle} barIcon />
-      {modal ? (
+      {modal && (
         <Modal
           type={alert.type}
           header={alert.header}
@@ -244,7 +244,7 @@ export default function Scoring() {
           confirm={alert.confirm}
           bgFunc={alert.bgFunc}
         />
-      ) : null}
+      )}
       {displaySideMenu ? <ScoringSideMenu /> : null}
       {buttonsData === null || routinesData === null ? null : (
         <div className="scoring-body">

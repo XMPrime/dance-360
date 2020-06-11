@@ -82,7 +82,7 @@ export default function Login() {
 
   return (
     <div className="judge-1">
-      {welcomeModal ? (
+      {welcomeModal && (
         <Modal
           type={welcome.type}
           header={welcome.header}
@@ -91,8 +91,8 @@ export default function Login() {
           confirm={welcome.confirm}
           bgFunc={welcome.bgFunc}
         />
-      ) : null}
-      {authModal ? (
+      )}
+      {authModal && (
         <Modal
           type="auth"
           header={invalidAuth.header}
@@ -101,7 +101,7 @@ export default function Login() {
           confirm={welcome.confirm}
           bgFunc={welcome.bgFunc}
         />
-      ) : null}
+      )}
       <div className="container-fluid">
         <img src={logo} className="login-logo" alt="logo" />
         <form onSubmit={handleSubmit(() => onSubmit())}>

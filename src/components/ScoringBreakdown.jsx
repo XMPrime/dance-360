@@ -2,8 +2,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import store from '../redux/index';
-import { toggleScoringModal, setButtonGrades } from '../redux/scoringReducer';
+import { toggleScoringModal } from '../redux/scoringReducer';
 import {
   addScore,
   minusScore,
@@ -23,68 +22,54 @@ export default function ScoringBreakdown() {
   const scoringBreakdownPopUp = useSelector(
     (state) => state.scoringBreakdown.popUp,
   );
+  const buttonGrades = useSelector((state) => state.scoring.buttonGrades);
 
   function handleChange(e) {
     const { value } = e.target;
     dispatch(editNotes(value));
   }
 
-  // scoreTabultor needs to be able to access STATE while in its forEach loop via "store"
-  function scoreTabultor(e, reduxStore) {
+  function scoreTabulator(e, buttons) {
+    // Determines strongest and weakest level_1_id categories & returns array of buttons with a non-null grade
     e.preventDefault();
-    const rectangles = document.querySelectorAll('div.rectangle.level_4');
-    const buttonGrades = [];
-    const gradesObj = {};
-    rectangles.forEach((rectangle, i) => {
-      const grade = rectangle.attributes.grade.value;
-      const level_1_id = rectangle.attributes.level_1_id.value;
-
-      const {
-        strongestRatio,
-        weakestRatio,
-      } = reduxStore.getState().scoringBreakdown;
-
-      // Creates "buttons" array for POST to score
-      buttonGrades.push({
-        level_4_id: Number(rectangle.attributes.level_4_id.value),
-        level_1_id: Number(rectangle.attributes.level_1_id.value),
-        good: grade === 'good' ? true : grade === 'bad' ? false : null,
+    const categories = {};
+    buttons
+      .filter((button) => button.good !== null)
+      .forEach((button) => {
+        if (!categories[`${button.level_1_id}`]) {
+          categories[`${button.level_1_id}`] = {
+            good: 0,
+            bad: 0,
+          };
+        }
+        if (button.good) {
+          categories[`${button.level_1_id}`].good += 1;
+        } else {
+          categories[`${button.level_1_id}`].bad += 1;
+        }
+        const { good, bad } = categories[`${button.level_1_id}`];
+        categories[`${button.level_1_id}`].ratio = good / (good + bad);
       });
 
-      // Counts number of "good", "bad", and "neutral" buttons under each level 1 Header
-      if (!Object.prototype.hasOwnProperty.call(gradesObj, level_1_id)) {
-        gradesObj[`${level_1_id}`] = {
-          good: 0,
-          bad: 0,
-          neutral: 0,
-          ratio: 0,
+    let strongest = { level_1_id: 0, ratio: 0 };
+    let weakest = { level_1_id: 0, ratio: 1 };
+    Object.entries(categories).forEach((category) => {
+      if (category[1].ratio > strongest.ratio) {
+        strongest = {
+          level_1_id: Number(category[0]),
+          ratio: category[1].ratio,
         };
       }
-      gradesObj[`${level_1_id}`][`${grade}`] += 1;
-
-      // Calculates the good/bad ratio for each level 1 header category and determines which is strongest & weakest
-      if (
-        i === rectangles.length - 1 ||
-        level_1_id !== rectangles[i + 1].attributes.level_1_id.value
-      ) {
-        let ratio =
-          gradesObj[`${level_1_id}`].good /
-          (gradesObj[`${level_1_id}`].good + gradesObj[`${level_1_id}`].bad);
-
-        // eslint-disable-next-line no-restricted-globals
-        if (isNaN(ratio)) {
-          ratio = 0;
-        }
-        if (ratio > strongestRatio) {
-          dispatch(setStrongestLevel1Id(Number(level_1_id), ratio));
-        }
-        if (ratio < weakestRatio) {
-          dispatch(setWeakestLevel1Id(Number(level_1_id), ratio));
-        }
+      if (category[1].ratio < weakest.ratio) {
+        weakest = {
+          level_1_id: Number(category[0]),
+          ratio: category[1].ratio,
+        };
       }
     });
 
-    return buttonGrades.filter((button) => button.good !== null);
+    dispatch(setStrongestLevel1Id(strongest));
+    dispatch(setWeakestLevel1Id(weakest));
   }
 
   return (
@@ -96,7 +81,7 @@ export default function ScoringBreakdown() {
       <form
         onSubmit={(e) => {
           dispatch(toggleScoringModal());
-          dispatch(setButtonGrades(scoreTabultor(e, store)));
+          scoreTabulator(e, buttonGrades);
         }}
       >
         <div className="scoring-breakdown-header">

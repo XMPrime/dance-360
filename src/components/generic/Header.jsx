@@ -26,7 +26,7 @@ export default function Header({ title, barIcon }) {
 }
 
 Header.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   barIcon: PropTypes.bool,
 };
 

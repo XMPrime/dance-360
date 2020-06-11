@@ -16,15 +16,17 @@ export default function TourDatesPage() {
     state.tourDates,
   ]);
 
-  const tourDatesList = tourDatesData.map((tourDateData) => (
-    <option
-      key={tourDateData.id}
-      id={tourDateData.id}
-      value={transformTourDateData(tourDateData)}
-    >
-      {transformTourDateData(tourDateData)}
-    </option>
-  ));
+  const tourDatesList = tourDatesData
+    .map((tourDateData) => (
+      <option
+        key={tourDateData.id}
+        id={tourDateData.id}
+        value={transformTourDateData(tourDateData)}
+      >
+        {transformTourDateData(tourDateData)}
+      </option>
+    ))
+    .reverse();
 
   function handleChange(e) {
     const select = document.getElementById('tour-select');

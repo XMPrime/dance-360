@@ -57,6 +57,10 @@ export function findClosestDate(tourDatesData) {
       closestDate = tourDate.end_date;
     }
   });
+
+  if (!closestDate) {
+    return tourDatesData[tourDatesData.length - 1].end_date;
+  }
   return closestDate;
 }
 

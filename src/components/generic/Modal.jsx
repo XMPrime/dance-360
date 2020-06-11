@@ -46,7 +46,7 @@ Modal.propTypes = {
   type: PropTypes.string.isRequired,
   header: PropTypes.string.isRequired,
   body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  cancel: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]).isRequired,
+  cancel: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
   confirm: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
   bgFunc: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]).isRequired,
 };

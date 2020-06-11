@@ -84,7 +84,6 @@ export function setTargetRoutine(targetRoutine, i = 0) {
 }
 
 export function getRoutinesData(tourDateId, judgeGroupId, judgePosition) {
-  console.log(tourDateId, judgeGroupId, judgePosition);
   return async (dispatch) => {
     const url = 'https://api.d360test.com/api/coda/routines';
     try {
@@ -160,6 +159,18 @@ export function submitScore(postData, nextRoutine, nextRoutineIndex) {
   };
 }
 
+export function addButtonGrade(rectangle) {
+  return {
+    type: 'ADD_BUTTON_GRADE',
+    rectangle,
+  };
+}
+export function changeButtonGrade() {
+  return {
+    type: 'CHANGE_BUTTON_GRADE',
+  };
+}
+
 const initialState = {
   routinesData: false,
   targetRoutine: {},
@@ -169,7 +180,8 @@ const initialState = {
   scrollPos: 0,
   topButtons: true,
   displaySideMenu: false,
-  buttonGrades: {},
+  buttonGrades: [],
+  rectangles: [],
   modal: false,
 };
 
@@ -211,6 +223,22 @@ export default function scoringReducer(scoringState = initialState, action) {
         ...scoringState,
         modal: !scoringState.modal,
       };
+    case 'ADD_BUTTON_GRADE': {
+      const index = scoringState.buttonGrades.findIndex((grade) => {
+        return grade.level_4_id === action.rectangle.level_4_id;
+      });
+      if (index === -1) {
+        return {
+          ...scoringState,
+          buttonGrades: [...scoringState.buttonGrades, action.rectangle],
+        };
+      }
+      scoringState.buttonGrades.splice(index, 1, action.rectangle);
+      return {
+        ...scoringState,
+        buttonGrades: scoringState.buttonGrades,
+      };
+    }
     default:
       return scoringState;
   }

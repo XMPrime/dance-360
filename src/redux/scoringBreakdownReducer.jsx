@@ -25,7 +25,7 @@ export function toggleCheckbox(event) {
     : { type: 'TOGGLE_I_CHOREOGRAPHED' };
 }
 
-export function setStrongestLevel1Id(level_1_id, ratio) {
+export function setStrongestLevel1Id({ level_1_id, ratio }) {
   return {
     type: 'SET_STRONGEST_LEVEL_1_ID',
     level_1_id,
@@ -33,7 +33,7 @@ export function setStrongestLevel1Id(level_1_id, ratio) {
   };
 }
 
-export function setWeakestLevel1Id(level_1_id, ratio) {
+export function setWeakestLevel1Id({ level_1_id, ratio }) {
   return {
     type: 'SET_WEAKEST_LEVEL_1_ID',
     level_1_id,
