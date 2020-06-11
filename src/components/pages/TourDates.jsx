@@ -20,8 +20,10 @@ export default function TourDatesPage() {
     .map((tourDateData) => (
       <option
         key={tourDateData.id}
-        id={tourDateData.id}
-        value={transformTourDateData(tourDateData)}
+        value={{
+          tourId: tourDateData.id,
+          tourInfo: transformTourDateData(tourDateData),
+        }}
       >
         {transformTourDateData(tourDateData)}
       </option>
@@ -29,10 +31,8 @@ export default function TourDatesPage() {
     .reverse();
 
   function handleChange(e) {
-    const select = document.getElementById('tour-select');
-    const tourId = select.options[select.selectedIndex].id;
-    const tourDateValue = e.target.value;
-    dispatch(setSelectedTour(tourId, tourDateValue));
+    const { tourId, tourInfo } = e.target.value;
+    dispatch(setSelectedTour(tourId, tourInfo));
   }
 
   const buttons = [
