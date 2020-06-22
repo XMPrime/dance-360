@@ -11,6 +11,7 @@ export default function CustomSelect({ id, label, options }) {
 
     switch (id) {
       case 'judge': {
+        // TODO figure out whats going on here with getElementById and see if you can figure out how to refactor it
         const index = document.getElementById('judge').selectedIndex;
         dispatch(setJudgeInfo('judgeFullName', value));
         dispatch(setJudgeInfo('judgeHeadshot', judgesData[index].headshot));

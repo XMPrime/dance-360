@@ -63,3 +63,42 @@ export class ScorePostData {
     };
   }
 }
+
+export class RectangleProps {
+  constructor({
+    header_name,
+    level_4_name,
+    id,
+    header_level,
+    level_3_name,
+    level_1_id,
+  }) {
+    this.level = this.determineLevel({ header_level, level_4_name });
+    this.isHeader = !!header_name;
+    this.text = this.determineText({ header_name, level_3_name, level_4_name });
+
+    if (!header_name) {
+      this.level_4_id = id;
+      this.level_1_id = level_1_id;
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  determineLevel({ header_level, level_4_name }) {
+    return header_level || (!level_4_name ? 3 : 4);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  determineText({ header_name, level_3_name, level_4_name }) {
+    return header_name || level_4_name || level_3_name;
+  }
+}
+
+export class ButtonTable {
+  constructor({ height, columns, rows }) {
+    this.rectangleHeight = height;
+    this.minColumns = columns;
+    this.minRows = rows;
+    this.minRectangles = this.minColumns * this.minRows;
+  }
+}

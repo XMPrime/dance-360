@@ -19,14 +19,16 @@ import {
   toggleScoringModal,
   submitScore,
 } from '../../redux/scoringReducer';
+import { ButtonTable, RectangleProps } from '../../utils/models';
+
+const {
+  rectangleHeight,
+  minColumns,
+  minRows,
+  minRectangles,
+} = new ButtonTable({ height: 30, columns: 5, rows: 4 });
 
 export default function Scoring() {
-  // Variables for formatting button table
-  const rectangleHeight = 30; // pixels
-  const minColumns = 5;
-  const minRows = 4;
-  const minRectangles = minColumns * minRows;
-
   const dispatch = useDispatch();
   const [
     selectedEvent,
@@ -88,7 +90,9 @@ export default function Scoring() {
     },
   };
 
+  // TODO refactor function below so that targetButtonData and buttonsDivider is only run when it is needed to be run
   function createButtonsList(data, id) {
+    // TODO change to 1 line expression
     const targetButtonData = data.find((element) => {
       return element.level_id === id;
     });
@@ -98,48 +102,52 @@ export default function Scoring() {
     );
 
     const fullButtonsList = targetButtonData.level_4.map((button) => {
-      // header buttons
-      if (button.header_name) {
-        return (
-          <Rectangle
-            key={button.id}
-            level={button.header_level}
-            isHeader
-            text={button.header_name}
-          />
-        );
-      }
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      return <Rectangle key={button.id} {...new RectangleProps(button)} />;
 
-      // level 3 buttons
-      if (button.level_4_name === null) {
-        return (
-          <Rectangle
-            key={button.id}
-            level={3}
-            isHeader={false}
-            text={button.level_3_name}
-            level_4_id={button.id}
-            level_1_id={button.level_1_id}
-          />
-        );
-      }
+      // // header buttons
+      // if (button.header_name) {
+      //   return (
+      //     <Rectangle
+      //       key={button.id}
+      //       level={button.header_level}
+      //       isHeader
+      //       text={button.header_name}
+      //     />
+      //   );
+      // }
 
-      // level 4 buttons
-      return (
-        <Rectangle
-          key={button.id}
-          level={4}
-          isHeader={false}
-          text={button.level_4_name}
-          level_4_id={button.id}
-          level_1_id={button.level_1_id}
-        />
-      );
+      // // level 3 buttons
+      // if (button.level_4_name === null) {
+      //   return (
+      //     <Rectangle
+      //       key={button.id}
+      //       level={3}
+      //       isHeader={false}
+      //       text={button.level_3_name}
+      //       level_4_id={button.id}
+      //       level_1_id={button.level_1_id}
+      //     />
+      //   );
+      // }
+
+      // // level 4 buttons
+      // return (
+      //   <Rectangle
+      //     key={button.id}
+      //     level={4}
+      //     isHeader={false}
+      //     text={button.level_4_name}
+      //     level_4_id={button.id}
+      //     level_1_id={button.level_1_id}
+      //   />
+      // );
     });
     const top = fullButtonsList.slice(0, buttonsDivider);
     const bottom = fullButtonsList.slice(buttonsDivider);
 
     // TODO do i need this? why did i put this in?
+    // Added below to force larger columns?
     while (top.length <= minRectangles) {
       top.push(<div className="blank-rectangle" />);
     }
@@ -211,6 +219,7 @@ export default function Scoring() {
       text: 'SAVE',
       func: () => {
         dispatch(toggleScoringModal());
+        // TODO move postdata to redux so that you dont have to pass it through to all these other components
         dispatch(submitScore(postData, nextRoutine, nextRoutineIndex));
       },
     },
@@ -250,6 +259,7 @@ export default function Scoring() {
       {displaySideMenu ? <ScoringSideMenu /> : null}
       {buttonsData === null || routinesData === null ? null : (
         <div className="scoring-body">
+          {/* TODO refactor html to not use IDs unless you have to, always use classes */}
           <div id="top-buttons">
             <div
               className="rectangles-container"
