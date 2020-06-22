@@ -16,21 +16,21 @@ export default function Rectangle({
 
   function goodToggle(e) {
     e.preventDefault();
-    // TODO do not need switch statement here
-    switch (grade) {
-      case 'good':
-        setGrade('bad');
-        dispatch(addButtonGrade({ level_4_id, level_1_id, good: false }));
-        break;
-      case 'bad':
-        setGrade('neutral');
-        dispatch(addButtonGrade({ level_4_id, level_1_id, good: null }));
-        break;
-      default:
-        setGrade('good');
-        dispatch(addButtonGrade({ level_4_id, level_1_id, good: true }));
-        break;
-    }
+    setGrade(
+      {
+        good: 'bad',
+        bad: 'neutral',
+      }[grade] || 'good',
+    );
+
+    dispatch(
+      addButtonGrade(
+        {
+          good: { level_4_id, level_1_id, good: false },
+          bad: { level_4_id, level_1_id, good: null },
+        }[grade] || { level_4_id, level_1_id, good: true },
+      ),
+    );
   }
 
   return (
