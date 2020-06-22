@@ -13,6 +13,7 @@ import {
   toggleScoringBreakdownPopUp,
 } from '../redux/scoringBreakdownReducer';
 import ScoringBreakdownPopUp from './ScoringBreakdownPopUp';
+import { infoIcon, plusIcon, minusIcon } from '../utils/constants';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
@@ -90,16 +91,16 @@ export default function ScoringBreakdown() {
             onClick={() => dispatch(toggleScoringBreakdownPopUp())}
             type="button"
           >
-            <i className="fas fa-info-circle" />
+            <i className={infoIcon} />
           </button>
         </div>
         <div className="score-container">
           <button onClick={() => dispatch(minusScore())} type="button">
-            <i className="fas fa-minus minus" />
+            <i className={minusIcon} />
           </button>
           <span className="score">{score}</span>
           <button onClick={() => dispatch(addScore())} type="button">
-            <i className="fas fa-plus plus" />
+            <i className={plusIcon} />
           </button>
         </div>
 
