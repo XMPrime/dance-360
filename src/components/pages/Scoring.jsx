@@ -89,6 +89,7 @@ export default function Scoring() {
     },
   };
 
+  // TODO refactor function below so that targetButtonData and buttonsDivider is only run when it is needed to be run
   function createButtonsList(data, id) {
     // TODO change to 1 line expression
     const targetButtonData = data.find((element) => {
