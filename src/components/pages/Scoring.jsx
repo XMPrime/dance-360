@@ -65,6 +65,7 @@ export default function Scoring() {
   const nextRoutine = routinesData[targetRoutineIndex + 1];
   const nextRoutineIndex = targetRoutineIndex + 1;
 
+  // TODO somehow get all of this data as a single chunk from redux
   const postData = {
     isTabulator,
     competition_group_id: judgeGroupId,
@@ -138,12 +139,13 @@ export default function Scoring() {
     const top = fullButtonsList.slice(0, buttonsDivider);
     const bottom = fullButtonsList.slice(buttonsDivider);
 
+    // TODO do i need this? why did i put this in?
     while (top.length <= minRectangles) {
       top.push(<div className="blank-rectangle" />);
     }
-    while (bottom.length <= minRectangles) {
-      bottom.push(<div className="blank-rectangle" />);
-    }
+    // while (bottom.length <= minRectangles) {
+    //   bottom.push(<div className="blank-rectangle" />);
+    // }
 
     return { top, bottom };
   }
