@@ -10,30 +10,6 @@ export default function Rectangle({
   text,
 }) {
   const [grade, setGrade] = useState('neutral');
-  const [level4id, setLevel4id] = useState(level_4_id);
-  const [level1id, setLevel1id] = useState(level_1_id);
-
-  function goodToggle(e) {
-    e.preventDefault();
-    // TODO do not need switch statement here
-    // switch (grade) {
-    //   case 'good':
-    //     setGrade('bad');
-    //     break;
-    //   case 'bad':
-    //     setGrade('neutral');
-    //     break;
-    //   default:
-    //     setGrade('good');
-    //     break;
-    // }
-    setGrade(
-      {
-        good: 'bad',
-        bad: 'neutral',
-      }[grade] || 'good',
-    );
-  }
 
   return (
     <div
@@ -41,7 +17,15 @@ export default function Rectangle({
       level_1_id={level_1_id}
       grade={grade}
       className={`rectangle level_${isHeader ? level : 4} ${grade}`}
-      onClick={!isHeader && goodToggle}
+      onClick={
+        !isHeader &&
+        setGrade(
+          {
+            good: 'bad',
+            bad: 'neutral',
+          }[grade] || 'good',
+        )
+      }
       role="button"
       tabIndex={0}
     >
