@@ -34,12 +34,20 @@ export default function JudgeInfo() {
     {
       id: 'position',
       label: 'What position are they?',
-      options: [1, 2, 3, 4],
+      options: [
+        { id: 1, position: 1 },
+        { id: 2, position: 2 },
+        { id: 3, position: 3 },
+        { id: 4, position: 4 },
+      ],
     },
     {
       id: 'teacher',
       label: 'Is this judge a teacher?',
-      options: [false, true],
+      options: [
+        { id: 1, isTeacher: false, text: 'No' },
+        { id: 2, isTeacher: true, text: 'Yes' },
+      ],
     },
     {
       id: 'competition',

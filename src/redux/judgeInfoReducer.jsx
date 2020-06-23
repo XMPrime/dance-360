@@ -42,20 +42,24 @@ export function getCompetitionGroupsData() {
   };
 }
 
-export function setJudgeInfo(key, info) {
-  if (typeof info !== 'number') {
-    return {
-      type: 'SET_JUDGE_INFO',
-      key,
-      info,
-    };
-  }
-
+export function setJudgeInfo(infoObj) {
   return {
     type: 'SET_JUDGE_INFO',
-    key,
-    info: Number(info),
+    infoObj,
   };
+  // if (typeof info !== 'number') {
+  //   return {
+  //     type: 'SET_JUDGE_INFO',
+  //     key,
+  //     info,
+  //   };
+  // }
+
+  // return {
+  //   type: 'SET_JUDGE_INFO',
+  //   key,
+  //   info: Number(info),
+  // };
 }
 
 export function toggleJudgeInfoModal(judgeName) {
@@ -108,7 +112,7 @@ export default function judgeInfoReducer(
         judgeGroupName: action.data[0].name,
       };
     case 'SET_JUDGE_INFO':
-      return { ...judgeInfoState, [action.key]: action.info };
+      return { ...judgeInfoState, ...action.infoObj };
     case 'TOGGLE_JUDGE_INFO_MODAL':
       return {
         ...judgeInfoState,

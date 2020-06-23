@@ -1,41 +1,36 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { setJudgeInfo } from '../../redux/judgeInfoReducer';
 
 export default function CustomSelect({ id, label, options }) {
-  const { judgesData } = useSelector((state) => state.judgeInfo);
   const dispatch = useDispatch();
 
   function handleFormChange(e) {
-    const { id, value } = e.target;
+    const selectedOption = options[e.target.selectedIndex];
+    dispatch(
+      setJudgeInfo(
+        {
+          judge: {
+            judgeFullName: `${selectedOption.fname} ${selectedOption.lname}`,
+            judgeHeadshot: selectedOption.headshot,
+            judgeId: selectedOption.key,
+          },
+          position: { judgePosition: selectedOption.position },
+          teacher: { judgeIsTeacher: selectedOption.isTeacher },
+          competition: {
+            judgeGroupName: selectedOption.name,
+            judgeGroupId: selectedOption.id,
+          },
+        }[id],
+      ),
+    );
+  }
 
-    switch (id) {
-      case 'judge': {
-        // TODO figure out whats going on here with getElementById and see if you can figure out how to refactor it
-        const index = document.getElementById('judge').selectedIndex;
-        dispatch(setJudgeInfo('judgeFullName', value));
-        dispatch(setJudgeInfo('judgeHeadshot', judgesData[index].headshot));
-        dispatch(setJudgeInfo('judgeId', judgesData[index].key));
-        break;
-      }
-      case 'position':
-        dispatch(setJudgeInfo('judgePosition', value));
-        break;
-      case 'teacher':
-        dispatch(setJudgeInfo('judgeIsTeacher', value));
-        break;
-      case 'competition': {
-        const competitionElem = document.getElementById('competition');
-        const index = competitionElem.selectedIndex;
-        const groupId = competitionElem[index].id;
-        dispatch(setJudgeInfo('judgeGroupName', value));
-        dispatch(setJudgeInfo('judgeGroupId', groupId));
-        break;
-      }
-      default:
-        // eslint-disable-next-line no-console
-        console.log('error');
-    }
+  function determineOptionText({ fname, lname, name, text }) {
+    if (fname) return `${fname} ${lname}`;
+    if (name) return name;
+    return text;
   }
 
   return (
@@ -48,40 +43,20 @@ export default function CustomSelect({ id, label, options }) {
         id={`${id}`}
         onChange={handleFormChange}
       >
-        {options.map((option) => {
-          // 'judge position teacher competition'
-          switch (id) {
-            case 'judge':
-              return (
-                <option
-                  key={option.id}
-                  value={`${option.fname} ${option.lname}`}
-                >
-                  {`${option.fname} ${option.lname}`}
-                </option>
-              );
-            case 'teacher':
-              return (
-                <option key={option} value={option}>
-                  {option ? 'Yes' : 'No'}
-                </option>
-              );
-            case 'competition':
-              return (
-                <option key={option.id} id={option.id} value={option.name}>
-                  {option.name}
-                </option>
-              );
-            default:
-              // 'position'
-              return (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              );
-          }
+        {options.map((option, i) => {
+          return (
+            <option key={option.id} value={i}>
+              {determineOptionText(option)}
+            </option>
+          );
         })}
       </select>
     </div>
   );
 }
+
+CustomSelect.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
