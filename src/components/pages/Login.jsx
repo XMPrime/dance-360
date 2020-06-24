@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -6,6 +7,8 @@ import useForm from 'react-hook-form';
 import { setTextInput, tryLogin, toggleModal } from '../../redux/loginReducer';
 import logo from '../../imgs/group-6.svg';
 import Modal from '../generic/Modal';
+import { ModalProps } from '../../utils/models';
+import { envelopeIcon, lockIcon } from '../../utils/constants';
 
 export default function Login() {
   const history = useHistory();
@@ -21,14 +24,14 @@ export default function Login() {
   );
   const textInputs = [
     {
-      icon: 'fa-envelope',
+      icon: envelopeIcon,
       type: 'text',
       id: 'username',
       placeholder: 'Username',
       errors: errors.username && errorMessage,
     },
     {
-      icon: 'fa-lock',
+      icon: lockIcon,
       type: 'password',
       id: 'password',
       placeholder: 'Password',
@@ -36,14 +39,10 @@ export default function Login() {
     },
   ];
 
-  const invalidAuth = {
+  const invalidAuthProps = {
     type: 'auth',
     header: 'Sorry',
     body: 'You have entered an invalid username or password.',
-    cancel: {
-      text: 'OK',
-      func: (e) => dispatch(toggleModal(e)),
-    },
     confirm: {
       text: 'OK',
       func: (e) => dispatch(toggleModal(e)),
@@ -51,7 +50,7 @@ export default function Login() {
     bgFunc: (e) => dispatch(toggleModal(e)),
   };
 
-  const welcome = {
+  const welcomeProps = {
     type: 'welcome',
     header: 'Welcome to my Dance Judge app!',
     body: (
@@ -82,32 +81,14 @@ export default function Login() {
 
   return (
     <div className="judge-1">
-      {welcomeModal && (
-        <Modal
-          type={welcome.type}
-          header={welcome.header}
-          body={welcome.body}
-          cancel={welcome.cancel}
-          confirm={welcome.confirm}
-          bgFunc={welcome.bgFunc}
-        />
-      )}
-      {authModal && (
-        <Modal
-          type="auth"
-          header={invalidAuth.header}
-          body={invalidAuth.body}
-          cancel={welcome.cancel}
-          confirm={welcome.confirm}
-          bgFunc={welcome.bgFunc}
-        />
-      )}
+      {welcomeModal && <Modal {...new ModalProps(welcomeProps)} />}
+      {authModal && <Modal {...new ModalProps(invalidAuthProps)} />}
       <div className="container-fluid">
         <img src={logo} className="login-logo" alt="logo" />
         <form onSubmit={handleSubmit(() => onSubmit())}>
           {textInputs.map((input, i) => (
             <div key={input.id} className="input-container">
-              <i className={`fa ${input.icon} icon`} />
+              <i className={`${input.icon} icon`} />
               <input
                 type={input.type}
                 id={input.id}

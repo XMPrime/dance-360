@@ -101,3 +101,14 @@ export class ButtonTable {
     this.minRows = rows;
   }
 }
+
+export class ModalProps {
+  constructor({ type, header, body, cancel, confirm, bgFunc }) {
+    this.type = type;
+    this.header = header;
+    this.body = body;
+    this.cancel = cancel;
+    this.confirm = confirm;
+    this.bgFunc = bgFunc;
+  }
+}

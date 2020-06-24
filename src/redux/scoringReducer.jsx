@@ -135,25 +135,36 @@ export function toggleScoringModal() {
   };
 }
 
-export function submitScore(postData, nextRoutine, nextRoutineIndex) {
-  return async (dispatch) => {
+export function submitScore() {
+  return async (dispatch, getState) => {
     const scoreUrl = 'https://api.d360test.com/api/coda/score';
     const socketUrl = 'https://api.d360test.com/api/socket-scoring';
 
+    const {
+      scorePostData,
+      routinesData,
+      targetRoutineIndex,
+    } = getState().scoring;
+
     try {
-      await axios.post(scoreUrl, postData).then((response) => {
+      await axios.post(scoreUrl, scorePostData).then((response) => {
         if (response.status === 200) {
           axios
             .post(socketUrl, {
-              tour_date_id: postData.tour_date_id,
+              tour_date_id: scorePostData.tour_date_id,
               coda: true,
               data: {
-                competition_group_id: postData.competition_group_id,
-                date_routine_id: postData.date_routine_id,
+                competition_group_id: scorePostData.competition_group_id,
+                date_routine_id: scorePostData.date_routine_id,
               },
             })
             .then(() => {
-              dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
+              dispatch(
+                setTargetRoutine(
+                  routinesData[targetRoutineIndex + 1],
+                  targetRoutineIndex + 1,
+                ),
+              );
               window.scrollTo(0, 0);
             });
         }
@@ -163,6 +174,35 @@ export function submitScore(postData, nextRoutine, nextRoutineIndex) {
     }
   };
 }
+
+// export function submitScore(postData, nextRoutine, nextRoutineIndex) {
+//   return async (dispatch, getState) => {
+//     const scoreUrl = 'https://api.d360test.com/api/coda/score';
+//     const socketUrl = 'https://api.d360test.com/api/socket-scoring';
+
+//     try {
+//       await axios.post(scoreUrl, postData).then((response) => {
+//         if (response.status === 200) {
+//           axios
+//             .post(socketUrl, {
+//               tour_date_id: postData.tour_date_id,
+//               coda: true,
+//               data: {
+//                 competition_group_id: postData.competition_group_id,
+//                 date_routine_id: postData.date_routine_id,
+//               },
+//             })
+//             .then(() => {
+//               dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
+//               window.scrollTo(0, 0);
+//             });
+//         }
+//       });
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+// }
 
 export function addButtonGrade(rectangle) {
   return {
@@ -289,7 +329,6 @@ export default function scoringReducer(scoringState = initialState, action) {
       };
     }
     case 'UPDATE_SCORE_POST_DATA':
-      console.log(action.scorePostData);
       return {
         ...scoringState,
         scorePostData: new ScorePostData(action.scorePostData),

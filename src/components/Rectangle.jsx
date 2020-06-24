@@ -37,6 +37,7 @@ export default function Rectangle({
   useEffect(() => {
     // Resets Rectangle's grade to neutral if a new routine is rendered
     if (grade !== 'neutral') setGrade('neutral');
+    // eslint-disable-next-line
   }, [targetRoutineIndex]);
 
   return (

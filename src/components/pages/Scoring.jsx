@@ -22,12 +22,7 @@ import {
   setButtons,
   updateScorePostData,
 } from '../../redux/scoringReducer';
-import {
-  ButtonTable,
-  RectangleProps,
-  TargetRoutine,
-  ScorePostData,
-} from '../../utils/models';
+import { ButtonTable, RectangleProps, ModalProps } from '../../utils/models';
 
 const { rectangleHeight, minColumns, minRows } = new ButtonTable({
   height: 30,
@@ -49,7 +44,6 @@ export default function Scoring() {
       targetRoutine,
       targetRoutineIndex,
       buttons,
-      scorePostData,
     },
   ] = useSelector((state) => [
     state.events.selectedEvent,
@@ -66,8 +60,6 @@ export default function Scoring() {
     performance_division,
     routine_category,
   } = targetRoutine;
-  const nextRoutine = routinesData[targetRoutineIndex + 1];
-  const nextRoutineIndex = targetRoutineIndex + 1;
 
   function createButtonsList(data, id) {
     const targetButtonData = data.find((element) => element.level_id === id);
@@ -125,7 +117,7 @@ export default function Scoring() {
     <div className="scoring-title">Nothing to see here...</div>
   );
 
-  const alert = {
+  const saveProps = {
     type: 'alert',
     header: 'Alert',
     body: 'Are you sure you want to save?',
@@ -143,7 +135,7 @@ export default function Scoring() {
         dispatch(toggleScoringModal());
         // TODO move postdata to redux so that you dont have to pass it through to all these other components
         dispatch(updateScorePostData());
-        dispatch(submitScore(scorePostData, nextRoutine, nextRoutineIndex));
+        dispatch(submitScore());
       },
     },
     bgFunc: () => {
@@ -169,27 +161,20 @@ export default function Scoring() {
         ? createButtonsList(buttonsData, performance_division_level_id)
         : '';
     dispatch(setButtons(buttonsList));
+    // eslint-disable-next-line
   }, [buttonsData, targetRoutineIndex]);
 
   return (
     <div className="generic-page">
       <Header title={scoringTitle} barIcon />
-      {modal && (
-        <Modal
-          type={alert.type}
-          header={alert.header}
-          body={alert.body}
-          cancel={alert.cancel}
-          confirm={alert.confirm}
-          bgFunc={alert.bgFunc}
-        />
-      )}
+      {modal && <Modal {...new ModalProps(saveProps)} />}
       {displaySideMenu ? <ScoringSideMenu /> : null}
       {buttonsData === null || routinesData === null ? null : (
         <div className="scoring-body">
           {buttons &&
-            buttons.map((set, i) => {
+            buttons.map((button, i) => {
               return (
+                // eslint-disable-next-line react/no-array-index-key
                 <div key={i} className="buttons-half">
                   <div
                     className="rectangles-container"

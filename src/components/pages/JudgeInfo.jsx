@@ -10,6 +10,7 @@ import {
 } from '../../redux/judgeInfoReducer';
 import Modal from '../generic/Modal';
 import CustomSelect from '../generic/CustomSelect';
+import { ModalProps } from '../../utils/models';
 
 const axios = require('axios');
 
@@ -56,7 +57,7 @@ export default function JudgeInfo() {
     },
   ];
 
-  const alert = {
+  const modalProps = {
     type: 'alert',
     header: 'Alert',
     body: `${modalFName} ${modalLName} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`,
@@ -115,12 +116,8 @@ export default function JudgeInfo() {
       <Header barIcon={false} title="JUDGE INFORMATION:" />
       {modal && (
         <Modal
-          type={alert.type}
-          header={alert.header}
-          body={alert.body}
-          cancel={alert.cancel}
-          confirm={alert.confirm}
-          bgFunc={alert.bgFunc}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...new ModalProps(modalProps)}
         />
       )}
       <div className="tour-dates-menu">

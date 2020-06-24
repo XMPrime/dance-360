@@ -25,6 +25,19 @@ export default function ScoringBreakdown() {
     { buttonGrades },
   ] = useSelector((state) => [state.scoringBreakdown, state.scoring]);
 
+  const checkboxes = [
+    {
+      name: 'family-friendly',
+      value: familyFriendly,
+      label: 'Routine is not family-friendly',
+    },
+    {
+      name: 'i-choreographed',
+      value: iChoreographed,
+      label: 'I choreographed this routine',
+    },
+  ];
+
   function handleChange(e) {
     const { value } = e.target;
     dispatch(editNotes(value));
@@ -111,31 +124,18 @@ export default function ScoringBreakdown() {
           onChange={handleChange}
           value={note}
         />
-        <div className="checkbox-container">
-          <input
-            className="checkbox-style"
-            type="checkbox"
-            name="family-friendly"
-            onClick={(e) => dispatch(toggleCheckbox(e))}
-            value={familyFriendly}
-          />
-          <div className="checkbox-label-style">
-            Routine is not family-friendly
+        {checkboxes.map(({ name, value, label }) => (
+          <div key={name} className="checkbox-container">
+            <input
+              className="checkbox-style"
+              type="checkbox"
+              name={name}
+              onClick={(e) => dispatch(toggleCheckbox(e))}
+              value={value}
+            />
+            <div className="checkbox-label-style">{label}</div>
           </div>
-        </div>
-        <div className="checkbox-container">
-          <input
-            className="checkbox-style"
-            type="checkbox"
-            name="i-choreographed"
-            onClick={(e) => dispatch(toggleCheckbox(e))}
-            value={iChoreographed}
-          />
-          <div className="checkbox-label-style">
-            I choreographed this routine
-          </div>
-        </div>
-
+        ))}
         <button className="btn btn-submit" type="submit">
           SUBMIT
         </button>
