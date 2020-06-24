@@ -2,7 +2,10 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleScoringModal } from '../redux/scoringReducer';
+import {
+  toggleScoringModal,
+  updateScorePostData,
+} from '../redux/scoringReducer';
 import {
   addScore,
   minusScore,
@@ -17,13 +20,10 @@ import { infoIcon, plusIcon, minusIcon } from '../utils/constants';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
-  const { score, note, familyFriendly, iChoreographed } = useSelector(
-    (state) => state.scoringBreakdown,
-  );
-  const scoringBreakdownPopUp = useSelector(
-    (state) => state.scoringBreakdown.popUp,
-  );
-  const buttonGrades = useSelector((state) => state.scoring.buttonGrades);
+  const [
+    { score, note, familyFriendly, iChoreographed, popUp },
+    { buttonGrades },
+  ] = useSelector((state) => [state.scoringBreakdown, state.scoring]);
 
   function handleChange(e) {
     const { value } = e.target;
@@ -75,14 +75,13 @@ export default function ScoringBreakdown() {
 
   return (
     <div className="scoring-breakdown-container">
-      {scoringBreakdownPopUp ? <ScoringBreakdownPopUp /> : null}
-      {scoringBreakdownPopUp ? (
-        <div className="scoring-breakdown-pop-up--divider" />
-      ) : null}
+      {popUp ? <ScoringBreakdownPopUp /> : null}
+      {popUp ? <div className="scoring-breakdown-pop-up--divider" /> : null}
       <form
         onSubmit={(e) => {
           dispatch(toggleScoringModal());
           scoreTabulator(e, buttonGrades);
+          dispatch(updateScorePostData());
         }}
       >
         <div className="scoring-breakdown-header">
@@ -141,7 +140,7 @@ export default function ScoringBreakdown() {
           SUBMIT
         </button>
       </form>
-      {scoringBreakdownPopUp ? (
+      {popUp ? (
         <div
           className="modal-background transparent"
           onClick={() => dispatch(toggleScoringBreakdownPopUp())}

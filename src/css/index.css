@@ -1144,8 +1144,9 @@ option {
   margin-right: 30px;
 }
 
-#top-buttons,
-#bottom-buttons {
+.top-buttons,
+.bottom-buttons,
+.buttons-half {
   height: 50%;
   padding-top: 80px;
 }

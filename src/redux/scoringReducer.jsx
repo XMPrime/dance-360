@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
+
+import { ScorePostData } from '../utils/models';
+
 // ACTION CREATORS:
 const axios = require('axios');
 
 export function toggleSideMenu() {
-  return {
-    type: 'TOGGLE_SIDE_MENU',
-  };
+  return { type: 'TOGGLE_SIDE_MENU' };
 }
 
 export function setButtonsData(data) {
@@ -27,6 +28,10 @@ export function setScoringBreakdownData(data) {
     type: 'SET_SCORING_BREAKDOWN_DATA',
     data,
   };
+}
+
+export function setButtons(data) {
+  return { type: 'SET_BUTTONS', data };
 }
 
 export function getButtonsData() {
@@ -171,18 +176,56 @@ export function changeButtonGrade() {
   };
 }
 
+export function updateScorePostData() {
+  return (dispatch, getState) => {
+    const {
+      login,
+      events,
+      tourDates,
+      judgeInfo,
+      scoring,
+      scoringBreakdown,
+    } = getState();
+
+    dispatch({
+      type: 'UPDATE_SCORE_POST_DATA',
+      scorePostData: {
+        isTabulator: login.isTabulator,
+        competition_group_id: judgeInfo.judgeGroupId,
+        date_routine_id: scoring.targetRoutine.date_routine_id,
+        event_id: events.selectedEvent.id,
+        tour_date_id: tourDates.tourDateId,
+        online_scoring_id: scoring.targetRoutine.online_scoring_id,
+        staff_id: judgeInfo.judgeId,
+        note: scoringBreakdown.note,
+        score: scoringBreakdown.score,
+        not_friendly: scoringBreakdown.familyFriendly,
+        i_choreographed: scoringBreakdown.iChoreographed,
+        position: judgeInfo.judgePosition,
+        teacher_critique: judgeInfo.judgeIsTeacher,
+        is_coda: true,
+        buttons: scoring.buttonGrades.filter((button) => button.good !== null),
+        strongest_level_1_id: scoringBreakdown.strongestId,
+        weakest_level_1_id: scoringBreakdown.weakestId,
+      },
+    });
+  };
+}
+
 const initialState = {
   routinesData: false,
   targetRoutine: {},
   targetRoutineIndex: 0,
-  buttonsData: false,
+  buttonsData: false, // needed?
   scoringBreakdownData: [],
   scrollPos: 0,
   topButtons: true,
   displaySideMenu: false,
+  buttons: false,
   buttonGrades: [],
   rectangles: [],
   modal: false,
+  scorePostData: {},
 };
 
 export default function scoringReducer(scoringState = initialState, action) {
@@ -192,6 +235,7 @@ export default function scoringReducer(scoringState = initialState, action) {
         ...scoringState,
         displaySideMenu: !scoringState.displaySideMenu,
       };
+
     case 'SET_BUTTONS_DATA':
       return {
         ...scoringState,
@@ -212,6 +256,11 @@ export default function scoringReducer(scoringState = initialState, action) {
         ...scoringState,
         targetRoutine: action.targetRoutine,
         targetRoutineIndex: action.targetRoutineIndex,
+      };
+    case 'SET_BUTTONS':
+      return {
+        ...scoringState,
+        buttons: action.data,
       };
     case 'SET_BUTTON_GRADES':
       return {
@@ -239,6 +288,12 @@ export default function scoringReducer(scoringState = initialState, action) {
         buttonGrades: scoringState.buttonGrades,
       };
     }
+    case 'UPDATE_SCORE_POST_DATA':
+      console.log(action.scorePostData);
+      return {
+        ...scoringState,
+        scorePostData: new ScorePostData(action.scorePostData),
+      };
     default:
       return scoringState;
   }

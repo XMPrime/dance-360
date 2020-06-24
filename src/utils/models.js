@@ -99,6 +99,5 @@ export class ButtonTable {
     this.rectangleHeight = height;
     this.minColumns = columns;
     this.minRows = rows;
-    this.minRectangles = this.minColumns * this.minRows;
   }
 }

@@ -27,10 +27,11 @@ export default function CustomSelect({ id, label, options }) {
     );
   }
 
-  function determineOptionText({ fname, lname, name, text }) {
+  function determineOptionText({ fname, lname, name, text, position }) {
     if (fname) return `${fname} ${lname}`;
     if (name) return name;
-    return text;
+    if (text) return text;
+    return position;
   }
 
   return (
@@ -43,13 +44,9 @@ export default function CustomSelect({ id, label, options }) {
         id={`${id}`}
         onChange={handleFormChange}
       >
-        {options.map((option, i) => {
-          return (
-            <option key={option.id} value={i}>
-              {determineOptionText(option)}
-            </option>
-          );
-        })}
+        {options.map((option) => (
+          <option key={option.id}>{determineOptionText(option)}</option>
+        ))}
       </select>
     </div>
   );

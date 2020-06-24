@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { addButtonGrade } from '../redux/scoringReducer';
 
 export default function Rectangle({
@@ -13,6 +13,7 @@ export default function Rectangle({
 }) {
   const dispatch = useDispatch();
   const [grade, setGrade] = useState('neutral');
+  const { targetRoutineIndex } = useSelector((state) => state.scoring);
 
   function goodToggle(e) {
     e.preventDefault();
@@ -33,11 +34,16 @@ export default function Rectangle({
     );
   }
 
+  useEffect(() => {
+    // Resets Rectangle's grade to neutral if a new routine is rendered
+    if (grade !== 'neutral') setGrade('neutral');
+  }, [targetRoutineIndex]);
+
   return (
     <div
       grade={grade}
       className={`rectangle level_${isHeader ? level : 4} ${grade}`}
-      onClick={!isHeader && goodToggle}
+      onClick={!isHeader ? goodToggle : undefined}
       role="button"
       tabIndex={0}
     >

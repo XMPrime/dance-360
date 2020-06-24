@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable camelcase */
 /* eslint-disable no-plusplus */
 import React, { useEffect } from 'react';
@@ -18,22 +19,28 @@ import {
   getRoutinesData,
   toggleScoringModal,
   submitScore,
+  setButtons,
+  updateScorePostData,
 } from '../../redux/scoringReducer';
-import { ButtonTable, RectangleProps } from '../../utils/models';
+import {
+  ButtonTable,
+  RectangleProps,
+  TargetRoutine,
+  ScorePostData,
+} from '../../utils/models';
 
-const {
-  rectangleHeight,
-  minColumns,
-  minRows,
-  minRectangles,
-} = new ButtonTable({ height: 30, columns: 5, rows: 4 });
+const { rectangleHeight, minColumns, minRows } = new ButtonTable({
+  height: 30,
+  columns: 5,
+  rows: 4,
+});
 
 export default function Scoring() {
   const dispatch = useDispatch();
   const [
     selectedEvent,
     tourDateId,
-    { judgeGroupId, judgePosition, judgeId, judgeIsTeacher },
+    { judgeGroupId, judgePosition },
     {
       buttonsData,
       routinesData,
@@ -41,17 +48,14 @@ export default function Scoring() {
       modal,
       targetRoutine,
       targetRoutineIndex,
-      buttonGrades,
+      buttons,
+      scorePostData,
     },
-    { score, note, familyFriendly, iChoreographed, strongestId, weakestId },
-    isTabulator,
   ] = useSelector((state) => [
     state.events.selectedEvent,
     state.tourDates.tourDateId,
     state.judgeInfo,
     state.scoring,
-    state.scoringBreakdown,
-    state.login.isTabulator,
   ]);
 
   const {
@@ -61,101 +65,23 @@ export default function Scoring() {
     age_division,
     performance_division,
     routine_category,
-    date_routine_id,
-    online_scoring_id,
   } = targetRoutine;
   const nextRoutine = routinesData[targetRoutineIndex + 1];
   const nextRoutineIndex = targetRoutineIndex + 1;
 
-  // TODO somehow get all of this data as a single chunk from redux
-  const postData = {
-    isTabulator,
-    competition_group_id: judgeGroupId,
-    date_routine_id,
-    event_id: selectedEvent.id,
-    tour_date_id: tourDateId,
-    data: {
-      online_scoring_id,
-      staff_id: judgeId,
-      note,
-      score,
-      not_friendly: familyFriendly,
-      i_choreographed: iChoreographed,
-      position: judgePosition,
-      teacher_critique: judgeIsTeacher,
-      is_coda: true,
-      buttons: buttonGrades.filter((button) => button.good !== null),
-      strongest_level_1_id: strongestId,
-      weakest_level_1_id: weakestId,
-    },
-  };
-
-  // TODO refactor function below so that targetButtonData and buttonsDivider is only run when it is needed to be run
   function createButtonsList(data, id) {
-    // TODO change to 1 line expression
-    const targetButtonData = data.find((element) => {
-      return element.level_id === id;
-    });
-
+    const targetButtonData = data.find((element) => element.level_id === id);
     const buttonsDivider = targetButtonData.level_4.findIndex(
-      (element) => element.header_name === 'Performance',
+      (button) => button.header_name === 'Performance',
     );
 
-    const fullButtonsList = targetButtonData.level_4.map((button) => {
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      return <Rectangle key={button.id} {...new RectangleProps(button)} />;
-
-      // // header buttons
-      // if (button.header_name) {
-      //   return (
-      //     <Rectangle
-      //       key={button.id}
-      //       level={button.header_level}
-      //       isHeader
-      //       text={button.header_name}
-      //     />
-      //   );
-      // }
-
-      // // level 3 buttons
-      // if (button.level_4_name === null) {
-      //   return (
-      //     <Rectangle
-      //       key={button.id}
-      //       level={3}
-      //       isHeader={false}
-      //       text={button.level_3_name}
-      //       level_4_id={button.id}
-      //       level_1_id={button.level_1_id}
-      //     />
-      //   );
-      // }
-
-      // // level 4 buttons
-      // return (
-      //   <Rectangle
-      //     key={button.id}
-      //     level={4}
-      //     isHeader={false}
-      //     text={button.level_4_name}
-      //     level_4_id={button.id}
-      //     level_1_id={button.level_1_id}
-      //   />
-      // );
-    });
+    const fullButtonsList = targetButtonData.level_4.map((button) => (
+      <Rectangle key={button.id} {...new RectangleProps(button)} />
+    ));
     const top = fullButtonsList.slice(0, buttonsDivider);
     const bottom = fullButtonsList.slice(buttonsDivider);
 
-    // TODO do i need this? why did i put this in?
-    // Added below to force larger columns?
-    while (top.length <= minRectangles) {
-      top.push(<div className="blank-rectangle" />);
-    }
-    // while (bottom.length <= minRectangles) {
-    //   bottom.push(<div className="blank-rectangle" />);
-    // }
-
-    return { top, bottom };
+    return [top, bottom];
   }
 
   function handleKeydown(e) {
@@ -169,10 +95,6 @@ export default function Scoring() {
     }
   }
 
-  const buttonsList =
-    buttonsData !== false && performance_division_level_id !== undefined
-      ? createButtonsList(buttonsData, performance_division_level_id)
-      : '';
   function calcStyle(rectangles) {
     return {
       height: `${Math.max(
@@ -220,7 +142,8 @@ export default function Scoring() {
       func: () => {
         dispatch(toggleScoringModal());
         // TODO move postdata to redux so that you dont have to pass it through to all these other components
-        dispatch(submitScore(postData, nextRoutine, nextRoutineIndex));
+        dispatch(updateScorePostData());
+        dispatch(submitScore(scorePostData, nextRoutine, nextRoutineIndex));
       },
     },
     bgFunc: () => {
@@ -236,12 +159,17 @@ export default function Scoring() {
       dispatch(getScoringBreakdownData(selectedEvent)),
       dispatch(getRoutinesData(tourDateId, judgeGroupId, judgePosition)),
     ]);
+    document.addEventListener('keydown', handleKeydown);
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeydown);
-  }, []);
+    const buttonsList =
+      buttonsData !== false && performance_division_level_id !== undefined
+        ? createButtonsList(buttonsData, performance_division_level_id)
+        : '';
+    dispatch(setButtons(buttonsList));
+  }, [buttonsData, targetRoutineIndex]);
 
   return (
     <div className="generic-page">
@@ -259,23 +187,19 @@ export default function Scoring() {
       {displaySideMenu ? <ScoringSideMenu /> : null}
       {buttonsData === null || routinesData === null ? null : (
         <div className="scoring-body">
-          {/* TODO refactor html to not use IDs unless you have to, always use classes */}
-          <div id="top-buttons">
-            <div
-              className="rectangles-container"
-              style={calcStyle(buttonsList.top)}
-            >
-              {buttonsList.top}
-            </div>
-          </div>
-          <div id="bottom-buttons">
-            <div
-              className="rectangles-container"
-              style={calcStyle(buttonsList.bottom)}
-            >
-              {buttonsList.bottom}
-            </div>
-          </div>
+          {buttons &&
+            buttons.map((set, i) => {
+              return (
+                <div key={i} className="buttons-half">
+                  <div
+                    className="rectangles-container"
+                    style={buttons ? calcStyle(buttons[i]) : { height: 0 }}
+                  >
+                    {buttons[i]}
+                  </div>
+                </div>
+              );
+            })}
         </div>
       )}
 
