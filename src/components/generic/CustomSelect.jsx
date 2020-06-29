@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { setJudgeInfo } from '../../redux/judgeInfoReducer';
 
+// TODO pass down the handleChange and refactor this so that it is scalable
+// TODO use the id of the option as the value and use that id to find the option in options if needed
 export default function CustomSelect({ id, label, options }) {
   const dispatch = useDispatch();
 
@@ -36,14 +38,10 @@ export default function CustomSelect({ id, label, options }) {
 
   return (
     <div className="label-container">
-      <label className="custom-label" htmlFor={`${id}`}>
+      <label className="custom-label" htmlFor={id}>
         {label}
       </label>
-      <select
-        className="custom-select"
-        id={`${id}`}
-        onChange={handleFormChange}
-      >
+      <select className="custom-select" id={id} onChange={handleFormChange}>
         {options.map((option) => (
           <option key={option.id}>{determineOptionText(option)}</option>
         ))}

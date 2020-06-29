@@ -16,6 +16,7 @@ export default function TourDatesPage() {
     state.tourDates,
   ]);
 
+  // TODO use .sort instead of .reverse()
   const tourDatesList = tourDatesData
     .map((tourDateData) => (
       <option
@@ -30,6 +31,7 @@ export default function TourDatesPage() {
     ))
     .reverse();
 
+  // TODO use id as value instead of object. then pass the id to action and use the id to find the data you need
   function handleChange(e) {
     const { tourId, tourInfo } = e.target.value;
     dispatch(setSelectedTour(tourId, tourInfo));
@@ -48,6 +50,7 @@ export default function TourDatesPage() {
     dispatch(getTourDatesData(selectedEvent));
   }, [dispatch, selectedEvent]);
 
+  // TODO after refactoring custom select, use it here
   return (
     <div className="generic-page">
       <Header barIcon={false} title="CHOOSE YOUR CITY:" />

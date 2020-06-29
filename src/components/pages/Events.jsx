@@ -5,10 +5,10 @@ import { getEventsData, setSelectedEvent } from '../../redux/eventsReducer';
 import Header from '../generic/Header';
 
 export default function Events() {
-  const history = useHistory();
+  const [history, dispatch] = [useHistory(), useDispatch()];
   const eventsData = useSelector((state) => state.events.eventsData);
-  const dispatch = useDispatch();
 
+  // TODO DRY
   function handleKeyPress(e, event) {
     if (e.key === 'Enter') {
       dispatch(setSelectedEvent(event));

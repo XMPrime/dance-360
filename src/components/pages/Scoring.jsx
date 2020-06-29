@@ -165,24 +165,25 @@ export default function Scoring() {
   return (
     <div className="generic-page">
       <Header title={scoringTitle} barIcon />
+
       {modal && <Modal {...new ModalProps(saveProps)} />}
-      {displaySideMenu ? <ScoringSideMenu /> : null}
-      {buttonsData === null || routinesData === null ? null : (
+
+      {displaySideMenu && <ScoringSideMenu />}
+
+      {(buttonsData || routinesData) && (
         <div className="scoring-body">
           {buttons &&
-            buttons.map((button, i) => {
-              return (
-                // eslint-disable-next-line react/no-array-index-key
-                <div key={i} className="buttons-half">
-                  <div
-                    className="rectangles-container"
-                    style={buttons ? calcStyle(buttons[i]) : { height: 0 }}
-                  >
-                    {buttons[i]}
-                  </div>
+            buttons.map((button, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <div key={i} className="buttons-half">
+                <div
+                  className="rectangles-container"
+                  style={calcStyle(buttons[i])}
+                >
+                  {button}
                 </div>
-              );
-            })}
+              </div>
+            ))}
         </div>
       )}
 
