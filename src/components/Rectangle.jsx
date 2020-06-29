@@ -42,7 +42,6 @@ export default function Rectangle({
 
   return (
     <div
-      grade={grade}
       className={`rectangle level_${isHeader ? level : 4} ${grade}`}
       onClick={!isHeader ? goodToggle : undefined}
       role="button"

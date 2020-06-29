@@ -30,6 +30,14 @@ export default function JudgeInfo() {
   ] = useSelector((state) => [state.tourDates, state.judgeInfo]);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    Promise.all([
+      dispatch(getJudgesData()),
+      dispatch(getCompetitionGroupsData()),
+    ]);
+    // eslint-disable-next-line
+  }, []);
+
   const selectMenus = [
     { id: 'judge', label: "What is this judge's name?", options: judgesData },
     {
@@ -88,8 +96,7 @@ export default function JudgeInfo() {
         },
       })
       .then((response) => {
-        const { fname } = response.data;
-        const { lname } = response.data;
+        const { fname, lname } = response.data;
 
         if (response.data === '') {
           history.push('/scoring');
@@ -104,13 +111,6 @@ export default function JudgeInfo() {
       });
   }
 
-  useEffect(() => {
-    Promise.all([
-      dispatch(getJudgesData()),
-      dispatch(getCompetitionGroupsData()),
-    ]);
-    // eslint-disable-next-line
-  }, []);
   return (
     <div className="generic-page">
       <Header barIcon={false} title="JUDGE INFORMATION:" />

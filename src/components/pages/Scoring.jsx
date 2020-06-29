@@ -60,6 +60,25 @@ export default function Scoring() {
     routine_category,
   } = targetRoutine;
 
+  useEffect(() => {
+    Promise.all([
+      dispatch(getButtonsData()),
+      dispatch(getScoringBreakdownData(selectedEvent)),
+      dispatch(getRoutinesData(tourDateId, judgeGroupId, judgePosition)),
+    ]);
+    document.addEventListener('keydown', handleKeydown);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    const buttonsList =
+      buttonsData !== false && performance_division_level_id !== undefined
+        ? createButtonsList(buttonsData, performance_division_level_id)
+        : '';
+    dispatch(setButtons(buttonsList));
+    // eslint-disable-next-line
+  }, [buttonsData, targetRoutineIndex]);
+
   function createButtonsList(data, id) {
     const targetButtonData = data.find((element) => element.level_id === id);
     const buttonsDivider = targetButtonData.level_4.findIndex(
@@ -143,30 +162,11 @@ export default function Scoring() {
     },
   };
 
-  useEffect(() => {
-    Promise.all([
-      dispatch(getButtonsData()),
-      dispatch(getScoringBreakdownData(selectedEvent)),
-      dispatch(getRoutinesData(tourDateId, judgeGroupId, judgePosition)),
-    ]);
-    document.addEventListener('keydown', handleKeydown);
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    const buttonsList =
-      buttonsData !== false && performance_division_level_id !== undefined
-        ? createButtonsList(buttonsData, performance_division_level_id)
-        : '';
-    dispatch(setButtons(buttonsList));
-    // eslint-disable-next-line
-  }, [buttonsData, targetRoutineIndex]);
-
   return (
     <div className="generic-page">
       <Header title={scoringTitle} barIcon />
       {modal && <Modal {...new ModalProps(saveProps)} />}
-      {displaySideMenu ? <ScoringSideMenu /> : null}
+      {displaySideMenu && <ScoringSideMenu />}
       {buttonsData === null || routinesData === null ? null : (
         <div className="scoring-body">
           {buttons &&
@@ -176,9 +176,9 @@ export default function Scoring() {
                 <div key={i} className="buttons-half">
                   <div
                     className="rectangles-container"
-                    style={buttons ? calcStyle(buttons[i]) : { height: 0 }}
+                    style={buttons ? calcStyle(button) : { height: 0 }}
                   >
-                    {buttons[i]}
+                    {button}
                   </div>
                 </div>
               );
