@@ -38,6 +38,7 @@ export default function JudgeInfo() {
     // eslint-disable-next-line
   }, []);
 
+  // TODO refactor based on custom select
   const selectMenus = [
     { id: 'judge', label: "What is this judge's name?", options: judgesData },
     {
@@ -65,6 +66,7 @@ export default function JudgeInfo() {
     },
   ];
 
+  // TODO refactor for DRY
   const modalProps = {
     type: 'alert',
     header: 'Alert',
@@ -83,6 +85,7 @@ export default function JudgeInfo() {
     bgFunc: (e) => dispatch(toggleJudgeInfoModal(e)),
   };
 
+  // TODO convert to async/await
   function handleSubmit(e) {
     e.preventDefault();
     const url = 'https://api.d360test.com/api/coda/check-judge';

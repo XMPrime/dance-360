@@ -12,38 +12,50 @@ export default function Rectangle({
   text,
 }) {
   const dispatch = useDispatch();
-  const [grade, setGrade] = useState('neutral');
+  const [grade, setGrade] = useState(null);
   const { targetRoutineIndex } = useSelector((state) => state.scoring);
+
+  function getNextGrade(currentGrade) {
+    if (currentGrade === null) return true;
+    if (currentGrade === false) return null;
+    return false;
+  }
 
   function goodToggle(e) {
     e.preventDefault();
-    setGrade(
-      {
-        good: 'bad',
-        bad: 'neutral',
-      }[grade] || 'good',
-    );
+    if (!isHeader) return;
+    const nextGrade = getNextGrade(grade);
+    setGrade(nextGrade);
+
+    // dispatch(
+    //   addButtonGrade(
+    //     {
+    //       good: { level_4_id, level_1_id, good: false },
+    //       bad: { level_4_id, level_1_id, good: null },
+    //     }[grade] || { level_4_id, level_1_id, good: true },
+    //   ),
+    // );
 
     dispatch(
-      addButtonGrade(
-        {
-          good: { level_4_id, level_1_id, good: false },
-          bad: { level_4_id, level_1_id, good: null },
-        }[grade] || { level_4_id, level_1_id, good: true },
-      ),
+      addButtonGrade({
+        level_4_id,
+        level_1_id,
+        good: nextGrade,
+      }),
     );
   }
 
   useEffect(() => {
     // Resets Rectangle's grade to neutral if a new routine is rendered
-    if (grade !== 'neutral') setGrade('neutral');
+    // if (grade !== 'neutral') setGrade('neutral');
+    if (grade !== null) setGrade(null);
     // eslint-disable-next-line
   }, [targetRoutineIndex]);
 
   return (
     <div
       className={`rectangle level_${isHeader ? level : 4} ${grade}`}
-      onClick={!isHeader ? goodToggle : undefined}
+      onClick={goodToggle}
       role="button"
       tabIndex={0}
     >
