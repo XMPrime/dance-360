@@ -2,10 +2,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  toggleScoringModal,
-  updateScorePostData,
-} from '../redux/scoringReducer';
+import { toggleScoringModal } from '../redux/scoringReducer';
 import {
   addScore,
   minusScore,
@@ -94,7 +91,6 @@ export default function ScoringBreakdown() {
         onSubmit={(e) => {
           dispatch(toggleScoringModal());
           scoreTabulator(e, buttonGrades);
-          dispatch(updateScorePostData());
         }}
       >
         <div className="scoring-breakdown-header">

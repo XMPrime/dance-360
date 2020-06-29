@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-console */
 
 import { ScorePostData } from '../utils/models';
@@ -141,21 +142,51 @@ export function submitScore() {
     const socketUrl = 'https://api.d360test.com/api/socket-scoring';
 
     const {
-      scorePostData,
-      routinesData,
-      targetRoutineIndex,
-    } = getState().scoring;
+      login,
+      events,
+      tourDates,
+      judgeInfo,
+      scoring,
+      scoringBreakdown,
+    } = getState();
+
+    const scorePostData = new ScorePostData({
+      isTabulator: login.isTabulator,
+      competition_group_id: judgeInfo.judgeGroupId,
+      date_routine_id: scoring.targetRoutine.date_routine_id,
+      event_id: events.selectedEvent.id,
+      tour_date_id: tourDates.tourDateId,
+      online_scoring_id: scoring.targetRoutine.online_scoring_id,
+      staff_id: judgeInfo.judgeId,
+      note: scoringBreakdown.note,
+      score: scoringBreakdown.score,
+      not_friendly: scoringBreakdown.familyFriendly,
+      i_choreographed: scoringBreakdown.iChoreographed,
+      position: judgeInfo.judgePosition,
+      teacher_critique: judgeInfo.judgeIsTeacher,
+      is_coda: true,
+      buttons: scoring.buttonGrades.filter((button) => button.good !== null),
+      strongest_level_1_id: scoringBreakdown.strongestId,
+      weakest_level_1_id: scoringBreakdown.weakestId,
+    });
+
+    const { routinesData, targetRoutineIndex } = scoring;
+    const {
+      tour_date_id,
+      competition_group_id,
+      date_routine_id,
+    } = scorePostData;
 
     try {
       await axios.post(scoreUrl, scorePostData).then((response) => {
         if (response.status === 200) {
           axios
             .post(socketUrl, {
-              tour_date_id: scorePostData.tour_date_id,
+              tour_date_id,
               coda: true,
               data: {
-                competition_group_id: scorePostData.competition_group_id,
-                date_routine_id: scorePostData.date_routine_id,
+                competition_group_id,
+                date_routine_id,
               },
             })
             .then(() => {
@@ -175,35 +206,6 @@ export function submitScore() {
   };
 }
 
-// export function submitScore(postData, nextRoutine, nextRoutineIndex) {
-//   return async (dispatch, getState) => {
-//     const scoreUrl = 'https://api.d360test.com/api/coda/score';
-//     const socketUrl = 'https://api.d360test.com/api/socket-scoring';
-
-//     try {
-//       await axios.post(scoreUrl, postData).then((response) => {
-//         if (response.status === 200) {
-//           axios
-//             .post(socketUrl, {
-//               tour_date_id: postData.tour_date_id,
-//               coda: true,
-//               data: {
-//                 competition_group_id: postData.competition_group_id,
-//                 date_routine_id: postData.date_routine_id,
-//               },
-//             })
-//             .then(() => {
-//               dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
-//               window.scrollTo(0, 0);
-//             });
-//         }
-//       });
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-// }
-
 export function addButtonGrade(rectangle) {
   return {
     type: 'ADD_BUTTON_GRADE',
@@ -216,47 +218,11 @@ export function changeButtonGrade() {
   };
 }
 
-export function updateScorePostData() {
-  return (dispatch, getState) => {
-    const {
-      login,
-      events,
-      tourDates,
-      judgeInfo,
-      scoring,
-      scoringBreakdown,
-    } = getState();
-
-    dispatch({
-      type: 'UPDATE_SCORE_POST_DATA',
-      scorePostData: {
-        isTabulator: login.isTabulator,
-        competition_group_id: judgeInfo.judgeGroupId,
-        date_routine_id: scoring.targetRoutine.date_routine_id,
-        event_id: events.selectedEvent.id,
-        tour_date_id: tourDates.tourDateId,
-        online_scoring_id: scoring.targetRoutine.online_scoring_id,
-        staff_id: judgeInfo.judgeId,
-        note: scoringBreakdown.note,
-        score: scoringBreakdown.score,
-        not_friendly: scoringBreakdown.familyFriendly,
-        i_choreographed: scoringBreakdown.iChoreographed,
-        position: judgeInfo.judgePosition,
-        teacher_critique: judgeInfo.judgeIsTeacher,
-        is_coda: true,
-        buttons: scoring.buttonGrades.filter((button) => button.good !== null),
-        strongest_level_1_id: scoringBreakdown.strongestId,
-        weakest_level_1_id: scoringBreakdown.weakestId,
-      },
-    });
-  };
-}
-
 const initialState = {
   routinesData: false,
   targetRoutine: {},
   targetRoutineIndex: 0,
-  buttonsData: false, // needed?
+  buttonsData: false,
   scoringBreakdownData: [],
   scrollPos: 0,
   topButtons: true,
@@ -265,7 +231,6 @@ const initialState = {
   buttonGrades: [],
   rectangles: [],
   modal: false,
-  scorePostData: {},
 };
 
 export default function scoringReducer(scoringState = initialState, action) {

@@ -20,7 +20,6 @@ import {
   toggleScoringModal,
   submitScore,
   setButtons,
-  updateScorePostData,
 } from '../../redux/scoringReducer';
 import { ButtonTable, RectangleProps, ModalProps } from '../../utils/models';
 
@@ -134,7 +133,6 @@ export default function Scoring() {
       func: () => {
         dispatch(toggleScoringModal());
         // TODO move postdata to redux so that you dont have to pass it through to all these other components
-        dispatch(updateScorePostData());
         dispatch(submitScore());
       },
     },
