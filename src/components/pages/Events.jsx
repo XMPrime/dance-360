@@ -8,22 +8,20 @@ export default function Events() {
   const [history, dispatch] = [useHistory(), useDispatch()];
   const eventsData = useSelector((state) => state.events.eventsData);
 
-  // TODO DRY
-  function handleKeyPress(e, event) {
-    if (e.key === 'Enter') {
-      dispatch(setSelectedEvent(event));
-      history.push('/tour-dates');
-    }
-  }
+  useEffect(() => {
+    dispatch(getEventsData());
+  }, [dispatch]);
 
-  function handleClick(event) {
+  function selectEvent(event) {
     dispatch(setSelectedEvent(event));
     history.push('/tour-dates');
   }
 
-  useEffect(() => {
-    dispatch(getEventsData());
-  }, [dispatch]);
+  function handleKeyPress(e, event) {
+    if (e.key === 'Enter') {
+      selectEvent(event);
+    }
+  }
 
   return (
     <div className="generic-page">
@@ -35,7 +33,7 @@ export default function Events() {
             className="grid-item"
             event_id={event.id}
             season_id={event.current_season_id}
-            onClick={() => handleClick(event)}
+            onClick={() => selectEvent(event)}
             onKeyDown={(e) => handleKeyPress(e, event)}
             role="link"
             tabIndex={i}

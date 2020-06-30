@@ -7,6 +7,7 @@ import judgeInfoReducer from './judgeInfoReducer';
 import judgeDropdownReducer from './judgeDropdownReducer';
 import scoringReducer from './scoringReducer';
 import scoringBreakdownReducer from './scoringBreakdownReducer';
+import modalsReducer from './modalsReducer';
 
 const rootReducer = combineReducers({
   login: loginReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   judgeDropdown: judgeDropdownReducer,
   scoring: scoringReducer,
   scoringBreakdown: scoringBreakdownReducer,
+  modals: modalsReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

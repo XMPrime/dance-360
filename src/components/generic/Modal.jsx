@@ -1,7 +1,19 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { toggleModal } from '../../redux/modalsReducer';
 
-export default function Modal({ header, body, type, cancel, confirm, bgFunc }) {
+export default function Modal({
+  header,
+  body,
+  type,
+  cancelText,
+  cancelFunc,
+  confirmText,
+  confirmFunc,
+}) {
+  const dispatch = useDispatch();
+
   return (
     <>
       <div className="modal">
@@ -10,32 +22,35 @@ export default function Modal({ header, body, type, cancel, confirm, bgFunc }) {
           <div className="modal-text">{body}</div>
         </div>
         <div className="modal-footer">
-          {cancel && (
+          {cancelText && (
             <button
-              id={type}
               className="btn btn-grey"
-              onClick={cancel.func}
+              onClick={() => {
+                dispatch(toggleModal(type));
+                if (cancelFunc) cancelFunc();
+              }}
               type="button"
             >
-              {cancel.text}
+              {cancelText}
             </button>
           )}
-          {confirm && (
+          {confirmText && (
             <button
-              id={type}
               className="btn btn-purple"
-              onClick={confirm.func}
+              onClick={() => {
+                dispatch(toggleModal(type));
+                if (confirmFunc) confirmFunc();
+              }}
               type="button"
             >
-              {confirm.text}
+              {confirmText}
             </button>
           )}
         </div>
       </div>
       <div
-        id={type}
         className="modal-background"
-        onClick={bgFunc}
+        onClick={() => dispatch(toggleModal(type))}
         role="alertdialog"
       />
     </>
@@ -46,7 +61,15 @@ Modal.propTypes = {
   type: PropTypes.string.isRequired,
   header: PropTypes.string.isRequired,
   body: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  cancel: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
-  confirm: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
-  bgFunc: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]).isRequired,
+  cancelText: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  cancelFunc: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  confirmText: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  confirmFunc: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+};
+
+Modal.defaultProps = {
+  cancelText: '',
+  cancelFunc: false,
+  confirmText: '',
+  confirmFunc: false,
 };

@@ -4,13 +4,15 @@ import { useHistory } from 'react-router-dom';
 import Header from '../generic/Header';
 import {
   getJudgesData,
+  setJudgeInfo,
   getCompetitionGroupsData,
-  toggleJudgeInfoModal,
   getModalJudgeName,
+  // submitJudgeInfo,
 } from '../../redux/judgeInfoReducer';
+import { toggleModal } from '../../redux/modalsReducer';
 import Modal from '../generic/Modal';
 import CustomSelect from '../generic/CustomSelect';
-import { ModalProps } from '../../utils/models';
+import { ModalProps, CustomSelectProps } from '../../utils/models';
 
 const axios = require('axios');
 
@@ -23,11 +25,11 @@ export default function JudgeInfo() {
       judgesData,
       judgePosition,
       judgeGroupId,
-      modal,
       modalFName,
       modalLName,
     },
-  ] = useSelector((state) => [state.tourDates, state.judgeInfo]);
+    { judgeInfoModal },
+  ] = useSelector((state) => [state.tourDates, state.judgeInfo, state.modals]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -40,7 +42,24 @@ export default function JudgeInfo() {
 
   // TODO refactor based on custom select
   const selectMenus = [
-    { id: 'judge', label: "What is this judge's name?", options: judgesData },
+    {
+      id: 'judge',
+      label: "What is this judge's name?",
+      options: judgesData,
+      optionText: (option) => `${option.fname} ${option.lname}`,
+      handleChange: (e) => {
+        const { id, fname, lname, headshot } = judgesData.find(
+          (judge) => judge.id === Number(e.target.value),
+        );
+        dispatch(
+          setJudgeInfo({
+            judgeId: id,
+            judgeFullName: `${fname} ${lname}`,
+            judgeHeadshot: headshot,
+          }),
+        );
+      },
+    },
     {
       id: 'position',
       label: 'What position are they?',
@@ -50,6 +69,10 @@ export default function JudgeInfo() {
         { id: 3, position: 3 },
         { id: 4, position: 4 },
       ],
+      optionText: (option) => option.position,
+      handleChange: (e) => {
+        dispatch(setJudgeInfo({ judgePosition: e.target.value }));
+      },
     },
     {
       id: 'teacher',
@@ -58,66 +81,68 @@ export default function JudgeInfo() {
         { id: 1, isTeacher: false, text: 'No' },
         { id: 2, isTeacher: true, text: 'Yes' },
       ],
+      optionText: (option) => (option.isTeacher ? 'Yes' : 'No'),
+      handleChange: (e) => {
+        dispatch(setJudgeInfo({ judgeIsTeacher: e.target.value }));
+      },
     },
     {
       id: 'competition',
       label: 'What competition group is this for?',
       options: competitionGroupsData,
+      optionText: (option) => option.name,
+      handleChange: (e) => {
+        const { id, name } = competitionGroupsData.find(
+          (judge) => judge.id === Number(e.target.value),
+        );
+        dispatch(setJudgeInfo({ judgeGroupName: name, judgeGroupId: id }));
+      },
     },
   ];
 
   // TODO refactor for DRY
   const modalProps = {
-    type: 'alert',
+    type: 'judgeInfo',
     header: 'Alert',
     body: `${modalFName} ${modalLName} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`,
-    cancel: {
-      text: 'CANCEL',
-      func: (e) => dispatch(toggleJudgeInfoModal(e)),
-    },
-    confirm: {
-      text: 'OK',
-      func: (e) => {
-        dispatch(toggleJudgeInfoModal(e));
-        history.push('/scoring');
-      },
-    },
-    bgFunc: (e) => dispatch(toggleJudgeInfoModal(e)),
+    cancelText: 'CANCEL',
+    confirmText: 'OK',
+    confirmFunc: () => history.push('/scoring'),
   };
 
   // TODO convert to async/await
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const url = 'https://api.d360test.com/api/coda/check-judge';
+    try {
+      await axios
+        .get(url, {
+          params: {
+            tour_date_id: tourDateId,
+            competition_group_id: judgeGroupId,
+            position: judgePosition,
+          },
+        })
+        .then((response) => {
+          const { fname, lname } = response.data;
 
-    axios
-      .get(url, {
-        params: {
-          tour_date_id: tourDateId,
-          competition_group_id: judgeGroupId,
-          position: judgePosition,
-        },
-      })
-      .then((response) => {
-        const { fname, lname } = response.data;
-
-        if (response.data === '') {
-          history.push('/scoring');
-        } else {
-          dispatch(getModalJudgeName(fname, lname));
-          dispatch(toggleJudgeInfoModal());
-        }
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log(error);
-      });
+          if (response.data === '') {
+            history.push('/scoring');
+          } else {
+            dispatch(getModalJudgeName(fname, lname));
+            dispatch(toggleModal('judgeInfo'));
+          }
+        });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
   }
 
   return (
     <div className="generic-page">
       <Header barIcon={false} title="JUDGE INFORMATION:" />
-      {modal && (
+      {judgeInfoModal && (
         <Modal
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...new ModalProps(modalProps)}
@@ -130,12 +155,11 @@ export default function JudgeInfo() {
           id="judgeInfoForm"
           onSubmit={handleSubmit}
         >
-          {selectMenus.map((dropdown) => (
+          {selectMenus.map((selectMenu) => (
             <CustomSelect
-              key={dropdown.id}
-              id={dropdown.id}
-              label={dropdown.label}
-              options={dropdown.options}
+              key={selectMenu.id}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...new CustomSelectProps(selectMenu)}
             />
           ))}
           <div className="btn-block">
@@ -150,7 +174,7 @@ export default function JudgeInfo() {
             <button
               className="btn btn-purple"
               type="submit"
-              onClick={() => handleSubmit}
+              // onClick={() => dispatch(submitJudgeInfo(history))}
             >
               NEXT
             </button>

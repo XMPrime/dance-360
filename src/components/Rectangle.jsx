@@ -17,24 +17,21 @@ export default function Rectangle({
 
   function getNextGrade(currentGrade) {
     if (currentGrade === null) return true;
-    if (currentGrade === false) return null;
-    return false;
+    if (currentGrade === true) return false;
+    return null;
+  }
+
+  function getColor(currentGrade) {
+    if (currentGrade === null) return 'neutral';
+    if (currentGrade === true) return 'good';
+    return 'bad';
   }
 
   function goodToggle(e) {
     e.preventDefault();
-    if (!isHeader) return;
+    if (isHeader) return;
     const nextGrade = getNextGrade(grade);
     setGrade(nextGrade);
-
-    // dispatch(
-    //   addButtonGrade(
-    //     {
-    //       good: { level_4_id, level_1_id, good: false },
-    //       bad: { level_4_id, level_1_id, good: null },
-    //     }[grade] || { level_4_id, level_1_id, good: true },
-    //   ),
-    // );
 
     dispatch(
       addButtonGrade({
@@ -47,14 +44,13 @@ export default function Rectangle({
 
   useEffect(() => {
     // Resets Rectangle's grade to neutral if a new routine is rendered
-    // if (grade !== 'neutral') setGrade('neutral');
     if (grade !== null) setGrade(null);
     // eslint-disable-next-line
   }, [targetRoutineIndex]);
 
   return (
     <div
-      className={`rectangle level_${isHeader ? level : 4} ${grade}`}
+      className={`rectangle level_${isHeader ? level : 4} ${getColor(grade)}`}
       onClick={goodToggle}
       role="button"
       tabIndex={0}

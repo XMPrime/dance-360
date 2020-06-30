@@ -4,5 +4,5 @@ export const caretDownIcon = 'fas fa-caret-down';
 export const infoIcon = 'fas fa-info-circle';
 export const minusIcon = 'fas fa-minus minus';
 export const plusIcon = 'fas fa-plus plus';
-export const envelopeIcon = 'fa-envelope';
-export const lockIcon = 'fa-envelope';
+export const envelopeIcon = 'fas fa-envelope';
+export const lockIcon = 'fas fa-lock';

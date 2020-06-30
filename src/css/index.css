@@ -40,7 +40,7 @@
 }
 
 .level_1 {
-  background-color: #007af4;
+  background-color: #007af4 !important;
   color: white;
   text-transform: uppercase;
   text-indent: 10px;
@@ -48,7 +48,7 @@
 }
 
 .level_2 {
-  background-color: #25282d;
+  background-color: #25282d !important;
   color: #007af4;
   text-transform: uppercase;
   text-indent: 20px;
@@ -56,7 +56,7 @@
 }
 
 .level_3 {
-  background-color: #2c3035;
+  background-color: #2c3035 !important;
   color: white;
   font-family: Montserrat;
   font-size: 10px;
@@ -74,7 +74,7 @@
   letter-spacing: normal;
   color: #e1e2e3;
   text-transform: capitalize;
-  background-color: #3c4148;
+  background-color: #3c4148 !important;
   text-indent: 20px;
   cursor: pointer;
 }
@@ -85,7 +85,7 @@
 }
 
 .scoring-button-indent {
-  background-color: #2c3035;
+  background-color: #2c3035 !important;
   height: 100%;
   min-width: 20px;
   margin-right: 10px;
@@ -183,7 +183,7 @@
 }
 
 .scoring-side-menu__routine--selected {
-  background-color: #3123ae;
+  background-color: #3123ae !important;
   color: #ffffff;
   cursor: auto;
 }
@@ -195,7 +195,7 @@
 
 .scoring-side-menu__routine--unrestricted:focus,
 .scoring-side-menu__routine--unrestricted:hover {
-  background-color: #3123ae;
+  background-color: #3123ae !important;
   color: #ffffff;
 }
 
@@ -381,7 +381,7 @@
 
 .scoring-breakdown-pop-up--divider {
   height: 20px;
-  background-color: #1c1e22;
+  background-color: #1c1e22 !important;
 }
 
 .scoring-breakdown-pop-up--header {
@@ -398,7 +398,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  background-color: #212529;
+  background-color: #212529 !important;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
@@ -703,7 +703,7 @@ p {
 }
 
 .btn-login {
-  background-color: #3123ae;
+  background-color: #3123ae !important;
   color: #fff;
   font-family: 'Arial';
   font-weight: 700;
@@ -742,7 +742,7 @@ p {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  background-color: #1c1e22;
+  background-color: #1c1e22 !important;
 }
 
 header {
@@ -901,7 +901,7 @@ header {
   color: #fff;
   font-family: Arial;
   padding-left: 31px;
-  background: url(https://dezov.s3.amazonaws.com/media/dropdown-icon-pngffb-4b34-b3ae-cf22855ec4eb.png);
+  background: url(../imgs/angleDown.png);
   background-size: 35px;
   background-repeat: no-repeat;
   background-position: 93% 50%;
@@ -998,7 +998,7 @@ option {
   -ms-grid-column: 3;
   -ms-grid-column-span: 1;
   grid-column: 3 / 4;
-  background-color: #3123ae;
+  background-color: #3123ae !important;
   margin-right: 1em;
 }
 
@@ -1014,7 +1014,7 @@ option {
 }
 
 .btn-submit {
-  background-color: #3123ae;
+  background-color: #3123ae !important;
   color: #fff;
   font-family: 'Arial';
   font-weight: 800;
@@ -1154,5 +1154,17 @@ option {
 button {
   background-color: transparent;
   border: none;
+}
+
+.custom-select {
+  position: relative;
+}
+
+.fa-angle-down {
+  position: absolute;
+  font-size: 1.5rem;
+  color: white;
+  top: 40%;
+  right: 12%;
 }
 /*# sourceMappingURL=index.css.map */

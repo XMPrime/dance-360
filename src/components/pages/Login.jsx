@@ -3,8 +3,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import useForm from 'react-hook-form';
-
-import { setTextInput, tryLogin, toggleModal } from '../../redux/loginReducer';
+import { setTextInput, tryLogin } from '../../redux/loginReducer';
 import logo from '../../imgs/group-6.svg';
 import Modal from '../generic/Modal';
 import { ModalProps } from '../../utils/models';
@@ -13,9 +12,11 @@ import { envelopeIcon, lockIcon } from '../../utils/constants';
 export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { username, password, welcomeModal, authModal } = useSelector(
-    (state) => state.login,
-  );
+  const [
+    { username, password },
+    { welcomeModal, authModal },
+  ] = useSelector((state) => [state.login, state.modals]);
+
   // welcomeModal, authModal
   const { register, handleSubmit, errors } = useForm();
 
@@ -43,11 +44,7 @@ export default function Login() {
     type: 'auth',
     header: 'Sorry',
     body: 'You have entered an invalid username or password.',
-    confirm: {
-      text: 'OK',
-      func: (e) => dispatch(toggleModal(e)),
-    },
-    bgFunc: (e) => dispatch(toggleModal(e)),
+    confirmText: 'OK',
   };
 
   const welcomeProps = {
@@ -61,12 +58,7 @@ export default function Login() {
         User Stories for this app. Thanks for stopping by!
       </>
     ),
-    cancel: false,
-    confirm: {
-      text: 'OK',
-      func: (e) => dispatch(toggleModal(e)),
-    },
-    bgFunc: (e) => dispatch(toggleModal(e)),
+    confirmText: 'OK',
   };
 
   async function onSubmit() {

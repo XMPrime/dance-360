@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-// ACTION CREATORS:
 const axios = require('axios');
 
 export function setJudgesData(data) {
@@ -47,19 +46,6 @@ export function setJudgeInfo(infoObj) {
     type: 'SET_JUDGE_INFO',
     infoObj,
   };
-  // if (typeof info !== 'number') {
-  //   return {
-  //     type: 'SET_JUDGE_INFO',
-  //     key,
-  //     info,
-  //   };
-  // }
-
-  // return {
-  //   type: 'SET_JUDGE_INFO',
-  //   key,
-  //   info: Number(info),
-  // };
 }
 
 export function toggleJudgeInfoModal(judgeName) {

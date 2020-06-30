@@ -1,49 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { setJudgeInfo } from '../../redux/judgeInfoReducer';
 
 // TODO pass down the handleChange and refactor this so that it is scalable
 // TODO use the id of the option as the value and use that id to find the option in options if needed
-export default function CustomSelect({ id, label, options }) {
-  const dispatch = useDispatch();
-
-  function handleFormChange(e) {
-    const selectedOption = options[e.target.selectedIndex];
-    dispatch(
-      setJudgeInfo(
-        {
-          judge: {
-            judgeFullName: `${selectedOption.fname} ${selectedOption.lname}`,
-            judgeHeadshot: selectedOption.headshot,
-            judgeId: selectedOption.key,
-          },
-          position: { judgePosition: selectedOption.position },
-          teacher: { judgeIsTeacher: selectedOption.isTeacher },
-          competition: {
-            judgeGroupName: selectedOption.name,
-            judgeGroupId: selectedOption.id,
-          },
-        }[id],
-      ),
-    );
-  }
-
-  function determineOptionText({ fname, lname, name, text, position }) {
-    if (fname) return `${fname} ${lname}`;
-    if (name) return name;
-    if (text) return text;
-    return position;
-  }
-
+export default function CustomSelect({
+  id,
+  label,
+  options,
+  optionText,
+  handleChange,
+}) {
   return (
-    <div className="label-container">
-      <label className="custom-label" htmlFor={id}>
-        {label}
-      </label>
-      <select className="custom-select" id={id} onChange={handleFormChange}>
+    <div
+      className="label-container"
+      style={!label ? { marginTop: 0, marginBottom: 0 } : {}}
+    >
+      {label && (
+        <label className="custom-label" htmlFor={id}>
+          {label}
+        </label>
+      )}
+      <select className="custom-select" id={id} onChange={handleChange}>
         {options.map((option) => (
-          <option key={option.id}>{determineOptionText(option)}</option>
+          <option key={option.id} value={option.id}>
+            {optionText(option)}
+          </option>
         ))}
       </select>
     </div>
@@ -52,6 +33,12 @@ export default function CustomSelect({ id, label, options }) {
 
 CustomSelect.propTypes = {
   id: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
+  optionText: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
+
+CustomSelect.defaultProps = {
+  label: '',
 };

@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleScoringModal } from '../redux/scoringReducer';
+import { toggleModal } from '../redux/modalsReducer';
 import {
   addScore,
   minusScore,
@@ -89,7 +89,7 @@ export default function ScoringBreakdown() {
       {popUp ? <div className="scoring-breakdown-pop-up--divider" /> : null}
       <form
         onSubmit={(e) => {
-          dispatch(toggleScoringModal());
+          dispatch(toggleModal('scoring'));
           scoreTabulator(e, buttonGrades);
         }}
       >

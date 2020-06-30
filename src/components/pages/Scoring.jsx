@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable camelcase */
 /* eslint-disable no-plusplus */
@@ -17,7 +18,6 @@ import {
   getButtonsData,
   getScoringBreakdownData,
   getRoutinesData,
-  toggleScoringModal,
   submitScore,
   setButtons,
 } from '../../redux/scoringReducer';
@@ -39,16 +39,17 @@ export default function Scoring() {
       buttonsData,
       routinesData,
       displaySideMenu,
-      modal,
       targetRoutine,
       targetRoutineIndex,
       buttons,
     },
+    { scoringModal },
   ] = useSelector((state) => [
     state.events.selectedEvent,
     state.tourDates.tourDateId,
     state.judgeInfo,
     state.scoring,
+    state.modals,
   ]);
 
   const {
@@ -136,29 +137,16 @@ export default function Scoring() {
   );
 
   const saveProps = {
-    type: 'alert',
+    type: 'scoring',
     header: 'Alert',
     body: 'Are you sure you want to save?',
-    cancel: {
-      text: 'CANCEL',
-      func: () => {
-        dispatch(toggleScoringModal());
-        dispatch(setStrongestLevel1Id('', -1));
-        dispatch(setWeakestLevel1Id('', 2));
-      },
+    cancelFunc: () => {
+      dispatch(setStrongestLevel1Id('', -1));
+      dispatch(setWeakestLevel1Id('', 2));
     },
-    confirm: {
-      text: 'SAVE',
-      func: () => {
-        dispatch(toggleScoringModal());
-        // TODO move postdata to redux so that you dont have to pass it through to all these other components
-        dispatch(submitScore());
-      },
-    },
-    bgFunc: () => {
-      dispatch(toggleScoringModal());
-      dispatch(setStrongestLevel1Id('reset', -1));
-      dispatch(setWeakestLevel1Id('reset', 2));
+    confirmText: 'SAVE',
+    confirmFunc: () => {
+      dispatch(submitScore());
     },
   };
 
@@ -166,7 +154,7 @@ export default function Scoring() {
     <div className="generic-page">
       <Header title={scoringTitle} barIcon />
 
-      {modal && <Modal {...new ModalProps(saveProps)} />}
+      {scoringModal && <Modal {...new ModalProps(saveProps)} />}
 
       {displaySideMenu && <ScoringSideMenu />}
 

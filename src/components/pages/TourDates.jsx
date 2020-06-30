@@ -2,40 +2,29 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Header from '../generic/Header';
+import CustomSelect from '../generic/CustomSelect';
 import {
   getTourDatesData,
   setSelectedTour,
   transformTourDateData,
 } from '../../redux/tourDatesReducer';
+import { CustomSelectProps } from '../../utils/models';
 
 export default function TourDatesPage() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [selectedEvent, { tourDatesData, tourDate }] = useSelector((state) => [
+  const [selectedEvent, { tourDatesData }] = useSelector((state) => [
     state.events.selectedEvent,
     state.tourDates,
   ]);
 
+  useEffect(() => {
+    dispatch(getTourDatesData(selectedEvent));
+  }, [dispatch, selectedEvent]);
+
   // TODO use .sort instead of .reverse()
-  const tourDatesList = tourDatesData
-    .map((tourDateData) => (
-      <option
-        key={tourDateData.id}
-        value={{
-          tourId: tourDateData.id,
-          tourInfo: transformTourDateData(tourDateData),
-        }}
-      >
-        {transformTourDateData(tourDateData)}
-      </option>
-    ))
-    .reverse();
 
   // TODO use id as value instead of object. then pass the id to action and use the id to find the data you need
-  function handleChange(e) {
-    const { tourId, tourInfo } = e.target.value;
-    dispatch(setSelectedTour(tourId, tourInfo));
-  }
 
   const buttons = [
     { color: 'grey', clickFunc: () => history.push('/events'), text: 'BACK' },
@@ -46,9 +35,19 @@ export default function TourDatesPage() {
     },
   ];
 
-  useEffect(() => {
-    dispatch(getTourDatesData(selectedEvent));
-  }, [dispatch, selectedEvent]);
+  const selectMenus = [
+    {
+      id: 'tourDates',
+      options: tourDatesData.sort((a, b) => b.id - a.id),
+      optionText: (option) => transformTourDateData(option),
+      handleChange: (e) => {
+        const { tourId, tourInfo } = tourDatesData.find(
+          (tour) => tour.id === Number(e.target.value),
+        );
+        dispatch(setSelectedTour(tourId, tourInfo));
+      },
+    },
+  ];
 
   // TODO after refactoring custom select, use it here
   return (
@@ -61,14 +60,14 @@ export default function TourDatesPage() {
           alt="logo"
         />
         <div className="form-container">
-          <select
-            id="tour-select"
-            className="custom-select"
-            onChange={handleChange}
-            value={tourDate}
-          >
-            {tourDatesList}
-          </select>
+          {selectMenus.map((selectMenu) => (
+            <CustomSelect
+              key={selectMenu.id}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...new CustomSelectProps(selectMenu)}
+            />
+          ))}
+
           <div className="btn-block">
             {buttons.map((button) => (
               <button

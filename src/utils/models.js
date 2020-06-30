@@ -103,12 +103,33 @@ export class ButtonTable {
 }
 
 export class ModalProps {
-  constructor({ type, header, body, cancel, confirm, bgFunc }) {
+  constructor({
+    type,
+    header,
+    body,
+    cancelText,
+    cancelFunc,
+    confirmText,
+    confirmFunc,
+    defaultShow,
+  }) {
     this.type = type;
     this.header = header;
     this.body = body;
-    this.cancel = cancel;
-    this.confirm = confirm;
-    this.bgFunc = bgFunc;
+    this.cancelText = cancelText;
+    this.cancelFunc = cancelFunc;
+    this.confirmText = confirmText;
+    this.confirmFunc = confirmFunc;
+    this.defaultShow = defaultShow;
+  }
+}
+
+export class CustomSelectProps {
+  constructor({ id, label, options, optionText, handleChange }) {
+    this.id = id;
+    this.label = label;
+    this.options = options;
+    this.optionText = optionText;
+    this.handleChange = handleChange;
   }
 }

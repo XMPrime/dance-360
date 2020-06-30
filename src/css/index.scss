@@ -279,12 +279,7 @@ p {
 
 /* JUDGE-2 */
 .generic-page {
-  // display: -ms-grid;
   display: flex;
-  // -ms-grid-columns: auto auto auto;
-  // grid-template-columns: repeat(6, 1 fr);
-  // -ms-grid-rows: auto auto auto;
-  // grid-template-rows: repeat(6, 1 fr);
   min-width: 100vw;
   min-height: 100vh;
   -webkit-box-align: center;
@@ -421,7 +416,7 @@ header {
   color: #fff;
   font-family: Arial;
   padding-left: 31px;
-  background: url(https://dezov.s3.amazonaws.com/media/dropdown-icon-pngffb-4b34-b3ae-cf22855ec4eb.png);
+  background: url(../imgs/angleDown.png);
   background-size: 35px;
   background-repeat: no-repeat;
   background-position: 93% 50%;
@@ -645,4 +640,16 @@ option {
 button {
   background-color: transparent;
   border: none;
+}
+
+// Select Menus
+.custom-select {
+  position: relative;
+}
+.fa-angle-down {
+  position: absolute;
+  font-size: 1.5rem;
+  color: white;
+  top: 40%;
+  right: 12%;
 }

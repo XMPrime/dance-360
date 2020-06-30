@@ -1,5 +1,6 @@
 // ACTION CREATORS:
 import axios from 'axios';
+import { toggleModal } from './modalsReducer';
 
 export function setTextInput(e) {
   const { id, value } = e.target;
@@ -19,14 +20,6 @@ export function login() {
 export function logout() {
   return {
     type: 'LOGOUT',
-  };
-}
-
-export function toggleModal(e) {
-  const { id } = e.target;
-  return {
-    type: 'TOGGLE_MODAL',
-    id,
   };
 }
 
@@ -57,7 +50,7 @@ export function tryLogin(username, password) {
       // eslint-disable-next-line no-console
       console.log(error);
       // display modal
-      dispatch(toggleModal({ target: { id: 'auth' } }));
+      dispatch(toggleModal('auth'));
     }
   };
 }
@@ -66,8 +59,6 @@ const initialState = {
   isLoggedIn: false,
   username: '',
   password: '',
-  authModal: false,
-  welcomeModal: true,
   isTabulator: false,
 };
 
@@ -81,11 +72,6 @@ export default function loginReducer(loginState = initialState, action) {
       return { ...loginState, isLoggedIn: false };
     case 'TABULATOR_CHECK':
       return { ...loginState, isTabulator: action.boolean };
-    case 'TOGGLE_MODAL':
-      return {
-        ...loginState,
-        [`${action.id}Modal`]: !loginState[`${action.id}Modal`],
-      };
     default:
       return loginState;
   }
