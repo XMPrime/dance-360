@@ -13,6 +13,7 @@ const axios = require('axios');
 
 export default function ScoringSideMenu() {
   const dispatch = useDispatch();
+  // TODO combine into 1 useSelector
   const selectedEvent = useSelector((state) => state.events.selectedEvent);
   const { tourDate, tourDateId } = useSelector((state) => state.tourDates);
   const { routinesData, targetRoutine } = useSelector((state) => state.scoring);

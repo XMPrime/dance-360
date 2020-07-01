@@ -40,7 +40,6 @@ export default function JudgeInfo() {
     // eslint-disable-next-line
   }, []);
 
-  // TODO refactor based on custom select
   const selectMenus = [
     {
       id: 'judge',
@@ -100,7 +99,6 @@ export default function JudgeInfo() {
     },
   ];
 
-  // TODO refactor for DRY
   const modalProps = {
     type: 'judgeInfo',
     header: 'Alert',

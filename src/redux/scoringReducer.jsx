@@ -35,6 +35,8 @@ export function setButtons(data) {
   return { type: 'SET_BUTTONS', data };
 }
 
+// TODO create a constnats file and put in the main URL to it (https://api.d360test.com/api)
+
 export function getButtonsData() {
   return async (dispatch) => {
     const url = 'https://api.d360test.com/api/coda/buttons';
@@ -102,6 +104,7 @@ export function getRoutinesData(tourDateId, judgeGroupId, judgePosition) {
           },
         })
         .then((response) => {
+          // TODO refactor below
           if (response.data.length !== 0) {
             let initialRoutine = response.data[0];
             let initialRoutineIndex = 0;

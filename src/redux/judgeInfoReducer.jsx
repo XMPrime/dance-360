@@ -78,6 +78,7 @@ const initialState = {
   modalLName: '',
 };
 
+// TODO fix implementation so you dont need action.data / action.data[0]
 export default function judgeInfoReducer(
   judgeInfoState = initialState,
   action,

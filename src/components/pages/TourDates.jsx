@@ -22,10 +22,6 @@ export default function TourDatesPage() {
     dispatch(getTourDatesData(selectedEvent));
   }, [dispatch, selectedEvent]);
 
-  // TODO use .sort instead of .reverse()
-
-  // TODO use id as value instead of object. then pass the id to action and use the id to find the data you need
-
   const buttons = [
     { color: 'grey', clickFunc: () => history.push('/events'), text: 'BACK' },
     {
@@ -35,6 +31,8 @@ export default function TourDatesPage() {
     },
   ];
 
+  // TODO use moment to convert date string into unix and use unix to compare for sort
+  // TODO use useState to save selected tour id, move current handleChange logic to when user clicks next
   const selectMenus = [
     {
       id: 'tourDates',
@@ -49,7 +47,6 @@ export default function TourDatesPage() {
     },
   ];
 
-  // TODO after refactoring custom select, use it here
   return (
     <div className="generic-page">
       <Header barIcon={false} title="CHOOSE YOUR CITY:" />

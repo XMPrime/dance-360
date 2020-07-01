@@ -64,6 +64,7 @@ export function findClosestDate(tourDatesData) {
   return closestDate;
 }
 
+// TODO redo below in moment
 export function transformTourDateData(tourDateData) {
   const monthNames = {
     1: 'Jan',
@@ -121,14 +122,19 @@ export default function tourDatesReducer(
   switch (action.type) {
     case 'SET_TOUR_DATES_DATA': {
       const closestDate = findClosestDate(action.data);
+      // const defaultTour =
+      //   action.data.find(
+      //     (tourDateData) => tourDateData.end_date === closestDate,
+      //   ) !== undefined
+      //     ? action.data.find(
+      //         (tourDateData) => tourDateData.end_date === closestDate,
+      //       )
+      //     : action.data[0];
+
       const defaultTour =
         action.data.find(
           (tourDateData) => tourDateData.end_date === closestDate,
-        ) !== undefined
-          ? action.data.find(
-              (tourDateData) => tourDateData.end_date === closestDate,
-            )
-          : action.data[0];
+        ) || action.data[0];
 
       return {
         ...tourDatesState,

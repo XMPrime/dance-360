@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// TODO pass down the handleChange and refactor this so that it is scalable
-// TODO use the id of the option as the value and use that id to find the option in options if needed
 export default function CustomSelect({
   id,
   label,

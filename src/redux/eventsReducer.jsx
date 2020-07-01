@@ -8,6 +8,7 @@ export function setEventsData(data) {
   };
 }
 
+// TODO change all promises to async/await
 export function getEventsData() {
   return async (dispatch) => {
     const url = 'https://api.d360test.com/api/coda/events';

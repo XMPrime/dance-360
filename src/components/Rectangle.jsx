@@ -4,6 +4,12 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { addButtonGrade } from '../redux/scoringReducer';
 
+const GRADE = {
+  GOOD: true,
+  BAD: false,
+  NEUTRAL: null,
+};
+
 export default function Rectangle({
   level_4_id,
   level_1_id,
@@ -12,20 +18,22 @@ export default function Rectangle({
   text,
 }) {
   const dispatch = useDispatch();
-  const [grade, setGrade] = useState(null);
+  const [grade, setGrade] = useState(GRADE.NEUTRAL);
   const { targetRoutineIndex } = useSelector((state) => state.scoring);
 
-  function getNextGrade(currentGrade) {
-    if (currentGrade === null) return true;
-    if (currentGrade === true) return false;
-    return null;
-  }
+  const getNextGrade = (currentGrade) =>
+    ({
+      [GRADE.NEUTRAL]: GRADE.GOOD,
+      [GRADE.GOOD]: GRADE.BAD,
+      [GRADE.BAD]: GRADE.NEUTRAL,
+    }[currentGrade]);
 
-  function getColor(currentGrade) {
-    if (currentGrade === null) return 'neutral';
-    if (currentGrade === true) return 'good';
-    return 'bad';
-  }
+  const getColor = (currentGrade) =>
+    ({
+      [GRADE.NEUTRAL]: 'neutral',
+      [GRADE.GOOD]: 'good',
+      [GRADE.BAD]: 'bad',
+    }[currentGrade]);
 
   function goodToggle(e) {
     e.preventDefault();
@@ -44,7 +52,7 @@ export default function Rectangle({
 
   useEffect(() => {
     // Resets Rectangle's grade to neutral if a new routine is rendered
-    if (grade !== null) setGrade(null);
+    if (grade !== GRADE.NEUTRAL) setGrade(GRADE.NEUTRAL);
     // eslint-disable-next-line
   }, [targetRoutineIndex]);
 

@@ -36,8 +36,7 @@ export default function ScoringBreakdown() {
   ];
 
   function handleChange(e) {
-    const { value } = e.target;
-    dispatch(editNotes(value));
+    dispatch(editNotes(e.target.value));
   }
 
   function scoreTabulator(e, buttons) {
@@ -47,42 +46,39 @@ export default function ScoringBreakdown() {
     buttons
       .filter((button) => button.good !== null)
       .forEach((button) => {
-        if (!categories[`${button.level_1_id}`]) {
-          categories[`${button.level_1_id}`] = {
+        if (!categories[button.level_1_id]) {
+          categories[button.level_1_id] = {
             good: 0,
             bad: 0,
           };
         }
-        if (button.good) {
-          categories[`${button.level_1_id}`].good += 1;
-        } else {
-          categories[`${button.level_1_id}`].bad += 1;
-        }
-        const { good, bad } = categories[`${button.level_1_id}`];
-        categories[`${button.level_1_id}`].ratio = good / (good + bad);
+        categories[button.level_1_id][button.good ? 'good' : 'bad'] += 1;
+        const { good, bad } = categories[button.level_1_id];
+        categories[button.level_1_id].ratio = good / (good + bad);
       });
 
-    let strongest = { level_1_id: 0, ratio: 0 };
-    let weakest = { level_1_id: 0, ratio: 1 };
-    Object.entries(categories).forEach((category) => {
-      if (category[1].ratio > strongest.ratio) {
-        strongest = {
-          level_1_id: Number(category[0]),
-          ratio: category[1].ratio,
-        };
-      }
-      if (category[1].ratio < weakest.ratio) {
-        weakest = {
-          level_1_id: Number(category[0]),
-          ratio: category[1].ratio,
-        };
-      }
-    });
+    // const strongest = { level_1_id: 0, ratio: 0 };
+    // const weakest = { level_1_id: 0, ratio: 1 };
+    // Object.entries(categories).forEach(([level_1_id, properties]) => {
+    //   if (properties.ratio > strongest.ratio) {
+    //     strongest.level_1_id = Number(level_1_id);
+    //     strongest.ratio = properties.ratio;
+    //   }
+    //   if (properties.ratio < weakest.ratio) {
+    //     weakest.level_1_id = Number(level_1_id);
+    //     weakest.ratio = properties.ratio;
+    //   }
+    // });
 
-    dispatch(setStrongestLevel1Id(strongest));
-    dispatch(setWeakestLevel1Id(weakest));
+    const sortedCategories = Object.entries(categories)
+      .map(([level_1_id, { ratio }]) => ({ level_1_id, ratio }))
+      .sort((a, b) => a.ratio - b.ratio);
+
+    dispatch(setStrongestLevel1Id(sortedCategories[0]));
+    dispatch(setWeakestLevel1Id(sortedCategories[sortedCategories.length - 1]));
   }
 
+  // TODO refactor html to break down into smaller components
   return (
     <div className="scoring-breakdown-container">
       {popUp ? <ScoringBreakdownPopUp /> : null}
