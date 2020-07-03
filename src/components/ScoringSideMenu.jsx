@@ -8,6 +8,7 @@ import {
   setTargetRoutine,
   toggleSideMenu,
 } from '../redux/scoringReducer';
+import CONST from '../utils/constants';
 
 const axios = require('axios');
 
@@ -69,24 +70,30 @@ export default function ScoringSideMenu() {
   }
 
   function refreshRoutines(data) {
-    const routinesUrl = 'https://api.d360test.com/api/coda/routines';
+    const routinesUrl = `${CONST.API}/coda/routines`;
+    return async () => {
+      try {
+        const response = await axios.get(routinesUrl, data);
 
-    axios.get(routinesUrl, data).then((response) => {
-      if (response.data.length !== 0) {
-        let initialRoutine = response.data[0];
-        let initialRoutineIndex = 0;
-        for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].score === null) {
-            initialRoutine = response.data[i];
-            initialRoutineIndex = i;
-            dispatch(setRoutinesData(response.data));
-            dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
-            break;
+        if (response.data.length !== 0) {
+          let initialRoutine = response.data[0];
+          let initialRoutineIndex = 0;
+          for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].score === null) {
+              initialRoutine = response.data[i];
+              initialRoutineIndex = i;
+              dispatch(setRoutinesData(response.data));
+              dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
+              break;
+            }
           }
+          dispatch(setRoutinesData(response.data));
         }
-        dispatch(setRoutinesData(response.data));
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
       }
-    });
+    };
   }
 
   function handleKeyPress(e, routine, i) {

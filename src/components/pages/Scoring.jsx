@@ -51,6 +51,7 @@ export default function Scoring() {
     state.scoring,
     state.modals,
   ]);
+  console.log(buttons);
 
   const {
     performance_division_level_id,

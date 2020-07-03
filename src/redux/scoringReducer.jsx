@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-console */
 
+import CONST from '../utils/constants';
 import { ScorePostData } from '../utils/models';
 
 // ACTION CREATORS:
@@ -39,11 +40,11 @@ export function setButtons(data) {
 
 export function getButtonsData() {
   return async (dispatch) => {
-    const url = 'https://api.d360test.com/api/coda/buttons';
+    const url = `${CONST.API}/coda/buttons`;
     try {
-      await axios.get(url).then((response) => {
-        dispatch(setButtonsData(response.data));
-      });
+      const response = await axios.get(url);
+      console.log(response);
+      dispatch(setButtonsData(response.data));
     } catch (error) {
       console.log(error);
     }
@@ -52,17 +53,14 @@ export function getButtonsData() {
 
 export function getScoringBreakdownData(selectedEvent) {
   return async (dispatch) => {
-    const url = 'https://api.d360test.com/api/coda/scoring-breakdown';
+    const url = `${CONST.API}/coda/scoring-breakdown`;
     try {
-      await axios
-        .get(url, {
-          params: {
-            event_id: selectedEvent.id,
-          },
-        })
-        .then((response) => {
-          dispatch(setScoringBreakdownData(response.data));
-        });
+      const response = await axios.get(url, {
+        params: {
+          event_id: selectedEvent.id,
+        },
+      });
+      dispatch(setScoringBreakdownData(response.data));
     } catch (error) {
       console.log(error);
     }
@@ -93,33 +91,29 @@ export function setTargetRoutine(targetRoutine, i = 0) {
 
 export function getRoutinesData(tourDateId, judgeGroupId, judgePosition) {
   return async (dispatch) => {
-    const url = 'https://api.d360test.com/api/coda/routines';
+    const url = `${CONST.API}/coda/routines`;
     try {
-      await axios
-        .get(url, {
-          params: {
-            tour_date_id: tourDateId,
-            competition_group_id: judgeGroupId,
-            position: judgePosition,
-          },
-        })
-        .then((response) => {
-          // TODO refactor below
-          if (response.data.length !== 0) {
-            let initialRoutine = response.data[0];
-            let initialRoutineIndex = 0;
-            for (let i = 0; i < response.data.length; i += 1) {
-              if (response.data[i].score === null) {
-                initialRoutine = response.data[i];
-                initialRoutineIndex = i;
-                dispatch(setRoutinesData(response.data));
-                dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
-                break;
-              }
-            }
-            dispatch(setRoutinesData(response.data));
+      const response = await axios.get(url, {
+        params: {
+          tour_date_id: tourDateId,
+          competition_group_id: judgeGroupId,
+          position: judgePosition,
+        },
+      });
+
+      if (response.data.length !== 0) {
+        let initialRoutine = response.data[0];
+        let initialRoutineIndex = 0;
+        for (let i = 0; i < response.data.length; i += 1) {
+          if (response.data[i].score === null) {
+            initialRoutine = response.data[i];
+            initialRoutineIndex = i;
+            break;
           }
-        });
+        }
+        dispatch(setRoutinesData(response.data));
+        dispatch(setTargetRoutine(initialRoutine, initialRoutineIndex));
+      }
     } catch (error) {
       console.log(error);
     }
@@ -141,8 +135,8 @@ export function toggleScoringModal() {
 
 export function submitScore() {
   return async (dispatch, getState) => {
-    const scoreUrl = 'https://api.d360test.com/api/coda/score';
-    const socketUrl = 'https://api.d360test.com/api/socket-scoring';
+    const scoreUrl = `${CONST.API}/coda/score`;
+    const socketUrl = `${CONST.API}/socket-scoring`;
 
     const {
       login,
@@ -181,28 +175,24 @@ export function submitScore() {
     } = scorePostData;
 
     try {
-      await axios.post(scoreUrl, scorePostData).then((response) => {
-        if (response.status === 200) {
-          axios
-            .post(socketUrl, {
-              tour_date_id,
-              coda: true,
-              data: {
-                competition_group_id,
-                date_routine_id,
-              },
-            })
-            .then(() => {
-              dispatch(
-                setTargetRoutine(
-                  routinesData[targetRoutineIndex + 1],
-                  targetRoutineIndex + 1,
-                ),
-              );
-              window.scrollTo(0, 0);
-            });
-        }
-      });
+      const response = await axios.post(scoreUrl, scorePostData);
+      if (response.status === 200) {
+        await axios.post(socketUrl, {
+          tour_date_id,
+          coda: true,
+          data: {
+            competition_group_id,
+            date_routine_id,
+          },
+        });
+        dispatch(
+          setTargetRoutine(
+            routinesData[targetRoutineIndex + 1],
+            targetRoutineIndex + 1,
+          ),
+        );
+        window.scrollTo(0, 0);
+      }
     } catch (error) {
       console.log(error);
     }

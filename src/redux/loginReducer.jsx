@@ -1,6 +1,8 @@
 // ACTION CREATORS:
-import axios from 'axios';
+import CONST from '../utils/constants';
 import { toggleModal } from './modalsReducer';
+
+const axios = require('axios');
 
 export function setTextInput(e) {
   const { id, value } = e.target;
@@ -32,20 +34,17 @@ export function tabulatorCheck(data) {
 
 export function tryLogin(username, password) {
   return async (dispatch) => {
-    const url = 'https://api.d360test.com/api/auth/signin';
+    const url = `${CONST.API}/auth/signin`;
 
     try {
-      await axios
-        .post(url, {
-          name: username,
-          password,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            dispatch(login());
-            dispatch(tabulatorCheck(response.data.roles));
-          }
-        });
+      const response = await axios.post(url, {
+        name: username,
+        password,
+      });
+      if (response.status === 200) {
+        dispatch(login());
+        dispatch(tabulatorCheck(response.data.roles));
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);

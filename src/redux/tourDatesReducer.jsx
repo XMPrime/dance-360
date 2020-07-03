@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 // ACTION CREATORS:
+import CONST from '../utils/constants';
+
 const axios = require('axios');
 
 export function setTourDatesData(data) {
@@ -11,18 +13,15 @@ export function setTourDatesData(data) {
 
 export function getTourDatesData(selectedEvent) {
   return async (dispatch) => {
-    const url = 'https://api.d360test.com/api/coda/tour-dates';
+    const url = `${CONST.API}/coda/tour-dates`;
     try {
-      await axios
-        .get(url, {
-          params: {
-            event_id: selectedEvent.id,
-            season_id: selectedEvent.current_season_id,
-          },
-        })
-        .then((response) => {
-          dispatch(setTourDatesData(response.data));
-        });
+      const response = await axios.get(url, {
+        params: {
+          event_id: selectedEvent.id,
+          season_id: selectedEvent.current_season_id,
+        },
+      });
+      dispatch(setTourDatesData(response.data));
     } catch (error) {
       console.log(error);
     }

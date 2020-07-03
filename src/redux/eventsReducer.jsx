@@ -1,4 +1,7 @@
 // ACTION CREATORS:
+
+import CONST from '../utils/constants';
+
 const axios = require('axios');
 
 export function setEventsData(data) {
@@ -11,12 +14,11 @@ export function setEventsData(data) {
 // TODO change all promises to async/await
 export function getEventsData() {
   return async (dispatch) => {
-    const url = 'https://api.d360test.com/api/coda/events';
+    const url = `${CONST.API}/coda/events`;
 
     try {
-      await axios.get(url).then((response) => {
-        dispatch(setEventsData(response.data));
-      });
+      const response = await axios.get(url);
+      dispatch(setEventsData(response.data));
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);

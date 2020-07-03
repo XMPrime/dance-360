@@ -9,6 +9,7 @@ import {
   setStrongestLevel1Id,
   setWeakestLevel1Id,
 } from '../../redux/scoringBreakdownReducer';
+import CONST from '../../utils/constants';
 
 const axios = require('axios');
 
@@ -61,33 +62,29 @@ export default function ScoringModal() {
     },
   };
 
-  function submitScore(data) {
-    const scoreUrl = 'https://api.d360test.com/api/coda/score';
-    const socketUrl = 'https://api.d360test.com/api/socket-scoring';
+  async function submitScore(data) {
+    const scoreUrl = `${CONST.API}/coda/score`;
+    const socketUrl = `${CONST.API}/socket-scoring`;
 
-    axios
-      .post(scoreUrl, data)
-      .then((response) => {
-        if (response.status === 200) {
-          axios
-            .post(socketUrl, {
-              tour_date_id,
-              coda: true,
-              data: {
-                competition_group_id: judgeGroupId,
-                date_routine_id,
-              },
-            })
-            .then(() => {
-              dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
-              window.scrollTo(0, 0);
-            });
-        }
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log(error.response);
-      });
+    try {
+      const scoreResponse = await axios.post(scoreUrl, data);
+
+      if (scoreResponse.status === 200) {
+        await axios.post(socketUrl, {
+          tour_date_id,
+          coda: true,
+          data: {
+            competition_group_id: judgeGroupId,
+            date_routine_id,
+          },
+        });
+        dispatch(setTargetRoutine(nextRoutine, nextRoutineIndex));
+        window.scrollTo(0, 0);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error.response);
+    }
   }
 
   return (

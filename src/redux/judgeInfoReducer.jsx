@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+import CONST from '../utils/constants';
+
 const axios = require('axios');
 
 export function setJudgesData(data) {
@@ -17,11 +19,10 @@ export function setCompetitionGroupsData(data) {
 
 export function getJudgesData() {
   return async (dispatch) => {
-    const url = 'https://api.d360test.com/api/coda/judges';
+    const url = `${CONST.API}/coda/judges`;
     try {
-      await axios.get(url).then((response) => {
-        dispatch(setJudgesData(response.data));
-      });
+      const response = await axios.get(url);
+      dispatch(setJudgesData(response.data));
     } catch (error) {
       console.log(error);
     }
@@ -30,11 +31,10 @@ export function getJudgesData() {
 
 export function getCompetitionGroupsData() {
   return async (dispatch) => {
-    const url = 'https://api.d360test.com/api/coda/competition-groups';
+    const url = `${CONST.API}/coda/competition-groups`;
     try {
-      await axios.get(url).then((response) => {
-        dispatch(setCompetitionGroupsData(response.data));
-      });
+      const response = await axios.get(url);
+      dispatch(setCompetitionGroupsData(response.data));
     } catch (error) {
       console.log(error);
     }

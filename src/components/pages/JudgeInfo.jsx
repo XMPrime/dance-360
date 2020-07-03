@@ -13,6 +13,7 @@ import { toggleModal } from '../../redux/modalsReducer';
 import Modal from '../generic/Modal';
 import CustomSelect from '../generic/CustomSelect';
 import { ModalProps, CustomSelectProps } from '../../utils/models';
+import CONST from '../../utils/constants';
 
 const axios = require('axios');
 
@@ -111,26 +112,23 @@ export default function JudgeInfo() {
   // TODO convert to async/await
   async function handleSubmit(e) {
     e.preventDefault();
-    const url = 'https://api.d360test.com/api/coda/check-judge';
+    const url = `${CONST.API}/coda/check-judge`;
     try {
-      await axios
-        .get(url, {
-          params: {
-            tour_date_id: tourDateId,
-            competition_group_id: judgeGroupId,
-            position: judgePosition,
-          },
-        })
-        .then((response) => {
-          const { fname, lname } = response.data;
-
-          if (response.data === '') {
-            history.push('/scoring');
-          } else {
-            dispatch(getModalJudgeName(fname, lname));
-            dispatch(toggleModal('judgeInfo'));
-          }
-        });
+      const response = await axios.get(url, {
+        params: {
+          tour_date_id: tourDateId,
+          competition_group_id: judgeGroupId,
+          position: judgePosition,
+        },
+      });
+      const { fname, lname } = response.data;
+      if (response.data === '') {
+        history.push('/scoring');
+        // TODO Toggle some modal saying its missing routine data
+      } else {
+        dispatch(getModalJudgeName(fname, lname));
+        dispatch(toggleModal('judgeInfo'));
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);

@@ -14,6 +14,8 @@ import {
 } from '../redux/scoringBreakdownReducer';
 import ScoringBreakdownPopUp from './ScoringBreakdownPopUp';
 import { infoIcon, plusIcon, minusIcon } from '../utils/constants';
+import IconButton from './generic/IconButton';
+import CustomCheckbox from './generic/CustomCheckbox';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
@@ -91,21 +93,21 @@ export default function ScoringBreakdown() {
       >
         <div className="scoring-breakdown-header">
           <div className="scoring-breakdown-header-text">Scoring Breakdown</div>
-          <button
-            onClick={() => dispatch(toggleScoringBreakdownPopUp())}
-            type="button"
-          >
-            <i className={infoIcon} />
-          </button>
+          <IconButton
+            icon={infoIcon}
+            handleClick={() => dispatch(toggleScoringBreakdownPopUp())}
+          />
         </div>
         <div className="score-container">
-          <button onClick={() => dispatch(minusScore())} type="button">
-            <i className={minusIcon} />
-          </button>
+          <IconButton
+            icon={minusIcon}
+            handleClick={() => dispatch(minusScore())}
+          />
           <span className="score">{score}</span>
-          <button onClick={() => dispatch(addScore())} type="button">
-            <i className={plusIcon} />
-          </button>
+          <IconButton
+            icon={plusIcon}
+            handleClick={() => dispatch(addScore())}
+          />
         </div>
 
         <div className="scoring-breakdown-header">
@@ -117,28 +119,25 @@ export default function ScoringBreakdown() {
           value={note}
         />
         {checkboxes.map(({ name, value, label }) => (
-          <div key={name} className="checkbox-container">
-            <input
-              className="checkbox-style"
-              type="checkbox"
-              name={name}
-              onClick={(e) => dispatch(toggleCheckbox(e))}
-              value={value}
-            />
-            <div className="checkbox-label-style">{label}</div>
-          </div>
+          <CustomCheckbox
+            key={name}
+            name={name}
+            label={label}
+            handleClick={(e) => dispatch(toggleCheckbox(e))}
+            value={value}
+          />
         ))}
         <button className="btn btn-submit" type="submit">
           SUBMIT
         </button>
       </form>
-      {popUp ? (
+      {popUp && (
         <div
           className="modal-background transparent"
           onClick={() => dispatch(toggleScoringBreakdownPopUp())}
           role="alertdialog"
         />
-      ) : null}
+      )}
     </div>
   );
 }

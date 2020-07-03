@@ -6,14 +6,12 @@ export default function PopUp() {
     (state) => state.scoring.scoringBreakdownData,
   );
   // TODO change all functions to use implicit returns when able
-  const scoringBreakdown = scoringBreakdownData.map((breakdown) => {
-    return (
-      <div className="scoring-breakdown-pop-up--breakdown" key={breakdown.id}>
-        <div className="award">{breakdown.award}</div>
-        <div className="score">{`${breakdown.lowest}-${breakdown.highest}`}</div>
-      </div>
-    );
-  });
+  const scoringBreakdown = scoringBreakdownData.map((breakdown) => (
+    <div className="scoring-breakdown-pop-up--breakdown" key={breakdown.id}>
+      <div className="award">{breakdown.award}</div>
+      <div className="score">{`${breakdown.lowest}-${breakdown.highest}`}</div>
+    </div>
+  ));
 
   return (
     <div className="scoring-breakdown-pop-up">
