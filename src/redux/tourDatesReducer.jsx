@@ -1,5 +1,7 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-console */
 // ACTION CREATORS:
+import moment from 'moment';
 import CONST from '../utils/constants';
 
 const axios = require('axios');
@@ -44,16 +46,17 @@ export function setSelectedTour(tourId, tourDate) {
 
 // TOUR DATES PAGE LOGIC
 export function findClosestDate(tourDatesData) {
-  const now = new Date();
-  let closest = Infinity;
-  let closestDate;
+  const now = moment();
+  let closestDate = now.add(10, 'year');
 
   tourDatesData.forEach((tourDate) => {
-    const endDate = new Date(tourDate.end_date);
+    const { end_date } = tourDate;
 
-    if (Math.abs(now - endDate) < Math.abs(now - closest) && now < endDate) {
-      closest = Date.parse(endDate);
-      closestDate = tourDate.end_date;
+    if (
+      moment(end_date).diff(now) < moment(closestDate).diff(now) &&
+      now.isBefore(end_date)
+    ) {
+      closestDate = end_date;
     }
   });
 
@@ -64,46 +67,23 @@ export function findClosestDate(tourDatesData) {
 }
 
 // TODO redo below in moment
-export function transformTourDateData(tourDateData) {
-  const monthNames = {
-    1: 'Jan',
-    2: 'Feb',
-    3: 'Mar',
-    4: 'Apr',
-    5: 'May',
-    6: 'Jun',
-    7: 'Jul',
-    8: 'Aug',
-    9: 'Sep',
-    10: 'Oct',
-    11: 'Nov',
-    12: 'Dec',
-  };
-  const startDate = tourDateData.start_date;
-  const endDate = tourDateData.end_date;
-  const cityName = tourDateData.event_city.name;
-  // Ternary statement used to get rid of 0 from single digit days or months
-  const startDay =
-    startDate[8] !== '0' ? `${startDate[8]}${startDate[9]}` : `${startDate[9]}`;
-  const endDay =
-    endDate[8] !== '0' ? `${endDate[8]}${endDate[9]}` : `${endDate[9]}`;
-  // Months converted to INTs to work with monthNames
-  const startMonth =
-    startDate[5] !== '0'
-      ? Number(`${startDate[5]}${startDate[6]}`)
-      : startDate[6];
-  const endMonth =
-    endDate[5] !== '0' ? Number(`${endDate[5]}${endDate[6]}`) : `${endDate[6]}`;
-  const startYear = startDate[0] + startDate[1] + startDate[2] + startDate[3];
-  const endYear = endDate[0] + endDate[1] + endDate[2] + endDate[3];
-
-  if (startYear !== endYear) {
-    return `${cityName} - ${monthNames[startMonth]} ${startDay}, ${startYear} - ${monthNames[endMonth]} ${endDay}, ${endYear}`;
+export function transformTourDateData({ start_date, end_date, event_city }) {
+  if (moment(end_date).isAfter(start_date, 'year')) {
+    // 'San Diego - Dec 29, 2019 - Jan 5, 2020
+    return `${event_city.name}: ${moment(start_date).format(
+      'MMM D, YYYY',
+    )}-${moment(end_date).format('MMM D, YYYY')}`;
   }
-  if (startMonth !== endMonth) {
-    return `${cityName} - ${monthNames[startMonth]} ${startDay} - ${monthNames[endMonth]} ${endDay}, ${endYear}`;
+  if (moment(end_date).isAfter(start_date, 'month')) {
+    // 'San Diego - Nov 29-Dec 5, 2019
+    return `${event_city.name}: ${moment(start_date).format(
+      'MMM D',
+    )} - ${moment(end_date).format('MMM D, YYYY')}`;
   }
-  return `${cityName} - ${monthNames[startMonth]} ${startDay}-${endDay}, ${startYear}`;
+  // 'San Diego - Dec 29-30, 2019
+  return `${event_city.name}: ${moment(start_date).format('MMM D')}-${moment(
+    end_date,
+  ).format('D, YYYY')}`;
 }
 
 // REDUCER

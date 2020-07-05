@@ -14,13 +14,18 @@ const axios = require('axios');
 
 export default function ScoringSideMenu() {
   const dispatch = useDispatch();
-  // TODO combine into 1 useSelector
-  const selectedEvent = useSelector((state) => state.events.selectedEvent);
-  const { tourDate, tourDateId } = useSelector((state) => state.tourDates);
-  const { routinesData, targetRoutine } = useSelector((state) => state.scoring);
-  const { judgeGroupId, judgePosition } = useSelector(
-    (state) => state.judgeInfo,
-  );
+
+  const [
+    selectedEvent,
+    { tourDate, tourDateId },
+    { routinesData, targetRoutine },
+    { judgeGroupId, judgePosition },
+  ] = useSelector((state) => [
+    state.events.selectedEvent,
+    state.tourDates,
+    state.scoring,
+    state.judgeInfo,
+  ]);
 
   const getData = {
     params: {
@@ -34,6 +39,7 @@ export default function ScoringSideMenu() {
     return String.fromCharCode(c.charCodeAt(0) + 1);
   }
 
+  // TODO use has_a property?
   function numbersTransformer(numbers) {
     const newArr = [...numbers];
     for (let i = 0, char = 'a'; i < numbers.length; i++) {
