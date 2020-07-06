@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import useForm from 'react-hook-form';
+import moment from 'moment';
 import Header from '../generic/Header';
 import CustomSelect from '../generic/CustomSelect';
 import {
@@ -13,6 +15,7 @@ import { CustomSelectProps } from '../../utils/models';
 export default function TourDatesPage() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { register, handleSubmit, errors } = useForm();
   const [selectedEvent, { tourDatesData }] = useSelector((state) => [
     state.events.selectedEvent,
     state.tourDates,
@@ -36,13 +39,15 @@ export default function TourDatesPage() {
   const selectMenus = [
     {
       id: 'tourDates',
-      options: tourDatesData.sort((a, b) => b.id - a.id),
+      options: tourDatesData.sort((a, b) =>
+        moment(b.end_date).diff(moment(a.end_date)),
+      ),
       optionText: (option) => transformTourDateData(option),
       handleChange: (e) => {
-        const { tourId, tourInfo } = tourDatesData.find(
+        const selectedTour = tourDatesData.find(
           (tour) => tour.id === Number(e.target.value),
         );
-        dispatch(setSelectedTour(tourId, tourInfo));
+        dispatch(setSelectedTour(selectedTour));
       },
     },
   ];

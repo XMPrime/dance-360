@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-console */
-// ACTION CREATORS:
+
 import moment from 'moment';
 import CONST from '../utils/constants';
 
@@ -30,32 +30,14 @@ export function getTourDatesData(selectedEvent) {
   };
 }
 
-export function setSelectedEvent(event) {
-  return {
-    type: 'SET_SELECTED_EVENT',
-    event,
-  };
-}
-export function setSelectedTour(tourId, tourDate) {
-  return {
-    type: 'SET_SELECTED_TOUR',
-    tourId,
-    tourDate,
-  };
-}
-
-// TOUR DATES PAGE LOGIC
 export function findClosestDate(tourDatesData) {
   const now = moment();
-  let closestDate = now.add(10, 'year');
+  let closestDate = moment().add(10, 'year');
 
   tourDatesData.forEach((tourDate) => {
     const { end_date } = tourDate;
 
-    if (
-      moment(end_date).diff(now) < moment(closestDate).diff(now) &&
-      now.isBefore(end_date)
-    ) {
+    if (Math.abs(now.diff(end_date)) < Math.abs(now.diff(closestDate))) {
       closestDate = end_date;
     }
   });
@@ -86,7 +68,13 @@ export function transformTourDateData({ start_date, end_date, event_city }) {
   ).format('D, YYYY')}`;
 }
 
-// REDUCER
+export function setSelectedTour(selectedTour) {
+  return {
+    type: 'SET_SELECTED_TOUR',
+    tourDateId: Number(selectedTour.id),
+    tourDate: transformTourDateData(selectedTour),
+  };
+}
 
 const initialState = {
   tourDatesData: [],
@@ -114,7 +102,6 @@ export default function tourDatesReducer(
         action.data.find(
           (tourDateData) => tourDateData.end_date === closestDate,
         ) || action.data[0];
-
       return {
         ...tourDatesState,
         tourDatesData: action.data,
@@ -126,7 +113,7 @@ export default function tourDatesReducer(
     case 'SET_SELECTED_TOUR':
       return {
         ...tourDatesState,
-        tourDateId: Number(action.tourId),
+        tourDateId: Number(action.tourDateId),
         tourDate: action.tourDate,
       };
     default:

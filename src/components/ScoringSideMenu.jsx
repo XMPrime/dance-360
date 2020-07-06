@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-nested-ternary */
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
@@ -34,38 +35,6 @@ export default function ScoringSideMenu() {
       position: judgePosition,
     },
   };
-
-  function nextChar(c) {
-    return String.fromCharCode(c.charCodeAt(0) + 1);
-  }
-
-  // TODO use has_a property?
-  function numbersTransformer(numbers) {
-    const newArr = [...numbers];
-    for (let i = 0, char = 'a'; i < numbers.length; i++) {
-      const checker = numbers.filter((number) => number === numbers[i]);
-      if (checker.length > 1) {
-        if (numbers[i] === null) {
-          newArr[i] = i + 1;
-        } else if (numbers[i] === numbers[i + 1]) {
-          newArr[i] = numbers[i] + char;
-          char = nextChar(char);
-        } else if (numbers[i] < numbers[i + 1]) {
-          newArr[i] = numbers[i] + char;
-          char = 'a';
-        } else if (numbers[i] === numbers[i - 1]) {
-          char = nextChar(char);
-          newArr[i] = numbers[i] + char;
-        } else {
-          char = 'a';
-          newArr[i] = numbers[i] + char;
-        }
-      } else {
-        char = 'a';
-      }
-    }
-    return newArr;
-  }
 
   function handleClick(routine, i) {
     if (routine.score === null) {
@@ -118,12 +87,9 @@ export default function ScoringSideMenu() {
     return 'scoring-side-menu__routine--restricted';
   }
 
-  const routineNumbers = routinesData
-    ? numbersTransformer(routinesData.map((routine) => routine.number))
-    : [];
-
   const routinesList = routinesData.length
     ? routinesData.map((routine, i) => (
+        // eslint-disable-next-line react/jsx-indent
         <div
           className={`scoring-side-menu__routine ${getClassName(routine)}`}
           key={routine.date_routine_id}
@@ -132,7 +98,9 @@ export default function ScoringSideMenu() {
           tabIndex={i}
           role="button"
         >
-          <div className="routine-text__list-number">{`#${routineNumbers[i]}`}</div>
+          <div className="routine-text__list-number">{`#${
+            routine.number ? routine.number : i + 1
+          }${routine.has_a ? 'a' : ''}`}</div>
           <div className="routine-text__routine-name">{routine.routine}</div>
         </div>
       ))

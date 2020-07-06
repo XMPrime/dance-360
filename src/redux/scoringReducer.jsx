@@ -43,7 +43,6 @@ export function getButtonsData() {
     const url = `${CONST.API}/coda/buttons`;
     try {
       const response = await axios.get(url);
-      console.log(response);
       dispatch(setButtonsData(response.data));
     } catch (error) {
       console.log(error);

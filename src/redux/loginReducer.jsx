@@ -65,7 +65,7 @@ export default function loginReducer(loginState = initialState, action) {
   switch (action.type) {
     case 'SET_TEXT_INPUT':
       // TODO change all template literal where its not needed
-      return { ...loginState, [`${action.id}`]: action.value };
+      return { ...loginState, [action.id]: action.value };
     case 'LOGIN':
       return { ...loginState, isLoggedIn: true };
     case 'LOGOUT':

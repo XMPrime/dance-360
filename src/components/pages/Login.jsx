@@ -17,7 +17,6 @@ export default function Login() {
     { welcomeModal, authModal },
   ] = useSelector((state) => [state.login, state.modals]);
 
-  // welcomeModal, authModal
   const { register, handleSubmit, errors } = useForm();
 
   const errorMessage = (

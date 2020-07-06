@@ -51,7 +51,6 @@ export default function Scoring() {
     state.scoring,
     state.modals,
   ]);
-  console.log(buttons);
 
   const {
     performance_division_level_id,
@@ -79,7 +78,7 @@ export default function Scoring() {
         : '';
     dispatch(setButtons(buttonsList));
     // eslint-disable-next-line
-  }, [buttonsData, targetRoutineIndex]);
+  }, [buttonsData, targetRoutine]);
 
   function createButtonsList(data, id) {
     const targetButtonData = data.find((element) => element.level_id === id);
