@@ -9,10 +9,6 @@ export default function JudgeDropdownMenu() {
 
   const buttons = [
     {
-      text: 'CHANGE JUDGE INFO',
-      clickFunction: () => history.push('/judge-info'),
-    },
-    {
       text: 'SIGN OUT',
       clickFunction: () => dispatch(logout()),
     },
@@ -20,6 +16,15 @@ export default function JudgeDropdownMenu() {
 
   return (
     <div className="judge-dropdown-menu">
+      {history.location.pathname === '/scoring' && (
+        <button
+          className="judge-dropdown-menu-rectangle"
+          onClick={() => history.push('/judge-info')}
+          type="button"
+        >
+          CHANGE JUDGE INFO
+        </button>
+      )}
       {buttons.map(({ text, clickFunction }) => (
         <button
           key={text}

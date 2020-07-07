@@ -68,12 +68,11 @@ const initialState = {
   competitionGroupsData: [],
   judgeId: '',
   judgeFullName: 'Anonymous',
-  judgePosition: 1,
-  judgeIsTeacher: true,
+  judgePosition: null,
+  judgeIsTeacher: false,
   judgeGroupName: null,
   judgeGroupId: null,
   judgeHeadshot: null,
-  modal: false,
   modalFName: '',
   modalLName: '',
 };
@@ -88,17 +87,14 @@ export default function judgeInfoReducer(
       return {
         ...judgeInfoState,
         judgesData: action.data,
-        judgeId: action.data[0].id,
-        judgeFullName: `${action.data[0].fname} ${action.data[0].lname}`,
       };
     case 'SET_COMPETITION_GROUPS_DATA':
       return {
         ...judgeInfoState,
         competitionGroupsData: action.data,
-        judgeGroupId: action.data[0].id,
-        judgeGroupName: action.data[0].name,
       };
     case 'SET_JUDGE_INFO':
+      console.log(judgeInfoState);
       return { ...judgeInfoState, ...action.infoObj };
     case 'TOGGLE_JUDGE_INFO_MODAL':
       return {

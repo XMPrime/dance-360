@@ -12,12 +12,11 @@ import { envelopeIcon, lockIcon } from '../../utils/constants';
 export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const { register, handleSubmit, errors } = useForm();
   const [
     { username, password },
     { welcomeModal, authModal },
   ] = useSelector((state) => [state.login, state.modals]);
-
-  const { register, handleSubmit, errors } = useForm();
 
   const errorMessage = (
     <span className="error-message">This field is required!</span>

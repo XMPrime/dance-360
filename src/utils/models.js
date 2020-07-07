@@ -125,11 +125,12 @@ export class ModalProps {
 }
 
 export class CustomSelectProps {
-  constructor({ id, label, options, optionText, handleChange }) {
+  constructor({ id, label, options, optionText, changeFunc, defaultOption }) {
     this.id = id;
     this.label = label;
     this.options = options;
     this.optionText = optionText;
-    this.handleChange = handleChange;
+    this.changeFunc = changeFunc;
+    this.defaultOption = defaultOption;
   }
 }

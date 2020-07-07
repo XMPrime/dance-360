@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import useForm from 'react-hook-form';
@@ -8,28 +8,45 @@ import CustomSelect from '../generic/CustomSelect';
 import {
   getTourDatesData,
   setSelectedTour,
-  transformTourDateData,
 } from '../../redux/tourDatesReducer';
 import { CustomSelectProps } from '../../utils/models';
+import {
+  findClosestDate,
+  transformTourDateData,
+} from '../../utils/helperFunctions';
 
 export default function TourDatesPage() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { register, handleSubmit, errors } = useForm();
-  const [selectedEvent, { tourDatesData }] = useSelector((state) => [
-    state.events.selectedEvent,
-    state.tourDates,
-  ]);
+  const { register, handleSubmit } = useForm();
+  const [
+    selectedEvent,
+    { tourDatesData, tourDateId },
+  ] = useSelector((state) => [state.events.selectedEvent, state.tourDates]);
+
+  const [defaultTour, setDefaultTour] = useState(
+    tourDateId ||
+      (tourDatesData &&
+        tourDatesData.find(
+          (data) => data.end_date === findClosestDate(tourDatesData),
+        )),
+  );
 
   useEffect(() => {
     dispatch(getTourDatesData(selectedEvent));
-  }, [dispatch, selectedEvent]);
+    // eslint-disable-next-line
+  }, [selectedEvent]);
 
   const buttons = [
-    { color: 'grey', clickFunc: () => history.push('/events'), text: 'BACK' },
     {
+      type: 'button',
+      color: 'grey',
+      clickFunc: () => history.push('/events'),
+      text: 'BACK',
+    },
+    {
+      type: 'submit',
       color: 'purple',
-      clickFunc: () => history.push('/judge-info'),
       text: 'NEXT',
     },
   ];
@@ -43,14 +60,18 @@ export default function TourDatesPage() {
         moment(b.end_date).diff(moment(a.end_date)),
       ),
       optionText: (option) => transformTourDateData(option),
-      handleChange: (e) => {
-        const selectedTour = tourDatesData.find(
-          (tour) => tour.id === Number(e.target.value),
-        );
-        dispatch(setSelectedTour(selectedTour));
-      },
+      changeFunc: setDefaultTour,
+      defaultOption: defaultTour,
     },
   ];
+
+  function onSubmit(formValues) {
+    const selectedTour = tourDatesData.find(
+      (tour) => tour.id === Number(formValues.tourDates),
+    );
+    dispatch(setSelectedTour(selectedTour));
+    history.push('/judge-info');
+  }
 
   return (
     <div className="generic-page">
@@ -61,10 +82,11 @@ export default function TourDatesPage() {
           className="group-logo"
           alt="logo"
         />
-        <div className="form-container">
+        <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
           {selectMenus.map((selectMenu) => (
             <CustomSelect
               key={selectMenu.id}
+              register={register}
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...new CustomSelectProps(selectMenu)}
             />
@@ -76,13 +98,13 @@ export default function TourDatesPage() {
                 key={button.text}
                 className={`btn btn-${button.color}`}
                 onClick={button.clickFunc}
-                type="button"
+                type="submit"
               >
                 {button.text}
               </button>
             ))}
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

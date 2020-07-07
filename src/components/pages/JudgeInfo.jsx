@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import useForm from 'react-hook-form';
 import Header from '../generic/Header';
 import {
   getJudgesData,
@@ -14,24 +15,50 @@ import Modal from '../generic/Modal';
 import CustomSelect from '../generic/CustomSelect';
 import { ModalProps, CustomSelectProps } from '../../utils/models';
 import CONST from '../../utils/constants';
+import { findById } from '../../utils/helperFunctions';
 
 const axios = require('axios');
 
 export default function JudgeInfo() {
   const history = useHistory();
+  const { register, handleSubmit } = useForm();
+  const dispatch = useDispatch();
   const [
     { tourDateId },
     {
       competitionGroupsData,
       judgesData,
+      judgeId,
       judgePosition,
+      judgeIsTeacher,
       judgeGroupId,
       modalFName,
       modalLName,
     },
     { judgeInfoModal },
   ] = useSelector((state) => [state.tourDates, state.judgeInfo, state.modals]);
-  const dispatch = useDispatch();
+  // const [defaultJudge, setDefaultJudge] = useState(judgeId);
+  // const [defaultJudgePosition, setDefaultJudgePosition] = useState(
+  //   judgePosition,
+  // );
+  // const [defaultJudgeIsTeacher, setDefaultJudgeIsTeacher] = useState(
+  //   judgeIsTeacher ? 2 : 1,
+  // );
+  // const [defaultJudgeCompGroup, setDefaultJudgeCompGroup] = useState(
+  //   judgeGroupId,
+  // );
+
+  const [
+    [defaultJudge, setDefaultJudge],
+    [defaultJudgePosition, setDefaultJudgePosition],
+    [defaultJudgeIsTeacher, setDefaultJudgeIsTeacher],
+    [defaultJudgeCompGroup, setDefaultJudgeCompGroup],
+  ] = [
+    useState(judgeId),
+    useState(judgePosition),
+    useState(judgeIsTeacher ? 2 : 1),
+    useState(judgeGroupId),
+  ];
 
   useEffect(() => {
     Promise.all([
@@ -41,62 +68,50 @@ export default function JudgeInfo() {
     // eslint-disable-next-line
   }, []);
 
+  const positionOptions = [
+    { id: 1, position: 1 },
+    { id: 2, position: 2 },
+    { id: 3, position: 3 },
+    { id: 4, position: 4 },
+  ];
+
+  const isTeacherOptions = [
+    { id: 1, isTeacher: false },
+    { id: 2, isTeacher: true },
+  ];
+
   const selectMenus = [
     {
       id: 'judge',
       label: "What is this judge's name?",
       options: judgesData,
       optionText: (option) => `${option.fname} ${option.lname}`,
-      handleChange: (e) => {
-        const { id, fname, lname, headshot } = judgesData.find(
-          (judge) => judge.id === Number(e.target.value),
-        );
-        dispatch(
-          setJudgeInfo({
-            judgeId: id,
-            judgeFullName: `${fname} ${lname}`,
-            judgeHeadshot: headshot,
-          }),
-        );
-      },
+      changeFunc: setDefaultJudge,
+      defaultOption: defaultJudge,
     },
     {
       id: 'position',
       label: 'What position are they?',
-      options: [
-        { id: 1, position: 1 },
-        { id: 2, position: 2 },
-        { id: 3, position: 3 },
-        { id: 4, position: 4 },
-      ],
+      options: positionOptions,
       optionText: (option) => option.position,
-      handleChange: (e) => {
-        dispatch(setJudgeInfo({ judgePosition: e.target.value }));
-      },
+      changeFunc: setDefaultJudgePosition,
+      defaultOption: defaultJudgePosition,
     },
     {
       id: 'teacher',
       label: 'Is this judge a teacher?',
-      options: [
-        { id: 1, isTeacher: false, text: 'No' },
-        { id: 2, isTeacher: true, text: 'Yes' },
-      ],
+      options: isTeacherOptions,
       optionText: (option) => (option.isTeacher ? 'Yes' : 'No'),
-      handleChange: (e) => {
-        dispatch(setJudgeInfo({ judgeIsTeacher: e.target.value }));
-      },
+      changeFunc: setDefaultJudgeIsTeacher,
+      defaultOption: defaultJudgeIsTeacher,
     },
     {
       id: 'competition',
       label: 'What competition group is this for?',
       options: competitionGroupsData,
       optionText: (option) => option.name,
-      handleChange: (e) => {
-        const { id, name } = competitionGroupsData.find(
-          (judge) => judge.id === Number(e.target.value),
-        );
-        dispatch(setJudgeInfo({ judgeGroupName: name, judgeGroupId: id }));
-      },
+      changeFunc: setDefaultJudgeCompGroup,
+      defaultOption: defaultJudgeCompGroup,
     },
   ];
 
@@ -110,21 +125,19 @@ export default function JudgeInfo() {
   };
 
   // TODO convert to async/await
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function checkJudge(position, competition) {
     const url = `${CONST.API}/coda/check-judge`;
     try {
       const response = await axios.get(url, {
         params: {
           tour_date_id: tourDateId,
-          competition_group_id: judgeGroupId,
-          position: judgePosition,
+          competition_group_id: competition,
+          position,
         },
       });
       const { fname, lname } = response.data;
       if (response.data === '') {
         history.push('/scoring');
-        // TODO Toggle some modal saying its missing routine data
       } else {
         dispatch(getModalJudgeName(fname, lname));
         dispatch(toggleModal('judgeInfo'));
@@ -133,6 +146,28 @@ export default function JudgeInfo() {
       // eslint-disable-next-line no-console
       console.log(error);
     }
+  }
+
+  function onSubmit({ judge, position, teacher, competition }) {
+    const [{ fname, lname }, { name }, { isTeacher }] = [
+      findById(judgesData, judge),
+      findById(competitionGroupsData, competition),
+      findById(isTeacherOptions, teacher),
+    ];
+
+    dispatch(
+      setJudgeInfo({
+        judgeId: Number(judge),
+        judgeFullName: `${fname} ${lname}`,
+        judgePosition: Number(position),
+        judgeIsTeacher: isTeacher,
+        judgeGroupId: Number(competition),
+        judgeGroupName: name,
+      }),
+    );
+
+    // TODO? dispatch not instantly updating state
+    checkJudge(Number(position), Number(competition));
   }
 
   return (
@@ -149,11 +184,12 @@ export default function JudgeInfo() {
         <form
           className="form-container"
           id="judgeInfoForm"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
         >
           {selectMenus.map((selectMenu) => (
             <CustomSelect
               key={selectMenu.id}
+              register={register}
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...new CustomSelectProps(selectMenu)}
             />

@@ -30,24 +30,6 @@ export function getTourDatesData(selectedEvent) {
   };
 }
 
-export function findClosestDate(tourDatesData) {
-  const now = moment();
-  let closestDate = moment().add(10, 'year');
-
-  tourDatesData.forEach((tourDate) => {
-    const { end_date } = tourDate;
-
-    if (Math.abs(now.diff(end_date)) < Math.abs(now.diff(closestDate))) {
-      closestDate = end_date;
-    }
-  });
-
-  if (!closestDate) {
-    return tourDatesData[tourDatesData.length - 1].end_date;
-  }
-  return closestDate;
-}
-
 // TODO redo below in moment
 export function transformTourDateData({ start_date, end_date, event_city }) {
   if (moment(end_date).isAfter(start_date, 'year')) {
@@ -88,25 +70,9 @@ export default function tourDatesReducer(
 ) {
   switch (action.type) {
     case 'SET_TOUR_DATES_DATA': {
-      const closestDate = findClosestDate(action.data);
-      // const defaultTour =
-      //   action.data.find(
-      //     (tourDateData) => tourDateData.end_date === closestDate,
-      //   ) !== undefined
-      //     ? action.data.find(
-      //         (tourDateData) => tourDateData.end_date === closestDate,
-      //       )
-      //     : action.data[0];
-
-      const defaultTour =
-        action.data.find(
-          (tourDateData) => tourDateData.end_date === closestDate,
-        ) || action.data[0];
       return {
         ...tourDatesState,
         tourDatesData: action.data,
-        tourDateId: defaultTour.id,
-        tourDate: transformTourDateData(defaultTour),
       };
     }
 

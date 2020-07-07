@@ -18,7 +18,7 @@ export default function JudgeDropdown() {
       onClick={() => dispatch(toggleJudgeDropdown())}
     >
       <div className="judge-id-name">
-        {`#${judgePosition} ${judgeFullName}`}
+        {judgePosition ? `#${judgePosition} ${judgeFullName}` : judgeFullName}
       </div>
       <img
         className="profile-pic"
