@@ -10,7 +10,7 @@ import {
   getModalJudgeName,
   // submitJudgeInfo,
 } from '../../redux/judgeInfoReducer';
-import { toggleModal } from '../../redux/modalsReducer';
+import { openModal } from '../../redux/modalsReducer';
 import Modal from '../generic/Modal';
 import CustomSelect from '../generic/CustomSelect';
 import { ModalProps, CustomSelectProps } from '../../utils/models';
@@ -121,34 +121,102 @@ export default function JudgeInfo() {
     body: `${modalFName} ${modalLName} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`,
     cancelText: 'CANCEL',
     confirmText: 'OK',
-    confirmFunc: () => history.push('/scoring'),
   };
 
-  // TODO convert to async/await
+  // async function checkJudge(position, competition) {
+  //   const url = `${CONST.API}/coda/check-judge`;
+  //   try {
+  //     const response = await axios.get(url, {
+  //       params: {
+  //         tour_date_id: tourDateId,
+  //         competition_group_id: competition,
+  //         position,
+  //       },
+  //     });
+  //     // const { fname, lname } = response.data;
+  //     // if (!response.data) {
+  //     //   history.push('/scoring');
+  //     // } else {
+  //     //   dispatch(getModalJudgeName(fname, lname));
+  //     //   dispatch(toggleModal('judgeInfo'));
+  //     // }
+  //     const { fname, lname } = response.data;
+
+  //     if (!response.data) {
+  //       history.push('/scoring');
+  //       return;
+  //     }
+
+  //     dispatch(getModalJudgeName(fname, lname));
+  //     dispatch(toggleModal('judgeInfo'));
+  //   } catch (error) {
+  //     // eslint-disable-next-line no-console
+  //     console.log(error);
+  //   }
+  // }
+
+  // function onSubmit({ judge, position, teacher, competition }) {
+  //   const [{ fname, lname }, { name }, { isTeacher }] = [
+  //     findById(judgesData, judge),
+  //     findById(competitionGroupsData, competition),
+  //     findById(isTeacherOptions, teacher),
+  //   ];
+
+  //   dispatch(
+  //     setJudgeInfo({
+  //       judgeId: Number(judge),
+  //       judgeFullName: `${fname} ${lname}`,
+  //       judgePosition: Number(position),
+  //       judgeIsTeacher: isTeacher,
+  //       judgeGroupId: Number(competition),
+  //       judgeGroupName: name,
+  //     }),
+  //   );
+
+  //   checkJudge(Number(position), Number(competition));
+  // }
+
+  // 1. onsubmit is run
+  // 2. dispatch data
+  // 3. check judge
+  // 4. if judge doesnt exist, go to scoring page
+  // 5. if judge exists, show modal
+  // 6. if modal is confirmed, go to scoring page
+
+  // 1. onsubmit is run
+  // 2. check judge
+  // 3. if judge exists, then show modal
+  // 4. if doesnt exist or modal is confirmed, then dispatch data and go to scoring page
+
+  // eslint-disable-next-line consistent-return
   async function checkJudge(position, competition) {
-    const url = `${CONST.API}/coda/check-judge`;
     try {
-      const response = await axios.get(url, {
+      const url = `${CONST.API}/coda/check-judge`;
+      const { data: response } = await axios.get(url, {
         params: {
           tour_date_id: tourDateId,
           competition_group_id: competition,
           position,
         },
       });
-      const { fname, lname } = response.data;
-      if (response.data === '') {
-        history.push('/scoring');
-      } else {
-        dispatch(getModalJudgeName(fname, lname));
-        dispatch(toggleModal('judgeInfo'));
-      }
+
+      if (!response) return true;
+
+      const { fname, lname } = response;
+
+      dispatch(getModalJudgeName(fname, lname));
+      return dispatch(openModal('judgeInfo'));
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
     }
   }
 
-  function onSubmit({ judge, position, teacher, competition }) {
+  async function onSubmit({ judge, position, teacher, competition }) {
+    const confirmed = await checkJudge(Number(position), Number(competition));
+
+    if (!confirmed) return;
+
     const [{ fname, lname }, { name }, { isTeacher }] = [
       findById(judgesData, judge),
       findById(competitionGroupsData, competition),
@@ -165,9 +233,7 @@ export default function JudgeInfo() {
         judgeGroupName: name,
       }),
     );
-
-    // TODO? dispatch not instantly updating state
-    checkJudge(Number(position), Number(competition));
+    history.push('/scoring');
   }
 
   return (

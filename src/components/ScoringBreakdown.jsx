@@ -80,11 +80,10 @@ export default function ScoringBreakdown() {
     dispatch(setWeakestLevel1Id(sortedCategories[sortedCategories.length - 1]));
   }
 
-  // TODO refactor html to break down into smaller components
   return (
     <div className="scoring-breakdown-container">
-      {popUp ? <ScoringBreakdownPopUp /> : null}
-      {popUp ? <div className="scoring-breakdown-pop-up--divider" /> : null}
+      {popUp && <ScoringBreakdownPopUp />}
+      {popUp && <div className="scoring-breakdown-pop-up--divider" />}
       <form
         onSubmit={(e) => {
           dispatch(toggleModal('scoring'));

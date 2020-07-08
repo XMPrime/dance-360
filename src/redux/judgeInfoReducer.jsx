@@ -41,12 +41,22 @@ export function getCompetitionGroupsData() {
   };
 }
 
-export function setJudgeInfo(infoObj) {
-  return {
+// TODO refactor all actions to use redux thunk
+// export function setJudgeInfo(infoObj) {
+//   return (dispatch) => {
+//     dispatch({
+//       type: 'SET_JUDGE_INFO',
+//       infoObj,
+//     });
+//   };
+// }
+
+export const setJudgeInfo = (infoObj) => (dispatch) => {
+  dispatch({
     type: 'SET_JUDGE_INFO',
     infoObj,
-  };
-}
+  });
+};
 
 export function toggleJudgeInfoModal(judgeName) {
   return {
@@ -77,7 +87,6 @@ const initialState = {
   modalLName: '',
 };
 
-// TODO fix implementation so you dont need action.data / action.data[0]
 export default function judgeInfoReducer(
   judgeInfoState = initialState,
   action,

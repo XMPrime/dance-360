@@ -11,7 +11,6 @@ export function setEventsData(data) {
   };
 }
 
-// TODO change all promises to async/await
 export function getEventsData() {
   return async (dispatch) => {
     const url = `${CONST.API}/coda/events`;

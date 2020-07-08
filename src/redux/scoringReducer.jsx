@@ -36,8 +36,6 @@ export function setButtons(data) {
   return { type: 'SET_BUTTONS', data };
 }
 
-// TODO create a constnats file and put in the main URL to it (https://api.d360test.com/api)
-
 export function getButtonsData() {
   return async (dispatch) => {
     const url = `${CONST.API}/coda/buttons`;

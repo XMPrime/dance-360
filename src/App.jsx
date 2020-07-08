@@ -4,6 +4,7 @@ import './App.css';
 import './css/index.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PrivateRoute from './components/generic/PrivateRoute';
+import Modal from './components/generic/Modal';
 
 import routes from './routes';
 
@@ -20,6 +21,7 @@ function App() {
             ),
           )}
         </Switch>
+        <Modal />
       </div>
     </Router>
   );

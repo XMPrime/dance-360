@@ -30,7 +30,6 @@ export function getTourDatesData(selectedEvent) {
   };
 }
 
-// TODO redo below in moment
 export function transformTourDateData({ start_date, end_date, event_city }) {
   if (moment(end_date).isAfter(start_date, 'year')) {
     // 'San Diego - Dec 29, 2019 - Jan 5, 2020

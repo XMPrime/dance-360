@@ -1,22 +1,41 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import useForm from 'react-hook-form';
 import { setTextInput, tryLogin } from '../../redux/loginReducer';
+import { openModal } from '../../redux/modalsReducer';
 import logo from '../../imgs/group-6.svg';
 import Modal from '../generic/Modal';
 import { ModalProps } from '../../utils/models';
 import { envelopeIcon, lockIcon } from '../../utils/constants';
 
+const welcomeProps = {
+  type: 'welcome',
+  header: 'Welcome to my Dance Judge app!',
+  body: (
+    <>
+      To login and look around, use &quot;jason&quot; and &quot;testtest&quot;
+      as the username and password respectively. Additionally,{' '}
+      <a href="https://tinyurl.com/yb5dz9dr">click here</a> for a link to the
+      User Stories for this app. Thanks for stopping by!
+    </>
+  ),
+  confirmText: 'OK',
+};
+
 export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
   const { register, handleSubmit, errors } = useForm();
-  const [
-    { username, password },
-    { welcomeModal, authModal },
-  ] = useSelector((state) => [state.login, state.modals]);
+  const [{ username, password }, { authModal }] = useSelector((state) => [
+    state.login,
+    state.modals,
+  ]);
+
+  useEffect(() => {
+    dispatch(openModal(new ModalProps(welcomeProps)));
+  }, []);
 
   const errorMessage = (
     <span className="error-message">This field is required!</span>
@@ -45,20 +64,6 @@ export default function Login() {
     confirmText: 'OK',
   };
 
-  const welcomeProps = {
-    type: 'welcome',
-    header: 'Welcome to my Dance Judge app!',
-    body: (
-      <>
-        To login and look around, use &quot;jason&quot; and &quot;testtest&quot;
-        as the username and password respectively. Additionally,{' '}
-        <a href="https://tinyurl.com/yb5dz9dr">click here</a> for a link to the
-        User Stories for this app. Thanks for stopping by!
-      </>
-    ),
-    confirmText: 'OK',
-  };
-
   async function onSubmit() {
     try {
       await dispatch(tryLogin(username, password));
@@ -71,7 +76,7 @@ export default function Login() {
 
   return (
     <div className="judge-1">
-      {welcomeModal && <Modal {...new ModalProps(welcomeProps)} />}
+      {/* TODO refactor all modals like welcome modal */}
       {authModal && <Modal {...new ModalProps(invalidAuthProps)} />}
       <div className="container-fluid">
         <img src={logo} className="login-logo" alt="logo" />

@@ -51,8 +51,6 @@ export default function TourDatesPage() {
     },
   ];
 
-  // TODO use moment to convert date string into unix and use unix to compare for sort
-  // TODO use useState to save selected tour id, move current handleChange logic to when user clicks next
   const selectMenus = [
     {
       id: 'tourDates',
