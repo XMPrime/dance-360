@@ -3,38 +3,44 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import useForm from 'react-hook-form';
-import { setTextInput, tryLogin } from '../../redux/loginReducer';
+import { login, tabulatorCheck, setTextInput } from '../../redux/loginReducer';
 import { openModal } from '../../redux/modalsReducer';
 import logo from '../../imgs/group-6.svg';
-import Modal from '../generic/Modal';
 import { ModalProps } from '../../utils/models';
-import { envelopeIcon, lockIcon } from '../../utils/constants';
+import CONST, { envelopeIcon, lockIcon } from '../../utils/constants';
 
-const welcomeProps = {
-  type: 'welcome',
-  header: 'Welcome to my Dance Judge app!',
-  body: (
-    <>
-      To login and look around, use &quot;jason&quot; and &quot;testtest&quot;
-      as the username and password respectively. Additionally,{' '}
-      <a href="https://tinyurl.com/yb5dz9dr">click here</a> for a link to the
-      User Stories for this app. Thanks for stopping by!
-    </>
-  ),
-  confirmText: 'OK',
-};
+const axios = require('axios');
 
 export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
   const { register, handleSubmit, errors } = useForm();
-  const [{ username, password }, { authModal }] = useSelector((state) => [
-    state.login,
-    state.modals,
-  ]);
+  const { username, password } = useSelector((state) => state.login);
+
+  const welcomeProps = {
+    type: 'welcome',
+    header: 'Welcome to my Dance Judge app!',
+    body: (
+      <>
+        To login and look around, use &quot;jason&quot; and &quot;testtest&quot;
+        as the username and password respectively. Additionally,{' '}
+        <a href="https://tinyurl.com/yb5dz9dr">click here</a> for a link to the
+        User Stories for this app. Thanks for stopping by!
+      </>
+    ),
+    confirmText: 'OK',
+  };
+
+  const invalidAuthProps = {
+    type: 'auth',
+    header: 'Sorry',
+    body: 'You have entered an invalid username or password.',
+    confirmText: 'OK',
+  };
 
   useEffect(() => {
     dispatch(openModal(new ModalProps(welcomeProps)));
+    // eslint-disable-next-line
   }, []);
 
   const errorMessage = (
@@ -57,30 +63,33 @@ export default function Login() {
     },
   ];
 
-  const invalidAuthProps = {
-    type: 'auth',
-    header: 'Sorry',
-    body: 'You have entered an invalid username or password.',
-    confirmText: 'OK',
-  };
+  async function tryLogin() {
+    const url = `${CONST.API}/auth/signin`;
 
-  async function onSubmit() {
     try {
-      await dispatch(tryLogin(username, password));
-      history.push('/events');
+      const response = await axios.post(url, {
+        name: username,
+        password,
+      });
+      if (response.status === 200) {
+        Promise.all([
+          dispatch(login()),
+          dispatch(tabulatorCheck(response.data.roles)),
+        ]);
+        history.push('/events');
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
+      dispatch(openModal(new ModalProps(invalidAuthProps)));
     }
   }
 
   return (
     <div className="judge-1">
-      {/* TODO refactor all modals like welcome modal */}
-      {authModal && <Modal {...new ModalProps(invalidAuthProps)} />}
       <div className="container-fluid">
         <img src={logo} className="login-logo" alt="logo" />
-        <form onSubmit={handleSubmit(() => onSubmit())}>
+        <form onSubmit={handleSubmit(tryLogin)}>
           {textInputs.map((input, i) => (
             <div key={input.id} className="input-container">
               <i className={`${input.icon} icon`} />

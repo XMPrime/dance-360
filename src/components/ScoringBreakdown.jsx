@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleModal } from '../redux/modalsReducer';
+import { openModal } from '../redux/modalsReducer';
 import {
   addScore,
   minusScore,
@@ -12,10 +12,12 @@ import {
   setWeakestLevel1Id,
   toggleScoringBreakdownPopUp,
 } from '../redux/scoringBreakdownReducer';
+import { submitScore } from '../redux/scoringReducer';
 import ScoringBreakdownPopUp from './ScoringBreakdownPopUp';
 import { infoIcon, plusIcon, minusIcon } from '../utils/constants';
 import IconButton from './generic/IconButton';
 import CustomCheckbox from './generic/CustomCheckbox';
+import { ModalProps } from '../utils/models';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
@@ -23,6 +25,20 @@ export default function ScoringBreakdown() {
     { score, note, familyFriendly, iChoreographed, popUp },
     { buttonGrades },
   ] = useSelector((state) => [state.scoringBreakdown, state.scoring]);
+
+  const saveProps = {
+    type: 'scoring',
+    header: 'Alert',
+    body: 'Are you sure you want to save?',
+    cancelFunc: () => {
+      dispatch(setStrongestLevel1Id('', -1));
+      dispatch(setWeakestLevel1Id('', 2));
+    },
+    confirmText: 'SAVE',
+    confirmFunc: () => {
+      dispatch(submitScore());
+    },
+  };
 
   const checkboxes = [
     {
@@ -86,7 +102,7 @@ export default function ScoringBreakdown() {
       {popUp && <div className="scoring-breakdown-pop-up--divider" />}
       <form
         onSubmit={(e) => {
-          dispatch(toggleModal('scoring'));
+          dispatch(openModal(new ModalProps(saveProps)));
           scoreTabulator(e, buttonGrades);
         }}
       >

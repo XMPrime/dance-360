@@ -7,11 +7,8 @@ import {
   getJudgesData,
   setJudgeInfo,
   getCompetitionGroupsData,
-  getModalJudgeName,
-  // submitJudgeInfo,
 } from '../../redux/judgeInfoReducer';
 import { openModal } from '../../redux/modalsReducer';
-import Modal from '../generic/Modal';
 import CustomSelect from '../generic/CustomSelect';
 import { ModalProps, CustomSelectProps } from '../../utils/models';
 import CONST from '../../utils/constants';
@@ -32,21 +29,8 @@ export default function JudgeInfo() {
       judgePosition,
       judgeIsTeacher,
       judgeGroupId,
-      modalFName,
-      modalLName,
     },
-    { judgeInfoModal },
-  ] = useSelector((state) => [state.tourDates, state.judgeInfo, state.modals]);
-  // const [defaultJudge, setDefaultJudge] = useState(judgeId);
-  // const [defaultJudgePosition, setDefaultJudgePosition] = useState(
-  //   judgePosition,
-  // );
-  // const [defaultJudgeIsTeacher, setDefaultJudgeIsTeacher] = useState(
-  //   judgeIsTeacher ? 2 : 1,
-  // );
-  // const [defaultJudgeCompGroup, setDefaultJudgeCompGroup] = useState(
-  //   judgeGroupId,
-  // );
+  ] = useSelector((state) => [state.tourDates, state.judgeInfo]);
 
   const [
     [defaultJudge, setDefaultJudge],
@@ -115,67 +99,6 @@ export default function JudgeInfo() {
     },
   ];
 
-  const modalProps = {
-    type: 'judgeInfo',
-    header: 'Alert',
-    body: `${modalFName} ${modalLName} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`,
-    cancelText: 'CANCEL',
-    confirmText: 'OK',
-  };
-
-  // async function checkJudge(position, competition) {
-  //   const url = `${CONST.API}/coda/check-judge`;
-  //   try {
-  //     const response = await axios.get(url, {
-  //       params: {
-  //         tour_date_id: tourDateId,
-  //         competition_group_id: competition,
-  //         position,
-  //       },
-  //     });
-  //     // const { fname, lname } = response.data;
-  //     // if (!response.data) {
-  //     //   history.push('/scoring');
-  //     // } else {
-  //     //   dispatch(getModalJudgeName(fname, lname));
-  //     //   dispatch(toggleModal('judgeInfo'));
-  //     // }
-  //     const { fname, lname } = response.data;
-
-  //     if (!response.data) {
-  //       history.push('/scoring');
-  //       return;
-  //     }
-
-  //     dispatch(getModalJudgeName(fname, lname));
-  //     dispatch(toggleModal('judgeInfo'));
-  //   } catch (error) {
-  //     // eslint-disable-next-line no-console
-  //     console.log(error);
-  //   }
-  // }
-
-  // function onSubmit({ judge, position, teacher, competition }) {
-  //   const [{ fname, lname }, { name }, { isTeacher }] = [
-  //     findById(judgesData, judge),
-  //     findById(competitionGroupsData, competition),
-  //     findById(isTeacherOptions, teacher),
-  //   ];
-
-  //   dispatch(
-  //     setJudgeInfo({
-  //       judgeId: Number(judge),
-  //       judgeFullName: `${fname} ${lname}`,
-  //       judgePosition: Number(position),
-  //       judgeIsTeacher: isTeacher,
-  //       judgeGroupId: Number(competition),
-  //       judgeGroupName: name,
-  //     }),
-  //   );
-
-  //   checkJudge(Number(position), Number(competition));
-  // }
-
   // 1. onsubmit is run
   // 2. dispatch data
   // 3. check judge
@@ -199,13 +122,19 @@ export default function JudgeInfo() {
           position,
         },
       });
-
       if (!response) return true;
 
       const { fname, lname } = response;
+      const modalProps = {
+        type: 'judgeInfo',
+        header: 'Alert',
+        body: `${fname} ${lname} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`,
+        cancelText: 'CANCEL',
+        confirmText: 'OK',
+        confirmFunc: () => history.push('/scoring'),
+      };
 
-      dispatch(getModalJudgeName(fname, lname));
-      return dispatch(openModal('judgeInfo'));
+      dispatch(openModal(new ModalProps(modalProps)));
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
@@ -214,7 +143,6 @@ export default function JudgeInfo() {
 
   async function onSubmit({ judge, position, teacher, competition }) {
     const confirmed = await checkJudge(Number(position), Number(competition));
-
     if (!confirmed) return;
 
     const [{ fname, lname }, { name }, { isTeacher }] = [
@@ -239,12 +167,6 @@ export default function JudgeInfo() {
   return (
     <div className="generic-page">
       <Header barIcon={false} title="JUDGE INFORMATION:" />
-      {judgeInfoModal && (
-        <Modal
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          {...new ModalProps(modalProps)}
-        />
-      )}
       <div className="tour-dates-menu">
         <p>JUDGE INFORMATION</p>
         <form
@@ -269,11 +191,7 @@ export default function JudgeInfo() {
               BACK
             </button>
 
-            <button
-              className="btn btn-purple"
-              type="submit"
-              // onClick={() => dispatch(submitJudgeInfo(history))}
-            >
+            <button className="btn btn-purple" type="submit">
               NEXT
             </button>
           </div>

@@ -1,17 +1,3 @@
-// export function toggleModal(modalType) {
-//   return {
-//     type: 'TOGGLE_MODAL',
-//     modalType,
-//   };
-// }
-
-export const toggleModal = (props) => (dispatch) => {
-  dispatch({
-    type: 'TOGGLE_MODAL',
-    props,
-  });
-};
-
 export const openModal = (props) => (dispatch) => {
   return new Promise((resolve) => {
     dispatch({
@@ -29,12 +15,6 @@ export const closeModal = (result) => (dispatch, getState) => {
     type: 'TOGGLE_MODAL',
   });
 };
-
-// class ModalProps {
-//   constructor() {
-
-//   }
-// }
 
 const initialState = {
   show: false,

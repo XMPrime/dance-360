@@ -8,20 +8,13 @@ import Header from '../generic/Header';
 import ScoringSideMenu from '../ScoringSideMenu';
 import Rectangle from '../Rectangle';
 import ScoringBreakdown from '../ScoringBreakdown';
-import Modal from '../generic/Modal';
-
-import {
-  setStrongestLevel1Id,
-  setWeakestLevel1Id,
-} from '../../redux/scoringBreakdownReducer';
 import {
   getButtonsData,
   getScoringBreakdownData,
   getRoutinesData,
-  submitScore,
   setButtons,
 } from '../../redux/scoringReducer';
-import { ButtonTable, RectangleProps, ModalProps } from '../../utils/models';
+import { ButtonTable, RectangleProps } from '../../utils/models';
 
 const { rectangleHeight, minColumns, minRows } = new ButtonTable({
   height: 30,
@@ -43,7 +36,6 @@ export default function Scoring() {
       targetRoutineIndex,
       buttons,
     },
-    { scoringModal },
   ] = useSelector((state) => [
     state.events.selectedEvent,
     state.tourDates.tourDateId,
@@ -136,28 +128,10 @@ export default function Scoring() {
     <div className="scoring-title">Nothing to see here...</div>
   );
 
-  const saveProps = {
-    type: 'scoring',
-    header: 'Alert',
-    body: 'Are you sure you want to save?',
-    cancelFunc: () => {
-      dispatch(setStrongestLevel1Id('', -1));
-      dispatch(setWeakestLevel1Id('', 2));
-    },
-    confirmText: 'SAVE',
-    confirmFunc: () => {
-      dispatch(submitScore());
-    },
-  };
-
   return (
     <div className="generic-page">
       <Header title={scoringTitle} barIcon />
-
-      {scoringModal && <Modal {...new ModalProps(saveProps)} />}
-
       {displaySideMenu && <ScoringSideMenu />}
-
       {(buttonsData || routinesData) && (
         <div className="scoring-body">
           {buttons &&

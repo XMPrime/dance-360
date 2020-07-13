@@ -42,34 +42,26 @@ export function getCompetitionGroupsData() {
 }
 
 // TODO refactor all actions to use redux thunk
-// export function setJudgeInfo(infoObj) {
-//   return (dispatch) => {
-//     dispatch({
-//       type: 'SET_JUDGE_INFO',
-//       infoObj,
-//     });
-//   };
-// }
+export function setJudgeInfo(infoObj) {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_JUDGE_INFO',
+      infoObj,
+    });
+  };
+}
 
-export const setJudgeInfo = (infoObj) => (dispatch) => {
-  dispatch({
-    type: 'SET_JUDGE_INFO',
-    infoObj,
-  });
-};
+// export const setJudgeInfo = (infoObj) => (dispatch) => {
+//   dispatch({
+//     type: 'SET_JUDGE_INFO',
+//     infoObj,
+//   });
+// };
 
 export function toggleJudgeInfoModal(judgeName) {
   return {
     type: 'TOGGLE_JUDGE_INFO_MODAL',
     judgeName,
-  };
-}
-
-export function getModalJudgeName(fname, lname) {
-  return {
-    type: 'GET_MODAL_JUDGE_NAME',
-    fname,
-    lname,
   };
 }
 
@@ -83,8 +75,6 @@ const initialState = {
   judgeGroupName: null,
   judgeGroupId: null,
   judgeHeadshot: null,
-  modalFName: '',
-  modalLName: '',
 };
 
 export default function judgeInfoReducer(
@@ -109,12 +99,6 @@ export default function judgeInfoReducer(
       return {
         ...judgeInfoState,
         modal: !judgeInfoState.modal,
-      };
-    case 'GET_MODAL_JUDGE_NAME':
-      return {
-        ...judgeInfoState,
-        modalFName: action.fname,
-        modalLName: action.lname,
       };
     default:
       return judgeInfoState;

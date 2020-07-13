@@ -1,9 +1,3 @@
-// ACTION CREATORS:
-import CONST from '../utils/constants';
-import { toggleModal } from './modalsReducer';
-
-const axios = require('axios');
-
 export function setTextInput(e) {
   const { id, value } = e.target;
   return {
@@ -29,28 +23,6 @@ export function tabulatorCheck(data) {
   return {
     type: 'TABULATOR_CHECK',
     boolean: data.includes('tabulator'),
-  };
-}
-
-export function tryLogin(username, password) {
-  return async (dispatch) => {
-    const url = `${CONST.API}/auth/signin`;
-
-    try {
-      const response = await axios.post(url, {
-        name: username,
-        password,
-      });
-      if (response.status === 200) {
-        dispatch(login());
-        dispatch(tabulatorCheck(response.data.roles));
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-      // display modal
-      dispatch(toggleModal('auth'));
-    }
   };
 }
 
