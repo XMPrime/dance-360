@@ -1,4 +1,4 @@
-<p align="center"><a href="https://quiz-scraper.netlify.app/"><img src="https://i.imgur.com/L0ItdG3.gif" title="source: imgur.com" /></a></p>
+<p align="center"><a href="https://dance-360.netlify.app/"><img src="https://i.imgur.com/3D6I6Qu.gif" title="click to go to app" /></a></p>
 
 # Dance Judge App
 
