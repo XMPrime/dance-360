@@ -1,4 +1,4 @@
-<p align="center"><a href="https://dance-360.netlify.app/"><img src="https://i.imgur.com/3D6I6Qu.gif" title="click to go to app" /></a></p>
+<p align="center"><a href="https://dance-360.netlify.app/"><img src="https://i.imgur.com/3D6I6Qu.gif" title="https://dance-360.netlify.app/" /></a></p>
 
 # Dance Judge App
 
